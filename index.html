@@ -1,1 +1,288 @@
-hello
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>পূজার হিসাব ও ব্যবস্থাপনা</title>
+    <style>
+        :root {
+            --primary: #d32f2f;
+            --primary-light: #ffebee;
+            --secondary: #ff9800;
+            --success: #388e3c;
+            --dark: #2c3e50;
+            --gray: #f4f6f9;
+        }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+        body { background-color: var(--gray); color: #333; padding: 15px; }
+        .container { max-width: 1000px; margin: auto; }
+
+        /* Header & Admin Switch */
+        header { 
+            background: linear-gradient(135deg, #d32f2f, #ff5722); 
+            color: white; padding: 20px; border-radius: 12px; 
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15); margin-bottom: 20px;
+        }
+        .admin-btn { background: #fff; color: var(--primary); font-weight: bold; padding: 8px 15px; border-radius: 20px; border: none; cursor: pointer; }
+
+        /* Cards Layout */
+        .dashboard-cards { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .card { 
+            flex: 1; min-width: 200px; background: white; padding: 20px; 
+            border-radius: 12px; border-left: 6px solid var(--primary); 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center; 
+        }
+        .card.income { border-color: var(--success); }
+        .card.balance { border-color: var(--secondary); }
+        .card h3 { font-size: 15px; color: #666; margin-bottom: 8px; }
+        .card p { font-size: 24px; font-weight: bold; color: var(--dark); }
+
+        /* Form & Main Content */
+        .main-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 15px; }
+        input, select, button { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
+        .btn-submit { background-color: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; }
+        .btn-submit:hover { background-color: #b71c1c; }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #eee; padding: 12px; text-align: center; font-size: 14px; }
+        th { background-color: var(--primary-light); color: var(--primary); }
+        .action-btns { display: none; gap: 5px; justify-content: center; }
+        .admin-active .action-btns { display: flex; }
+        .btn-edit { background: #ffc107; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        .btn-delete { background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+
+        /* Print Area */
+        .print-btn { background: #2196F3; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 15px; }
+
+        @media print {
+            body * { visibility: hidden; }
+            #printable-area, #printable-area * { visibility: visible; }
+            #printable-area { position: absolute; left: 0; top: 0; width: 100%; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="main-container">
+    <header>
+        <div>
+            <h2>🕉️ পূজার হিসাব ও উদ্বৃত্ত রিপোর্ট</h2>
+            <small id="role-indicator">মোড: সাধারণ ইউজার</small>
+        </div>
+        <button class="admin-btn" onclick="toggleAdmin()">এডমিন লগইন</button>
+    </header>
+
+    <!-- Printable Summary Area -->
+    <div id="printable-area">
+        <h2 style="display:none; text-align:center; margin-bottom:15px;" id="print-header">পূজা হিসাব রিপোর্ট ২০২৬</h2>
+        <div class="dashboard-cards">
+            <div class="card income">
+                <h3>মোট জমা (আদায়)</h3>
+                <p><span id="total-income">০</span> ৳</p>
+            </div>
+            <div class="card">
+                <h3>মোট খরচ</h3>
+                <p><span id="total-expense">০</span> ৳</p>
+            </div>
+            <div class="card balance">
+                <h3>বর্তমান উদ্বৃত্ত</h3>
+                <p><span id="total-balance">০</span> ৳</p>
+            </div>
+        </div>
+
+        <div class="main-box">
+            <h3>হিসাবের তালিকা (জমা ও খরচ)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>তারিখ</th>
+                        <th>খাত/বিবরণ</th>
+                        <th>টাইপ</th>
+                        <th>গ্রাম</th>
+                        <th>বাড়ি</th>
+                        <th>পরিমাণ (৳)</th>
+                        <th class="no-print">একশন</th>
+                    </tr>
+                </thead>
+                <tbody id="transaction-list">
+                    <!-- Data rows loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <button class="print-btn no-print" onclick="window.print()">🖨️ উদ্বৃত্ত রিপোর্ট প্রিন্ট করুন</button>
+
+    <!-- Entry Form -->
+    <div class="main-box no-print">
+        <h3>নতুন হিসাব যোগ করুন</h3>
+        <form id="entry-form" onsubmit="handleFormSubmit(event)">
+            <div class="form-grid">
+                <input type="date" id="date" required>
+                <input type="text" id="title" placeholder="বিবরণ / নাম" required>
+                <select id="type" required>
+                    <option value="জমা">জমা (চাঁদা/অনুদানের টাকা)</option>
+                    <option value="খরচ">খরচ</option>
+                </select>
+                <select id="village-dropdown" required>
+                    <!-- JavaScript auto fills villages -->
+                </select>
+                <select id="house-dropdown" required>
+                    <!-- JavaScript auto fills houses -->
+                </select>
+                <input type="number" id="amount" placeholder="টাকার পরিমাণ (৳)" required>
+            </div>
+            <button type="submit" class="btn-submit">ডাটা সেভ করুন</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // =========================================================================
+    // ১. গুগল অ্যাপস স্ক্রিপ্ট (Code.gs) এর লিঙ্ক এখানে বসান
+    // =========================================================================
+    const APPS_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+    // =========================================================================
+    // ২. গ্রাম এবং বাড়ির তালিকা (এখানে আপনি নতুন নাম যোগ করতে পারেন)
+    // =========================================================================
+    const VILLAGE_LIST = ["উত্তর পাড়া", "দক্ষিণ পাড়া", "পূর্ব পাড়া", "পশ্চিম পাড়া", "কেন্দ্রীয় এলাকা"];
+    const HOUSE_LIST = ["বিশ্বাস বাড়ি", "মন্ডল বাড়ি", "ঘোষ বাড়ি", "সরকার বাড়ি", "হালদার বাড়ি", "অন্যান্য"];
+
+    let isAdmin = false;
+    let transactions = [];
+
+    // Initialize Dropdowns & Date
+    window.onload = function() {
+        document.getElementById('date').valueAsDate = new Date();
+        populateDropdowns();
+        fetchData(); // Fetch initial data from Apps Script
+    };
+
+    function populateDropdowns() {
+        const vSelect = document.getElementById('village-dropdown');
+        const hSelect = document.getElementById('house-dropdown');
+        
+        vSelect.innerHTML = '<option value="">-- গ্রাম নির্বাচন করুন --</option>';
+        VILLAGE_LIST.forEach(v => vSelect.innerHTML += `<option value="${v}">${v}</option>`);
+
+        hSelect.innerHTML = '<option value="">-- বাড়ি নির্বাচন করুন --</option>';
+        HOUSE_LIST.forEach(h => hSelect.innerHTML += `<option value="${h}">${h}</option>`);
+    }
+
+    function toggleAdmin() {
+        if(!isAdmin) {
+            let pass = prompt("এডমিন পাসওয়ার্ড দিন (ডিফল্ট: 1234):");
+            if(pass === "1234") {
+                isAdmin = true;
+                document.getElementById('role-indicator').innerText = "মোড: এডমিন (এডিট করার অনুমতি আছে)";
+                document.getElementById('main-container').classList.add('admin-active');
+                alert("এডমিন লগইন সফল হয়েছে!");
+            } else {
+                alert("ভুল পাসওয়ার্ড!");
+            }
+        } else {
+            isAdmin = false;
+            document.getElementById('role-indicator').innerText = "মোড: সাধারণ ইউজার";
+            document.getElementById('main-container').classList.remove('admin-active');
+        }
+        renderTable();
+    }
+
+    function handleFormSubmit(e) {
+        e.preventDefault();
+        const data = {
+            id: Date.now(),
+            date: document.getElementById('date').value,
+            title: document.getElementById('title').value,
+            type: document.getElementById('type').value,
+            village: document.getElementById('village-dropdown').value,
+            house: document.getElementById('house-dropdown').value,
+            amount: parseFloat(document.getElementById('amount').value)
+        };
+
+        transactions.push(data);
+        saveToAppsScript(data);
+        renderTable();
+        document.getElementById('entry-form').reset();
+        document.getElementById('date').valueAsDate = new Date();
+    }
+
+    function renderTable() {
+        const list = document.getElementById('transaction-list');
+        list.innerHTML = "";
+        let income = 0, expense = 0;
+
+        transactions.forEach((item, index) => {
+            if(item.type === "জমা") income += item.amount;
+            else expense += item.amount;
+
+            list.innerHTML += `
+                <tr>
+                    <td>${item.date}</td>
+                    <td>${item.title}</td>
+                    <td style="color: ${item.type === 'জমা' ? 'green' : 'red'}; font-weight:bold;">${item.type}</td>
+                    <td>${item.village}</td>
+                    <td>${item.house}</td>
+                    <td>${item.amount} ৳</td>
+                    <td class="no-print action-btns">
+                        <button class="btn-edit" onclick="editEntry(${index})">এডিট</button>
+                        <button class="btn-delete" onclick="deleteEntry(${index})">ডিলিট</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        document.getElementById('total-income').innerText = income;
+        document.getElementById('total-expense').innerText = expense;
+        document.getElementById('total-balance').innerText = income - expense;
+    }
+
+    function editEntry(index) {
+        if(!isAdmin) return alert("কেবলমাত্র এডমিন সংশোধন করতে পারবেন!");
+        let item = transactions[index];
+        let newAmount = prompt("নতুন পরিমাণ (৳) লিখুন:", item.amount);
+        if(newAmount !== null) {
+            transactions[index].amount = parseFloat(newAmount);
+            renderTable();
+        }
+    }
+
+    function deleteEntry(index) {
+        if(!isAdmin) return alert("কেবলমাত্র এডমিন ডিলিট করতে পারবেন!");
+        if(confirm("আপনি কি নিশ্চিত এটি মুছে ফেলতে চান?")) {
+            transactions.splice(index, 1);
+            renderTable();
+        }
+    }
+
+    // Google Apps Script API calls
+    function saveToAppsScript(data) {
+        if(APPS_SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") return;
+        fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+    }
+
+    function fetchData() {
+        if(APPS_SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") return;
+        fetch(APPS_SCRIPT_URL)
+            .then(res => res.json())
+            .then(data => {
+                transactions = data;
+                renderTable();
+            });
+    }
+</script>
+
+</body>
+</html>
+
