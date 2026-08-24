@@ -6,12 +6,18 @@
     <title>পূজার - কালেকশন / জমা / খরচ / উদ্বৃত্ত</title>
     <style>
         :root {
-            --primary-color: #d32f2f;
-            --secondary-color: #1976d2;
-            --bg-color: #f4f7f6;
+            --bg-color: #f0f2f5;
             --card-bg: #ffffff;
-            --text-color: #333333;
-            --border-color: #cccccc;
+            --text-color: #222222;
+            --border-color: #dddddd;
+            
+            /* Module Theme Colors */
+            --color-m1: #d32f2f; /* কমিটি কালেকশন - লাল */
+            --color-m2: #1976d2; /* কমিটি জমা/ফেরত - নীল */
+            --color-m3: #e65100; /* খরচ - কমলা */
+            --color-m4: #2e7d32; /* উদ্বৃত্ত - সবুজ */
+            --color-m5: #7b1fa2; /* গ্রাম কালেকশন - বেগুনি */
+            --color-m6: #00838f; /* ইউজার - সায়ান/টিয়াল */
         }
 
         * {
@@ -28,7 +34,7 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -37,143 +43,208 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: var(--card-bg);
-            padding: 15px 20px;
-            border-radius: 8px;
-            border: 2px solid var(--border-color);
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
 
         header h1 {
-            font-size: 20px;
-            color: var(--primary-color);
+            font-size: 22px;
+            letter-spacing: 0.5px;
         }
 
         .auth-status {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .btn-login {
-            background-color: var(--secondary-color);
+            background-color: #ff9800;
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
+            padding: 10px 20px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .btn-login:hover {
+            background-color: #e65100;
         }
 
         .user-info-text {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: bold;
-            color: #555;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
         }
 
         /* Dashboard Grid */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 22px;
         }
 
         .card {
             background-color: var(--card-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid #e0e0e0;
         }
 
         .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
-        .card h3 {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: #2c3e50;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 8px;
-        }
-
-        .card-amount-box {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        .card-amount-box span {
-            font-size: 16px;
+        /* Color Header for each module card */
+        .card-header {
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
             font-weight: bold;
         }
 
-        .amount-val {
-            border: 1px solid var(--border-color);
-            padding: 5px 15px;
-            border-radius: 4px;
-            background-color: #fafafa;
-            min-width: 100px;
-            display: inline-block;
+        .card-m1 .card-header { background-color: var(--color-m1); }
+        .card-m2 .card-header { background-color: var(--color-m2); }
+        .card-m3 .card-header { background-color: var(--color-m3); }
+        .card-m4 .card-header { background-color: var(--color-m4); }
+        .card-m5 .card-header { background-color: var(--color-m5); }
+        .card-m6 .card-header { background-color: var(--color-m6); }
+
+        .card-body {
+            padding: 20px;
+            text-align: center;
         }
 
-        /* Modal / Popup Styles */
+        /* Bigger Amount Display Box */
+        .card-amount-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .card-amount-label {
+            font-size: 16px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .amount-val {
+            font-size: 28px;
+            font-weight: 800;
+            border: 2px solid #e0e0e0;
+            padding: 10px 25px;
+            border-radius: 8px;
+            background-color: #fafafa;
+            min-width: 180px;
+            display: inline-block;
+            word-break: break-all;
+        }
+
+        /* Surplus Color Utility Classes */
+        .text-plus {
+            color: #2e7d32 !important;
+        }
+        .text-minus {
+            color: #d32f2f !important;
+        }
+
+        /* Full Display Modal / Popup Styles */
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.7);
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            padding: 15px;
+            padding: 10px;
         }
 
         .modal-overlay.active {
             display: flex;
         }
 
+        /* Form full display box */
         .modal-box {
             background-color: white;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 850px;
-            max-height: 90vh;
+            border-radius: 12px;
+            width: 96%;
+            height: 94vh;
+            max-width: 1400px;
             overflow-y: auto;
-            padding: 20px;
+            padding: 25px;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            padding: 15px 20px;
+            margin: -25px -25px 20px -25px;
+            color: white;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .modal-header h3 {
+            font-size: 22px;
         }
 
         .close-btn {
-            background: none;
+            background: rgba(255,255,255,0.2);
             border: none;
-            font-size: 24px;
+            font-size: 28px;
             cursor: pointer;
-            color: #888;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .close-btn:hover {
+            background: rgba(255,255,255,0.4);
         }
 
         /* Form Controls */
+        .form-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            margin-bottom: 25px;
+        }
+
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
             margin-bottom: 15px;
         }
 
@@ -184,67 +255,100 @@
 
         .form-group label {
             font-size: 14px;
-            margin-bottom: 4px;
-            font-weight: bold;
+            margin-bottom: 6px;
+            font-weight: 700;
+            color: #444;
         }
 
         .form-group input, .form-group select {
-            padding: 8px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 14px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: #1976d2;
+        }
+
+        .btn-action-container {
+            display: flex;
+            gap: 10px;
         }
 
         .btn-save {
             background-color: #2e7d32;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
+            padding: 12px 25px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .btn-cancel {
+            background-color: #757575;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
         }
 
         /* Table Styles */
         .table-responsive {
             overflow-x: auto;
-            margin-top: 20px;
+            flex-grow: 1;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 14px;
+            font-size: 15px;
+            margin-top: 10px;
         }
 
         table th, table td {
-            border: 1px solid var(--border-color);
-            padding: 8px;
+            border: 1px solid #e0e0e0;
+            padding: 12px 10px;
             text-align: center;
         }
 
         table th {
-            background-color: #f0f0f0;
+            background-color: #f1f3f5;
             font-weight: bold;
+            color: #333;
         }
 
         .btn-edit {
             background-color: #f39c12;
             color: white;
             border: none;
-            padding: 4px 8px;
-            border-radius: 3px;
+            padding: 6px 12px;
+            border-radius: 4px;
             cursor: pointer;
+            font-weight: bold;
+            margin-right: 5px;
         }
 
         .btn-delete {
             background-color: #e74c3c;
             color: white;
             border: none;
-            padding: 4px 8px;
-            border-radius: 3px;
+            padding: 6px 12px;
+            border-radius: 4px;
             cursor: pointer;
+            font-weight: bold;
+        }
+
+        .login-box {
+            max-width: 420px;
+            height: auto;
+            margin: auto;
         }
     </style>
 </head>
@@ -255,64 +359,76 @@
     <header>
         <h1>পূজার - কালেকশন / জমা / খরচ / উদ্বৃত্ত</h1>
         <div class="auth-status">
-            <span id="user-display" class="user-info-text">স্ট্যাটাস: গেস্ট ইউজার</span>
-            <button id="auth-btn" class="btn-login" onclick="openLoginModal()">Login</button>
+            <span id="user-display" class="user-info-text">গেস্ট ইউজার</span>
+            <button id="auth-btn" class="btn-login" onclick="handleAuthClick()">Login</button>
         </div>
     </header>
 
     <!-- Dashboard 6 Module Cards -->
     <div class="dashboard-grid">
         <!-- Card 1 -->
-        <div class="card" onclick="openModule(1)">
-            <h3>কমিটি কালেকশন</h3>
-            <div class="card-amount-box">
-                <span>টাকা</span>
-                <span class="amount-val" id="dash-val-1">0.00</span>
+        <div class="card card-m1" onclick="openModule(1)">
+            <div class="card-header">কমিটি কালেকশন</div>
+            <div class="card-body">
+                <div class="card-amount-box">
+                    <span class="card-amount-label">মোট কালেকশন</span>
+                    <span class="amount-val" id="dash-val-1">৳ 0.00</span>
+                </div>
             </div>
         </div>
 
         <!-- Card 2 -->
-        <div class="card" onclick="openModule(2)">
-            <h3>কমিটি জমা/ফেরত</h3>
-            <div class="card-amount-box">
-                <span>টাকা</span>
-                <span class="amount-val" id="dash-val-2">0.00</span>
+        <div class="card card-m2" onclick="openModule(2)">
+            <div class="card-header">কমিটি জমা / ফেরত</div>
+            <div class="card-body">
+                <div class="card-amount-box">
+                    <span class="card-amount-label">নিট জমা পরিমাণ</span>
+                    <span class="amount-val" id="dash-val-2">৳ 0.00</span>
+                </div>
             </div>
         </div>
 
         <!-- Card 3 -->
-        <div class="card" onclick="openModule(3)">
-            <h3>খরচ</h3>
-            <div class="card-amount-box">
-                <span>টাকা</span>
-                <span class="amount-val" id="dash-val-3">0.00</span>
+        <div class="card card-m3" onclick="openModule(3)">
+            <div class="card-header">খরচ মডিউল</div>
+            <div class="card-body">
+                <div class="card-amount-box">
+                    <span class="card-amount-label">মোট খরচ</span>
+                    <span class="amount-val" id="dash-val-3">৳ 0.00</span>
+                </div>
             </div>
         </div>
 
         <!-- Card 4 -->
-        <div class="card" onclick="openModule(4)">
-            <h3>উদ্বৃত্ত</h3>
-            <div class="card-amount-box">
-                <span>টাকা</span>
-                <span class="amount-val" id="dash-val-4">0.00</span>
+        <div class="card card-m4" onclick="openModule(4)">
+            <div class="card-header">উদ্বৃত্ত বিবরণী</div>
+            <div class="card-body">
+                <div class="card-amount-box">
+                    <span class="card-amount-label">সর্বমোট উদ্বৃত্ত</span>
+                    <span class="amount-val" id="dash-val-4">৳ 0.00</span>
+                </div>
             </div>
         </div>
 
         <!-- Card 5 -->
-        <div class="card" onclick="openModule(5)">
-            <h3>গ্রাম কালেকশন</h3>
-            <div class="card-amount-box">
-                <span>টাকা</span>
-                <span class="amount-val" id="dash-val-5">0.00</span>
+        <div class="card card-m5" onclick="openModule(5)">
+            <div class="card-header">গ্রাম কালেকশন</div>
+            <div class="card-body">
+                <div class="card-amount-box">
+                    <span class="card-amount-label">মোট গ্রাম কালেকশন</span>
+                    <span class="amount-val" id="dash-val-5">৳ 0.00</span>
+                </div>
             </div>
         </div>
 
         <!-- Card 6 -->
-        <div class="card" onclick="openModule(6)">
-            <h3>ইউজার</h3>
-            <div class="card-amount-box">
-                <span>জন</span>
-                <span class="amount-val" id="dash-val-6">0</span>
+        <div class="card card-m6" onclick="openModule(6)">
+            <div class="card-header">ইউজার মডিউল</div>
+            <div class="card-body">
+                <div class="card-amount-box">
+                    <span class="card-amount-label">মোট রেজিস্টার্ড ইউজার</span>
+                    <span class="amount-val" id="dash-val-6">0 জন</span>
+                </div>
             </div>
         </div>
     </div>
@@ -320,8 +436,8 @@
 
 <!-- Login Modal -->
 <div class="modal-overlay" id="login-modal">
-    <div class="modal-box" style="max-width: 400px;">
-        <div class="modal-header">
+    <div class="modal-box login-box">
+        <div class="modal-header" style="background-color: var(--color-m2);">
             <h3>লগইন করুন</h3>
             <button class="close-btn" onclick="closeModal('login-modal')">&times;</button>
         </div>
@@ -330,7 +446,7 @@
                 <label>ইউজার আইডি</label>
                 <input type="text" id="login-id" required placeholder="ইউজার আইডি লিখুন">
             </div>
-            <div class="form-group" style="margin-bottom: 15px;">
+            <div class="form-group" style="margin-bottom: 20px;">
                 <label>পাসওয়ার্ড</label>
                 <input type="password" id="login-pass" required placeholder="পাসওয়ার্ড লিখুন">
             </div>
@@ -339,41 +455,39 @@
     </div>
 </div>
 
-<!-- Main Module Modal -->
+<!-- Main Module Modal (Full Display) -->
 <div class="modal-overlay" id="module-modal">
     <div class="modal-box">
-        <div class="modal-header">
+        <div class="modal-header" id="modal-header-bg">
             <h3 id="modal-title">মডিউল নাম</h3>
             <button class="close-btn" onclick="closeModal('module-modal')">&times;</button>
         </div>
 
         <!-- Form Section -->
-        <div id="form-container">
-            <!-- Dynamic Form Fields will load here -->
+        <div id="form-container" class="form-section">
+            <!-- Dynamic Form Fields load here -->
         </div>
 
-        <!-- List/Table Section -->
+        <!-- Table Section -->
         <div id="table-container" class="table-responsive">
-            <!-- Dynamic Tables will load here -->
+            <!-- Dynamic Tables load here -->
         </div>
     </div>
 </div>
 
 <script>
-    // Google Apps Script Backend Integration URL
-    const APPS_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL";
-
-    // Global State Management
-    let currentUser = null; // null = Guest, { id: 'admin', role: 'admin' }, etc.
+    // State Management
+    let currentUser = null;
     let activeModuleId = null;
+    let editingIndex = null; // null = Add Mode, Number = Edit Mode
 
-    // Default Demo Users Data
+    // Default User List
     let usersList = [
         { id: 1, date: '2026-08-24 10:00', name: 'অ্যাডমিন', village: 'কেন্দ্রীয়', mobile: '01700000000', userId: 'admin', pass: '1234', role: 'admin' },
         { id: 2, date: '2026-08-24 10:05', name: 'রাহুল হালদার', village: 'উত্তর পাড়া', mobile: '01800000000', userId: 'user1', pass: '1234', role: 'user' }
     ];
 
-    // Data Store for Modules
+    // Data Store
     let database = {
         module1: [], // কমিটি কালেকশন
         module2: [], // কমিটি জমা/ফেরত
@@ -384,24 +498,54 @@
     const VILLAGES = ["উত্তর পাড়া", "দক্ষিণ পাড়া", "পূর্ব পাড়া", "পশ্চিম পাড়া", "কেন্দ্রীয় এলাকা"];
     const HOUSES = ["বিশ্বাস বাড়ি", "মন্ডল বাড়ি", "ঘোষ বাড়ি", "সরকার বাড়ি", "হালদার বাড়ি"];
 
+    const MODULE_COLORS = {
+        1: 'var(--color-m1)',
+        2: 'var(--color-m2)',
+        3: 'var(--color-m3)',
+        4: 'var(--color-m4)',
+        5: 'var(--color-m5)',
+        6: 'var(--color-m6)'
+    };
+
+    // Page Load - Session Persistence from localStorage
     window.onload = function() {
+        const savedUser = localStorage.getItem('puja_app_user');
+        if (savedUser) {
+            try {
+                currentUser = JSON.parse(savedUser);
+            } catch(e) {
+                currentUser = null;
+            }
+        }
+        updateUserUI();
         calculateTotals();
     };
 
-    function openLoginModal() {
-        if(currentUser) {
+    function updateUserUI() {
+        if (currentUser) {
+            document.getElementById('user-display').innerText = `${currentUser.name} (${currentUser.role === 'admin' ? 'এডমিন' : 'ইউজার'})`;
+            document.getElementById('auth-btn').innerText = "Logout";
+        } else {
+            document.getElementById('user-display').innerText = "গেস্ট ইউজার";
+            document.getElementById('auth-btn').innerText = "Login";
+        }
+    }
+
+    function handleAuthClick() {
+        if (currentUser) {
             // Logout
             currentUser = null;
-            document.getElementById('user-display').innerText = "স্ট্যাটাস: গেস্ট ইউজার";
-            document.getElementById('auth-btn').innerText = "Login";
-            alert("আপনি লগআউট করেছেন।");
-            return;
+            localStorage.removeItem('puja_app_user');
+            updateUserUI();
+            alert("আপনি সফলভাবে লগআউট হয়েছেন।");
+        } else {
+            document.getElementById('login-modal').classList.add('active');
         }
-        document.getElementById('login-modal').classList.add('active');
     }
 
     function closeModal(modalId) {
         document.getElementById(modalId).classList.remove('active');
+        editingIndex = null;
     }
 
     function handleLogin(e) {
@@ -411,33 +555,38 @@
 
         const foundUser = usersList.find(u => u.userId === idInput && u.pass === passInput);
 
-        if(foundUser) {
+        if (foundUser) {
             currentUser = foundUser;
-            document.getElementById('user-display').innerText = `ইউজার: ${currentUser.name} (${currentUser.role === 'admin' ? 'এডমিন' : 'সাধারণ ইউজার'})`;
-            document.getElementById('auth-btn').innerText = "Logout";
+            localStorage.setItem('puja_app_user', JSON.stringify(currentUser));
+            updateUserUI();
             closeModal('login-modal');
             document.getElementById('login-id').value = '';
             document.getElementById('login-pass').value = '';
         } else {
-            alert("ইউজার আইডি অথবা পাসওয়ার্ড ভুল হয়েছে!");
+            alert("ভুল ইউজার আইডি অথবা পাসওয়ার্ড!");
         }
     }
 
     function openModule(moduleId) {
         // Guest Access Guard
         if (!currentUser) {
-            alert("গেস্ট ইউজাররা কোনো মডিউলে প্রবেশ করতে পারবেন না। অনুগ্রহ করে ইউজার আইডি ও পাসওয়ার্ড দিয়ে লগইন করুন।");
-            openLoginModal();
+            alert("গেস্ট ইউজাররা তথ্য দেখতে বা পরিবর্তন করতে পারবেন না। অনুগ্রহ করে লগইন করুন।");
+            document.getElementById('login-modal').classList.add('active');
             return;
         }
 
-        // Regular User Guard for User Module (Module 6)
+        // User Access Guard for User Module
         if (moduleId === 6 && currentUser.role !== 'admin') {
             alert("সাধারণ ইউজাররা 'ইউজার মডিউল' এক্সেস করতে পারবেন না!");
             return;
         }
 
         activeModuleId = moduleId;
+        editingIndex = null;
+        
+        const modalHeader = document.getElementById('modal-header-bg');
+        modalHeader.style.backgroundColor = MODULE_COLORS[moduleId];
+
         const modalTitle = document.getElementById('modal-title');
         const formContainer = document.getElementById('form-container');
         
@@ -461,7 +610,7 @@
                 break;
             case 4:
                 modalTitle.innerText = "উদ্বৃত্ত বিবরণী";
-                formContainer.innerHTML = ""; // No input form for Surplus
+                formContainer.style.display = "none"; // No form for Surplus
                 renderTableModule4();
                 break;
             case 5:
@@ -475,21 +624,27 @@
                 renderTableModule6();
                 break;
         }
+        if (moduleId !== 4) formContainer.style.display = "block";
     }
 
     // --- Module 1: কমিটি কালেকশন ---
-    function renderFormModule1() {
-        let vOptions = VILLAGES.map(v => `<option value="${v}">${v}</option>`).join('');
-        let hOptions = HOUSES.map(h => `<option value="${h}">${h}</option>`).join('');
+    function renderFormModule1(editItem = null) {
+        let vOptions = VILLAGES.map(v => `<option value="${v}" ${editItem && editItem.village === v ? 'selected' : ''}>${v}</option>`).join('');
+        let hOptions = HOUSES.map(h => `<option value="${h}" ${editItem && editItem.house === h ? 'selected' : ''}>${h}</option>`).join('');
+
         document.getElementById('form-container').innerHTML = `
             <form onsubmit="saveModule1(event)">
+                <h4 style="margin-bottom: 10px; color: var(--color-m1);">${editItem ? 'তথ্য এডিট করুন' : 'নতুন কালেকশন এন্ট্রি'}</h4>
                 <div class="form-grid">
-                    <div class="form-group"><label>নাম</label><input type="text" id="m1-name" required></div>
+                    <div class="form-group"><label>নাম</label><input type="text" id="m1-name" value="${editItem ? editItem.name : ''}" required></div>
                     <div class="form-group"><label>গ্রাম</label><select id="m1-village" required><option value="">--নির্বাচন করুন--</option>${vOptions}</select></div>
                     <div class="form-group"><label>বাড়ি</label><select id="m1-house" required><option value="">--নির্বাচন করুন--</option>${hOptions}</select></div>
-                    <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m1-amount" required step="any"></div>
+                    <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m1-amount" value="${editItem ? editItem.amount : ''}" required step="any"></div>
                 </div>
-                <button type="submit" class="btn-save">Save</button>
+                <div class="btn-action-container">
+                    <button type="submit" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
+                    ${editItem ? `<button type="button" class="btn-cancel" onclick="cancelEdit(1)">বাতিল</button>` : ''}
+                </div>
             </form>
         `;
     }
@@ -497,18 +652,30 @@
     function saveModule1(e) {
         e.preventDefault();
         const entry = {
-            id: Date.now(),
-            dateTime: new Date().toLocaleString('bn-BD'),
+            id: editingIndex !== null ? database.module1[editingIndex].id : Date.now(),
+            dateTime: editingIndex !== null ? database.module1[editingIndex].dateTime : new Date().toLocaleString('bn-BD'),
             name: document.getElementById('m1-name').value,
             village: document.getElementById('m1-village').value,
             house: document.getElementById('m1-house').value,
             amount: parseFloat(document.getElementById('m1-amount').value),
             userId: currentUser.userId
         };
-        database.module1.push(entry);
+
+        if (editingIndex !== null) {
+            database.module1[editingIndex] = entry;
+            editingIndex = null;
+        } else {
+            database.module1.push(entry);
+        }
+
         calculateTotals();
+        renderFormModule1();
         renderTableModule1();
-        e.target.reset();
+    }
+
+    function editModule1(idx) {
+        editingIndex = idx;
+        renderFormModule1(database.module1[idx]);
     }
 
     function renderTableModule1() {
@@ -519,7 +686,7 @@
                 <td>${item.name}</td>
                 <td>${item.village}</td>
                 <td>${item.house}</td>
-                <td>${item.amount.toFixed(2)}</td>
+                <td>৳ ${item.amount.toFixed(2)}</td>
                 <td>${item.userId}</td>
                 ${isAdmin ? `<td>
                     <button class="btn-edit" onclick="editModule1(${idx})">এডিট</button>
@@ -529,7 +696,7 @@
         `).join('');
 
         document.getElementById('table-container').innerHTML = `
-            <h3>কালেকশন লিস্ট</h3>
+            <h3>কালেকশন তালিকা</h3>
             <table>
                 <thead>
                     <tr>
@@ -537,22 +704,13 @@
                         ${isAdmin ? '<th>Action</th>' : ''}
                     </tr>
                 </thead>
-                <tbody>${rows || '<tr><td colspan="7">কোনো ডাটা নেই</td></tr>'}</tbody>
+                <tbody>${rows || '<tr><td colspan="7">কোনো ডাটা পাওয়া যায়নি</td></tr>'}</tbody>
             </table>
         `;
     }
 
-    function editModule1(idx) {
-        let newAmt = prompt("নতুন পরিমাণ লিখুন:", database.module1[idx].amount);
-        if(newAmt !== null && !isNaN(parseFloat(newAmt))) {
-            database.module1[idx].amount = parseFloat(newAmt);
-            calculateTotals();
-            renderTableModule1();
-        }
-    }
-
     function deleteModule1(idx) {
-        if(confirm("আপনি কি এটি মুছে ফেলতে চান?")) {
+        if(confirm("আপনি কি নিশ্চিত এটি মুছে ফেলতে চান?")) {
             database.module1.splice(idx, 1);
             calculateTotals();
             renderTableModule1();
@@ -560,22 +718,26 @@
     }
 
     // --- Module 2: কমিটি জমা / ফেরত ---
-    function renderFormModule2() {
+    function renderFormModule2(editItem = null) {
         document.getElementById('form-container').innerHTML = `
             <form onsubmit="saveModule2(event)">
+                <h4 style="margin-bottom: 10px; color: var(--color-m2);">${editItem ? 'জমা/ফেরত তথ্য এডিট' : 'নতুন জমা/ফেরত এন্ট্রি'}</h4>
                 <div class="form-grid">
-                    <div class="form-group"><label>জমা/ফেরতকারীর নাম</label><input type="text" id="m2-name" required></div>
-                    <div class="form-group"><label>জমা/ফেরতকারীর গ্রাম</label><input type="text" id="m2-village" required></div>
+                    <div class="form-group"><label>আমানতকারীর নাম</label><input type="text" id="m2-name" value="${editItem ? editItem.name : ''}" required></div>
+                    <div class="form-group"><label>গ্রাম</label><input type="text" id="m2-village" value="${editItem ? editItem.village : ''}" required></div>
                     <div class="form-group">
                         <label>টাইপ</label>
                         <select id="m2-type" required>
-                            <option value="জমা">জমা</option>
-                            <option value="ফেরত">ফেরত</option>
+                            <option value="জমা" ${editItem && editItem.type === 'জমা' ? 'selected' : ''}>জমা</option>
+                            <option value="ফেরত" ${editItem && editItem.type === 'ফেরত' ? 'selected' : ''}>ফেরত</option>
                         </select>
                     </div>
-                    <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m2-amount" required step="any"></div>
+                    <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m2-amount" value="${editItem ? editItem.amount : ''}" required step="any"></div>
                 </div>
-                <button type="submit" class="btn-save">Save</button>
+                <div class="btn-action-container">
+                    <button type="submit" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
+                    ${editItem ? `<button type="button" class="btn-cancel" onclick="cancelEdit(2)">বাতিল</button>` : ''}
+                </div>
             </form>
         `;
     }
@@ -583,18 +745,30 @@
     function saveModule2(e) {
         e.preventDefault();
         const entry = {
-            id: Date.now(),
-            dateTime: new Date().toLocaleString('bn-BD'),
+            id: editingIndex !== null ? database.module2[editingIndex].id : Date.now(),
+            dateTime: editingIndex !== null ? database.module2[editingIndex].dateTime : new Date().toLocaleString('bn-BD'),
             name: document.getElementById('m2-name').value,
             village: document.getElementById('m2-village').value,
             type: document.getElementById('m2-type').value,
             amount: parseFloat(document.getElementById('m2-amount').value),
             userId: currentUser.userId
         };
-        database.module2.push(entry);
+
+        if (editingIndex !== null) {
+            database.module2[editingIndex] = entry;
+            editingIndex = null;
+        } else {
+            database.module2.push(entry);
+        }
+
         calculateTotals();
+        renderFormModule2();
         renderTableModule2();
-        e.target.reset();
+    }
+
+    function editModule2(idx) {
+        editingIndex = idx;
+        renderFormModule2(database.module2[idx]);
     }
 
     function renderTableModule2() {
@@ -605,28 +779,31 @@
                 <td>${item.name}</td>
                 <td>${item.village}</td>
                 <td>${item.type}</td>
-                <td>${item.amount.toFixed(2)}</td>
+                <td>৳ ${item.amount.toFixed(2)}</td>
                 <td>${item.userId}</td>
-                ${isAdmin ? `<td><button class="btn-delete" onclick="deleteModule2(${idx})">মুছুন</button></td>` : ''}
+                ${isAdmin ? `<td>
+                    <button class="btn-edit" onclick="editModule2(${idx})">এডিট</button>
+                    <button class="btn-delete" onclick="deleteModule2(${idx})">মুছুন</button>
+                </td>` : ''}
             </tr>
         `).join('');
 
         document.getElementById('table-container').innerHTML = `
-            <h3>জমা / ফেরত লিস্ট</h3>
+            <h3>জমা / ফেরত তালিকা</h3>
             <table>
                 <thead>
                     <tr>
-                        <th>তারিখ/সময়</th><th>আমানতকারীর নাম</th><th>গ্রাম</th><th>জমা/ফেরত</th><th>পরিমাণ</th><th>ইউজার আইডি</th>
+                        <th>তারিখ/সময়</th><th>আমানতকারীর নাম</th><th>গ্রাম</th><th>টাইপ</th><th>পরিমাণ</th><th>ইউজার আইডি</th>
                         ${isAdmin ? '<th>Action</th>' : ''}
                     </tr>
                 </thead>
-                <tbody>${rows || '<tr><td colspan="7">কোনো ডাটা নেই</td></tr>'}</tbody>
+                <tbody>${rows || '<tr><td colspan="7">কোনো ডাটা পাওয়া যায়নি</td></tr>'}</tbody>
             </table>
         `;
     }
 
     function deleteModule2(idx) {
-        if(confirm("আপনি কি নিশ্চিত মুছবেন?")) {
+        if(confirm("মুছে ফেলতে চান?")) {
             database.module2.splice(idx, 1);
             calculateTotals();
             renderTableModule2();
@@ -634,16 +811,20 @@
     }
 
     // --- Module 3: খরচ ---
-    function renderFormModule3() {
+    function renderFormModule3(editItem = null) {
         document.getElementById('form-container').innerHTML = `
             <form onsubmit="saveModule3(event)">
+                <h4 style="margin-bottom: 10px; color: var(--color-m3);">${editItem ? 'খরচের তথ্য এডিট' : 'নতুন খরচ এন্ট্রি'}</h4>
                 <div class="form-grid">
-                    <div class="form-group"><label>খরচের খাত</label><input type="text" id="m3-title" required></div>
-                    <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m3-amount" required step="any"></div>
-                    <div class="form-group"><label>টাকা নেওয়া ব্যক্তির নাম</label><input type="text" id="m3-person" required></div>
-                    <div class="form-group"><label>নোট / মোবাইল</label><input type="text" id="m3-note"></div>
+                    <div class="form-group"><label>খরচের খাত</label><input type="text" id="m3-title" value="${editItem ? editItem.title : ''}" required></div>
+                    <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m3-amount" value="${editItem ? editItem.amount : ''}" required step="any"></div>
+                    <div class="form-group"><label>টাকা নেওয়া ব্যক্তির নাম</label><input type="text" id="m3-person" value="${editItem ? editItem.person : ''}" required></div>
+                    <div class="form-group"><label>নোট / মোবাইল</label><input type="text" id="m3-note" value="${editItem ? editItem.note : ''}"></div>
                 </div>
-                <button type="submit" class="btn-save">Save</button>
+                <div class="btn-action-container">
+                    <button type="submit" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
+                    ${editItem ? `<button type="button" class="btn-cancel" onclick="cancelEdit(3)">বাতিল</button>` : ''}
+                </div>
             </form>
         `;
     }
@@ -651,18 +832,30 @@
     function saveModule3(e) {
         e.preventDefault();
         const entry = {
-            id: Date.now(),
-            dateTime: new Date().toLocaleString('bn-BD'),
+            id: editingIndex !== null ? database.module3[editingIndex].id : Date.now(),
+            dateTime: editingIndex !== null ? database.module3[editingIndex].dateTime : new Date().toLocaleString('bn-BD'),
             title: document.getElementById('m3-title').value,
             amount: parseFloat(document.getElementById('m3-amount').value),
             person: document.getElementById('m3-person').value,
             note: document.getElementById('m3-note').value,
             userId: currentUser.userId
         };
-        database.module3.push(entry);
+
+        if (editingIndex !== null) {
+            database.module3[editingIndex] = entry;
+            editingIndex = null;
+        } else {
+            database.module3.push(entry);
+        }
+
         calculateTotals();
+        renderFormModule3();
         renderTableModule3();
-        e.target.reset();
+    }
+
+    function editModule3(idx) {
+        editingIndex = idx;
+        renderFormModule3(database.module3[idx]);
     }
 
     function renderTableModule3() {
@@ -671,24 +864,27 @@
             <tr>
                 <td>${item.dateTime}</td>
                 <td>${item.title}</td>
-                <td>${item.amount.toFixed(2)}</td>
+                <td>৳ ${item.amount.toFixed(2)}</td>
                 <td>${item.person}</td>
                 <td>${item.note || '-'}</td>
                 <td>${item.userId}</td>
-                ${isAdmin ? `<td><button class="btn-delete" onclick="deleteModule3(${idx})">মুছুন</button></td>` : ''}
+                ${isAdmin ? `<td>
+                    <button class="btn-edit" onclick="editModule3(${idx})">এডিট</button>
+                    <button class="btn-delete" onclick="deleteModule3(${idx})">মুছুন</button>
+                </td>` : ''}
             </tr>
         `).join('');
 
         document.getElementById('table-container').innerHTML = `
-            <h3>খরচের লিস্ট</h3>
+            <h3>খরচের তালিকা</h3>
             <table>
                 <thead>
                     <tr>
-                        <th>তারিখ/সময়</th><th>খরচের খাত</th><th>পরিমাণ</th><th>টাকা নেওয়া ব্যক্তির নাম</th><th>নোট/মোবাইল</th><th>ইউজার আইডি</th>
+                        <th>তারিখ/সময়</th><th>খরচের খাত</th><th>পরিমাণ</th><th>টাকা নেওয়া ব্যক্তি</th><th>নোট/মোবাইল</th><th>ইউজার আইডি</th>
                         ${isAdmin ? '<th>Action</th>' : ''}
                     </tr>
                 </thead>
-                <tbody>${rows || '<tr><td colspan="7">কোনো ডাটা নেই</td></tr>'}</tbody>
+                <tbody>${rows || '<tr><td colspan="7">কোনো ডাটা পাওয়া যায়নি</td></tr>'}</tbody>
             </table>
         `;
     }
@@ -704,20 +900,23 @@
     // --- Module 4: উদ্বৃত্ত (Surplus Summary Statement) ---
     function renderTableModule4() {
         let totals = getCalculatedTotals();
+        let surplusStyleClass = totals.surplus >= 0 ? "text-plus" : "text-minus";
+        let surplusFormatted = totals.surplus >= 0 ? `৳ ${totals.surplus.toFixed(2)}` : `- ৳ ${Math.abs(totals.surplus).toFixed(2)}`;
+
         document.getElementById('table-container').innerHTML = `
-            <h3>উদ্বৃত্ত বিবরণী হিসাব</h3>
+            <h3>উদ্বৃত্ত হিসাব বিবরণী</h3>
             <table>
                 <thead>
-                    <tr><th>আইটেম / খাত</th><th>মোট টাকা (৳)</th></tr>
+                    <tr><th>আইটেম / বিবরণী খাত</th><th>মোট টাকা (৳)</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td style="text-align:left;">(+) মোট কালেকশন</td><td>${totals.totCol.toFixed(2)}</td></tr>
-                    <tr><td style="text-align:left;">(+) মোট গ্রাম কালেকশন</td><td>${totals.totVilCol.toFixed(2)}</td></tr>
-                    <tr><td style="text-align:left;">(+/-) নিট জমা ফেরত</td><td>${totals.netDeposit.toFixed(2)}</td></tr>
-                    <tr><td style="text-align:left;">(-) মোট খরচ</td><td>${totals.totExp.toFixed(2)}</td></tr>
-                    <tr style="font-weight:bold; background-color:#e8f5e9;">
+                    <tr><td style="text-align:left;">(+) মোট কমিটি কালেকশন</td><td>৳ ${totals.totCol.toFixed(2)}</td></tr>
+                    <tr><td style="text-align:left;">(+) মোট গ্রাম কালেকশন</td><td>৳ ${totals.totVilCol.toFixed(2)}</td></tr>
+                    <tr><td style="text-align:left;">(+/-) নিট জমা / ফেরত</td><td>৳ ${totals.netDeposit.toFixed(2)}</td></tr>
+                    <tr><td style="text-align:left;">(-) মোট খরচ</td><td>৳ ${totals.totExp.toFixed(2)}</td></tr>
+                    <tr style="font-weight:bold; font-size: 18px; background-color:#f9f9f9;">
                         <td style="text-align:left;">(=) সর্বমোট উদ্বৃত্ত টাকা</td>
-                        <td>${totals.surplus.toFixed(2)}</td>
+                        <td class="${surplusStyleClass}">${surplusFormatted}</td>
                     </tr>
                 </tbody>
             </table>
@@ -725,17 +924,22 @@
     }
 
     // --- Module 5: গ্রাম কালেকশন ---
-    function renderFormModule5() {
-        let vOptions = VILLAGES.map(v => `<option value="${v}">${v}</option>`).join('');
+    function renderFormModule5(editItem = null) {
+        let vOptions = VILLAGES.map(v => `<option value="${v}" ${editItem && editItem.village === v ? 'selected' : ''}>${v}</option>`).join('');
+
         document.getElementById('form-container').innerHTML = `
             <form onsubmit="saveModule5(event)">
+                <h4 style="margin-bottom: 10px; color: var(--color-m5);">${editItem ? 'গ্রাম কালেকশন এডিট' : 'নতুন গ্রাম কালেকশন এন্ট্রি'}</h4>
                 <div class="form-grid">
-                    <div class="form-group"><label>নাম</label><input type="text" id="m5-name" required></div>
+                    <div class="form-group"><label>নাম</label><input type="text" id="m5-name" value="${editItem ? editItem.name : ''}" required></div>
                     <div class="form-group"><label>গ্রাম</label><select id="m5-village" required><option value="">--নির্বাচন করুন--</option>${vOptions}</select></div>
-                    <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m5-amount" required step="any"></div>
-                    <div class="form-group"><label>নোট</label><input type="text" id="m5-note"></div>
+                    <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m5-amount" value="${editItem ? editItem.amount : ''}" required step="any"></div>
+                    <div class="form-group"><label>নোট</label><input type="text" id="m5-note" value="${editItem ? editItem.note : ''}"></div>
                 </div>
-                <button type="submit" class="btn-save">Save</button>
+                <div class="btn-action-container">
+                    <button type="submit" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
+                    ${editItem ? `<button type="button" class="btn-cancel" onclick="cancelEdit(5)">বাতিল</button>` : ''}
+                </div>
             </form>
         `;
     }
@@ -743,18 +947,30 @@
     function saveModule5(e) {
         e.preventDefault();
         const entry = {
-            id: Date.now(),
-            dateTime: new Date().toLocaleString('bn-BD'),
+            id: editingIndex !== null ? database.module5[editingIndex].id : Date.now(),
+            dateTime: editingIndex !== null ? database.module5[editingIndex].dateTime : new Date().toLocaleString('bn-BD'),
             name: document.getElementById('m5-name').value,
             village: document.getElementById('m5-village').value,
             amount: parseFloat(document.getElementById('m5-amount').value),
             note: document.getElementById('m5-note').value,
             userId: currentUser.userId
         };
-        database.module5.push(entry);
+
+        if (editingIndex !== null) {
+            database.module5[editingIndex] = entry;
+            editingIndex = null;
+        } else {
+            database.module5.push(entry);
+        }
+
         calculateTotals();
+        renderFormModule5();
         renderTableModule5();
-        e.target.reset();
+    }
+
+    function editModule5(idx) {
+        editingIndex = idx;
+        renderFormModule5(database.module5[idx]);
     }
 
     function renderTableModule5() {
@@ -764,15 +980,18 @@
                 <td>${item.dateTime}</td>
                 <td>${item.name}</td>
                 <td>${item.village}</td>
-                <td>${item.amount.toFixed(2)}</td>
+                <td>৳ ${item.amount.toFixed(2)}</td>
                 <td>${item.note || '-'}</td>
                 <td>${item.userId}</td>
-                ${isAdmin ? `<td><button class="btn-delete" onclick="deleteModule5(${idx})">মুছুন</button></td>` : ''}
+                ${isAdmin ? `<td>
+                    <button class="btn-edit" onclick="editModule5(${idx})">এডিট</button>
+                    <button class="btn-delete" onclick="deleteModule5(${idx})">মুছুন</button>
+                </td>` : ''}
             </tr>
         `).join('');
 
         document.getElementById('table-container').innerHTML = `
-            <h3>গ্রাম কালেকশন লিস্ট</h3>
+            <h3>গ্রাম কালেকশন তালিকা</h3>
             <table>
                 <thead>
                     <tr>
@@ -780,7 +999,7 @@
                         ${isAdmin ? '<th>Action</th>' : ''}
                     </tr>
                 </thead>
-                <tbody>${rows || '<tr><td colspan="7">কোনো ডাটা নেই</td></tr>'}</tbody>
+                <tbody>${rows || '<tr><td colspan="7">কোনো ডাটা পাওয়া যায়নি</td></tr>'}</tbody>
             </table>
         `;
     }
@@ -793,34 +1012,38 @@
         }
     }
 
-    // --- Module 6: ইউজার ---
-    function renderFormModule6() {
+    // --- Module 6: ইউজার মডিউল ---
+    function renderFormModule6(editItem = null) {
         document.getElementById('form-container').innerHTML = `
             <form onsubmit="saveUser(event)">
+                <h4 style="margin-bottom: 10px; color: var(--color-m6);">${editItem ? 'ইউজার তথ্য এডিট' : 'নতুন ইউজার এন্ট্রি'}</h4>
                 <div class="form-grid">
-                    <div class="form-group"><label>নাম</label><input type="text" id="u-name" required></div>
-                    <div class="form-group"><label>গ্রাম</label><input type="text" id="u-village" required></div>
-                    <div class="form-group"><label>মোবাইল</label><input type="text" id="u-mobile" required></div>
-                    <div class="form-group"><label>ইউজার আইডি</label><input type="text" id="u-id" required></div>
-                    <div class="form-group"><label>পাসওয়ার্ড</label><input type="text" id="u-pass" required></div>
+                    <div class="form-group"><label>নাম</label><input type="text" id="u-name" value="${editItem ? editItem.name : ''}" required></div>
+                    <div class="form-group"><label>গ্রাম</label><input type="text" id="u-village" value="${editItem ? editItem.village : ''}" required></div>
+                    <div class="form-group"><label>মোবাইল</label><input type="text" id="u-mobile" value="${editItem ? editItem.mobile : ''}" required></div>
+                    <div class="form-group"><label>ইউজার আইডি</label><input type="text" id="u-id" value="${editItem ? editItem.userId : ''}" required></div>
+                    <div class="form-group"><label>পাসওয়ার্ড</label><input type="text" id="u-pass" value="${editItem ? editItem.pass : ''}" required></div>
                     <div class="form-group">
                         <label>রোল</label>
                         <select id="u-role" required>
-                            <option value="user">সাধারণ ইউজার</option>
-                            <option value="admin">এডমিন</option>
+                            <option value="user" ${editItem && editItem.role === 'user' ? 'selected' : ''}>সাধারণ ইউজার</option>
+                            <option value="admin" ${editItem && editItem.role === 'admin' ? 'selected' : ''}>এডমিন</option>
                         </select>
                     </div>
                 </div>
-                <button type="submit" class="btn-save">Save</button>
+                <div class="btn-action-container">
+                    <button type="submit" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
+                    ${editItem ? `<button type="button" class="btn-cancel" onclick="cancelEdit(6)">বাতিল</button>` : ''}
+                </div>
             </form>
         `;
     }
 
     function saveUser(e) {
         e.preventDefault();
-        const newUser = {
-            id: Date.now(),
-            date: new Date().toLocaleString('bn-BD'),
+        const userObj = {
+            id: editingIndex !== null ? usersList[editingIndex].id : Date.now(),
+            date: editingIndex !== null ? usersList[editingIndex].date : new Date().toLocaleString('bn-BD'),
             name: document.getElementById('u-name').value,
             village: document.getElementById('u-village').value,
             mobile: document.getElementById('u-mobile').value,
@@ -828,10 +1051,22 @@
             pass: document.getElementById('u-pass').value,
             role: document.getElementById('u-role').value
         };
-        usersList.push(newUser);
+
+        if (editingIndex !== null) {
+            usersList[editingIndex] = userObj;
+            editingIndex = null;
+        } else {
+            usersList.push(userObj);
+        }
+
         calculateTotals();
+        renderFormModule6();
         renderTableModule6();
-        e.target.reset();
+    }
+
+    function editUser(idx) {
+        editingIndex = idx;
+        renderFormModule6(usersList[idx]);
     }
 
     function renderTableModule6() {
@@ -844,7 +1079,10 @@
                 <td>${u.userId}</td>
                 <td>${u.pass}</td>
                 <td>${u.role}</td>
-                <td><button class="btn-delete" onclick="deleteUser(${idx})">মুছুন</button></td>
+                <td>
+                    <button class="btn-edit" onclick="editUser(${idx})">এডিট</button>
+                    <button class="btn-delete" onclick="deleteUser(${idx})">মুছুন</button>
+                </td>
             </tr>
         `).join('');
 
@@ -863,7 +1101,7 @@
 
     function deleteUser(idx) {
         if(usersList[idx].userId === 'admin') {
-            alert("মূল এডমিন অ্যাকাউন্ট মোছা যাবে না!");
+            alert("প্রধান এডমিন অ্যাকাউন্ট মুছা যাবে না!");
             return;
         }
         if(confirm("ইউজারটি মুছে ফেলতে চান?")) {
@@ -873,7 +1111,12 @@
         }
     }
 
-    // --- Calculation Engine ---
+    function cancelEdit(modId) {
+        editingIndex = null;
+        openModule(modId);
+    }
+
+    // --- Global Calculation Engine ---
     function getCalculatedTotals() {
         let totCol = database.module1.reduce((acc, i) => acc + i.amount, 0);
         let totVilCol = database.module5.reduce((acc, i) => acc + i.amount, 0);
@@ -891,12 +1134,22 @@
     function calculateTotals() {
         let totals = getCalculatedTotals();
         
-        document.getElementById('dash-val-1').innerText = totals.totCol.toFixed(2);
-        document.getElementById('dash-val-2').innerText = totals.netDeposit.toFixed(2);
-        document.getElementById('dash-val-3').innerText = totals.totExp.toFixed(2);
-        document.getElementById('dash-val-4').innerText = totals.surplus.toFixed(2);
-        document.getElementById('dash-val-5').innerText = totals.totVilCol.toFixed(2);
-        document.getElementById('dash-val-6').innerText = usersList.length;
+        document.getElementById('dash-val-1').innerText = `৳ ${totals.totCol.toFixed(2)}`;
+        document.getElementById('dash-val-2').innerText = `৳ ${totals.netDeposit.toFixed(2)}`;
+        document.getElementById('dash-val-3').innerText = `৳ ${totals.totExp.toFixed(2)}`;
+        
+        // Surplus Display Logic (+ Green, - Red)
+        const surplusElem = document.getElementById('dash-val-4');
+        if (totals.surplus >= 0) {
+            surplusElem.innerText = `৳ ${totals.surplus.toFixed(2)}`;
+            surplusElem.className = "amount-val text-plus";
+        } else {
+            surplusElem.innerText = `- ৳ ${Math.abs(totals.surplus).toFixed(2)}`;
+            surplusElem.className = "amount-val text-minus";
+        }
+
+        document.getElementById('dash-val-5').innerText = `৳ ${totals.totVilCol.toFixed(2)}`;
+        document.getElementById('dash-val-6').innerText = `${usersList.length} জন`;
     }
 </script>
 
