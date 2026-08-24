@@ -543,7 +543,8 @@
         6: 'var(--color-m6)'
     };
 
-    function showLoader() { document.getElementById('loading-overlay').style.display = 'flex'; }
+    // সেভ বা কানেকশনের সময় স্ক্রিনের নোটিফিকেশন বন্ধ রাখার জন্য লোডার নিষ্ক্রিয় করা হলো
+    function showLoader() { }
     function hideLoader() { document.getElementById('loading-overlay').style.display = 'none'; }
 
     // Backend API Call Helper Function
@@ -566,7 +567,6 @@
         } catch (err) {
             hideLoader();
             console.error("API Error:", err);
-            alert("গুগল শিটের সাথে ডাটা আদান-প্রদানে সমস্যা হয়েছে!");
             return null;
         }
     }
