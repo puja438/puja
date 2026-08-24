@@ -3,350 +3,398 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>পূজায় কালেকশন / খরচ / জমা - ড্যাশবোর্ড</title>
+    <title>পূজার - কালেকশন / জমা / খরচ / উদ্বৃত্ত</title>
     <style>
         :root {
-            --primary: #d32f2f;
-            --primary-dark: #b71c1c;
-            --secondary: #0d6efd;
-            --success: #198754;
-            --warning: #ff9800;
-            --purple: #6f42c1;
-            --dark-border: #2c3e50;
-            --bg-light: #f8f9fa;
-            --card-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            --primary-color: #d32f2f;
+            --secondary-color: #1976d2;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #cccccc;
         }
 
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
-        body { background-color: #f4f6f9; color: #212529; padding: 15px; }
-        .container { max-width: 900px; margin: auto; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-        /* Header Title & Status */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Header Style */
         header {
-            background: linear-gradient(135deg, #d32f2f, #ff5722);
-            color: white; padding: 20px; border-radius: 14px;
-            box-shadow: 0 5px 15px rgba(211, 47, 47, 0.3);
-            display: flex; justify-content: space-between; align-items: center;
-            flex-wrap: wrap; gap: 10px; margin-bottom: 20px;
-        }
-        header h1 { font-size: 22px; font-weight: bold; }
-        .user-status { display: flex; align-items: center; gap: 10px; }
-        .status-badge {
-            padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; background: rgba(255,255,255,0.2);
-        }
-        .btn-auth {
-            background: white; color: var(--primary); font-weight: bold; border: none;
-            padding: 8px 18px; border-radius: 20px; cursor: pointer; transition: 0.2s;
-        }
-        .btn-auth:hover { background: #ffebee; }
-
-        /* Formula Banner */
-        .formula-card {
-            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
-            color: #006064; padding: 14px 18px; border-radius: 12px;
-            font-size: 14px; font-weight: 600; margin-bottom: 20px;
-            border-left: 5px solid #00838f; box-shadow: var(--card-shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--card-bg);
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            margin-bottom: 20px;
         }
 
-        /* 6 Dashboard Summary Cards Grid */
+        header h1 {
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        .auth-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-login {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .user-info-text {
+            font-size: 14px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* Dashboard Grid */
         .dashboard-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin-bottom: 25px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
         }
+
         .card {
-            background: white; border: 2px solid var(--dark-border); border-radius: 14px;
-            padding: 16px; box-shadow: var(--card-shadow); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
-            position: relative; overflow: hidden;
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
-        .card-title {
-            font-size: 17px; font-weight: bold; color: var(--dark-border);
-            padding-bottom: 8px; border-bottom: 1px solid #eee; margin-bottom: 12px;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .card-body { display: flex; justify-content: space-between; align-items: center; }
-        .card-label { font-size: 16px; font-weight: 600; color: #555; }
-        .value-badge {
-            font-size: 18px; font-weight: bold; padding: 6px 14px; border-radius: 8px;
-            border: 1px solid var(--dark-border); background: white; color: var(--secondary);
-        }
-        .value-badge.expense { color: var(--primary); }
-        .value-badge.surplus { background: #e8f5e9; color: var(--success); border-color: var(--success); }
-        .value-badge.purple { background: #f3e5f5; color: var(--purple); border-color: var(--purple); }
 
-        /* Modal Dialog Popup */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; padding: 15px;
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .modal.active { display: flex; }
-        .modal-content {
-            background: white; border-radius: 14px; max-width: 550px; width: 100%;
-            max-height: 90vh; overflow-y: auto; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative;
+
+        .card h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
         }
+
+        .card-amount-box {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .card-amount-box span {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .amount-val {
+            border: 1px solid var(--border-color);
+            padding: 5px 15px;
+            border-radius: 4px;
+            background-color: #fafafa;
+            min-width: 100px;
+            display: inline-block;
+        }
+
+        /* Modal / Popup Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background-color: white;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 850px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 20px;
+            position: relative;
+        }
+
         .modal-header {
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
         }
-        .modal-header h3 { color: var(--primary); font-size: 18px; }
-        .close-btn { font-size: 22px; cursor: pointer; border: none; background: none; color: #777; }
 
-        /* Forms */
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 5px; color: #444; }
-        input, select, button { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
-        .btn-submit { background: var(--primary); color: white; font-weight: bold; border: none; cursor: pointer; margin-top: 10px; }
-        .btn-submit:hover { background: var(--primary-dark); }
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #888;
+        }
 
-        /* Data Tables */
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #eee; padding: 10px; text-align: center; font-size: 13px; }
-        th { background: #ffebee; color: var(--primary); }
-        .action-btns { display: none; gap: 5px; justify-content: center; }
-        .admin-mode .action-btns { display: flex; }
-        .btn-edit { background: var(--warning); border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; color: white; }
-        .btn-delete { background: var(--primary); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
+        /* Form Controls */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
 
-        /* Print Settings */
-        .btn-print { background: var(--success); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        @media print {
-            .no-print { display: none !important; }
-            body { background: white; padding: 0; }
-            .container { max-width: 100%; }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .btn-save {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* Table Styles */
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        table th, table td {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .btn-edit {
+            background-color: #f39c12;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-<div class="container" id="app-container">
-
-    <!-- Header Section -->
-    <header class="no-print">
-        <div>
-            <h1>🕉️ পূজায় কালেকশন / খরচ / জমা</h1>
-        </div>
-        <div class="user-status">
-            <span id="role-badge" class="status-badge">গেস্ট (লগইন ছাড়া)</span>
-            <button class="btn-auth" onclick="openLoginModal()" id="auth-btn">লগইন করুন</button>
+<div class="container">
+    <!-- Header -->
+    <header>
+        <h1>পূজার - কালেকশন / জমা / খরচ / উদ্বৃত্ত</h1>
+        <div class="auth-status">
+            <span id="user-display" class="user-info-text">স্ট্যাটাস: গেস্ট ইউজার</span>
+            <button id="auth-btn" class="btn-login" onclick="openLoginModal()">Login</button>
         </div>
     </header>
 
-    <!-- Printable Area -->
-    <div id="printable-area">
-        <!-- Formula Banner -->
-        <div class="formula-card">
-            🧮 <strong>উদ্বৃত্ত হিসাবের সূত্র:</strong> উদ্বৃত্ত = (কালেকশন + গ্রাম কালেকশন + নিট জমা/ফেরত) - খরচ
-        </div>
-
-        <!-- 6 Main Dashboard Module Cards -->
-        <div class="dashboard-grid no-print">
-            <div class="card" onclick="handleModuleClick('collection')">
-                <div class="card-title">💰 ১. কালেকশন মডিউল</div>
-                <div class="card-body">
-                    <span class="card-label">টাকা</span>
-                    <div class="value-badge" id="dash-collection">0.00</div>
-                </div>
-            </div>
-
-            <div class="card" onclick="handleModuleClick('expense')">
-                <div class="card-title">🧾 ২. খরচ মডিউল</div>
-                <div class="card-body">
-                    <span class="card-label">টাকা</span>
-                    <div class="value-badge expense" id="dash-expense">0.00</div>
-                </div>
-            </div>
-
-            <div class="card" onclick="handleModuleClick('deposit')">
-                <div class="card-title">🔄 ৩. জমা / ফেরত মডিউল</div>
-                <div class="card-body">
-                    <span class="card-label">টাকা</span>
-                    <div class="value-badge" id="dash-deposit">0.00</div>
-                </div>
-            </div>
-
-            <div class="card" onclick="handleModuleClick('village_col')">
-                <div class="card-title">🏛️ ৪. গ্রাম কালেকশন মডিউল</div>
-                <div class="card-body">
-                    <span class="card-label">টাকা</span>
-                    <div class="value-badge" id="dash-village-col">0.00</div>
-                </div>
-            </div>
-
-            <div class="card" onclick="handleModuleClick('surplus')">
-                <div class="card-title">⚖️ ৫. উদ্বৃত্ত মডিউল</div>
-                <div class="card-body">
-                    <span class="card-label">টাকা</span>
-                    <div class="value-badge surplus" id="dash-surplus">0.00</div>
-                </div>
-            </div>
-
-            <div class="card" onclick="handleModuleClick('users')">
-                <div class="card-title">👥 ৬. ইউজার মডিউল</div>
-                <div class="card-body">
-                    <span class="card-label">মোট ইউজার</span>
-                    <div class="value-badge purple">জন = <span id="dash-user-count">১</span></div>
-                </div>
+    <!-- Dashboard 6 Module Cards -->
+    <div class="dashboard-grid">
+        <!-- Card 1 -->
+        <div class="card" onclick="openModule(1)">
+            <h3>কমিটি কালেকশন</h3>
+            <div class="card-amount-box">
+                <span>টাকা</span>
+                <span class="amount-val" id="dash-val-1">0.00</span>
             </div>
         </div>
 
-        <!-- Print Summary Report -->
-        <div style="background: white; padding: 20px; border-radius: 12px; border: 2px solid var(--dark-border);">
-            <h3 style="text-align:center; color: var(--primary); margin-bottom: 10px;">সর্বশেষ হিসাব বিবরণী</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>তারিখ</th>
-                        <th>মডিউল / খাত</th>
-                        <th>নাম / নোট</th>
-                        <th>গ্রাম</th>
-                        <th>বাড়ি</th>
-                        <th>পরিমাণ (৳)</th>
-                        <th class="no-print">অ্যাকশন</th>
-                    </tr>
-                </thead>
-                <tbody id="master-table-body">
-                    <!-- Data populated dynamically -->
-                </tbody>
-            </table>
+        <!-- Card 2 -->
+        <div class="card" onclick="openModule(2)">
+            <h3>কমিটি জমা/ফেরত</h3>
+            <div class="card-amount-box">
+                <span>টাকা</span>
+                <span class="amount-val" id="dash-val-2">0.00</span>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card" onclick="openModule(3)">
+            <h3>খরচ</h3>
+            <div class="card-amount-box">
+                <span>টাকা</span>
+                <span class="amount-val" id="dash-val-3">0.00</span>
+            </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="card" onclick="openModule(4)">
+            <h3>উদ্বৃত্ত</h3>
+            <div class="card-amount-box">
+                <span>টাকা</span>
+                <span class="amount-val" id="dash-val-4">0.00</span>
+            </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="card" onclick="openModule(5)">
+            <h3>গ্রাম কালেকশন</h3>
+            <div class="card-amount-box">
+                <span>টাকা</span>
+                <span class="amount-val" id="dash-val-5">0.00</span>
+            </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="card" onclick="openModule(6)">
+            <h3>ইউজার</h3>
+            <div class="card-amount-box">
+                <span>জন</span>
+                <span class="amount-val" id="dash-val-6">0</span>
+            </div>
         </div>
     </div>
-
-    <button class="btn-print no-print" onclick="window.print()">🖨️ উদ্বৃত্ত রিপোর্ট প্রিন্ট করুন</button>
 </div>
 
 <!-- Login Modal -->
-<div class="modal" id="login-modal">
-    <div class="modal-content">
+<div class="modal-overlay" id="login-modal">
+    <div class="modal-box" style="max-width: 400px;">
         <div class="modal-header">
-            <h3>অ্যাকেসস লগইন</h3>
+            <h3>লগইন করুন</h3>
             <button class="close-btn" onclick="closeModal('login-modal')">&times;</button>
         </div>
-        <div class="form-group">
-            <label>ইউজার রোল নির্বাচন করুন</label>
-            <select id="login-role">
-                <option value="user">সাধারণ ইউজার</option>
-                <option value="admin">এডমিন (Admin)</option>
-            </select>
-        </div>
-        <div class="form-group" id="pin-group" style="display:none;">
-            <label>এডমিন পিন (PIN)</label>
-            <input type="password" id="admin-pin" placeholder="ডিফল্ট পিন: 1234">
-        </div>
-        <button class="btn-submit" onclick="performLogin()">লগইন করুন</button>
-    </div>
-</div>
-
-<!-- Data Entry & Module Modal -->
-<div class="modal" id="module-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 id="modal-module-title">মডিউল তথ্য এন্ট্রি</h3>
-            <button class="close-btn" onclick="closeModal('module-modal')">&times;</button>
-        </div>
-        <form id="module-form" onsubmit="handleFormSubmit(event)">
-            <input type="hidden" id="entry-module-type">
-            <div class="form-group">
-                <label>তারিখ</label>
-                <input type="date" id="entry-date" required>
+        <form onsubmit="handleLogin(event)">
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>ইউজার আইডি</label>
+                <input type="text" id="login-id" required placeholder="ইউজার আইডি লিখুন">
             </div>
-            <div class="form-group">
-                <label>নাম / খাতের বিবরণ / নোট</label>
-                <input type="text" id="entry-title" placeholder="বিবরণ লিখুন" required>
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label>পাসওয়ার্ড</label>
+                <input type="password" id="login-pass" required placeholder="পাসওয়ার্ড লিখুন">
             </div>
-            <div class="form-group" id="field-village">
-                <label>গ্রাম</label>
-                <select id="entry-village" required></select>
-            </div>
-            <div class="form-group" id="field-house">
-                <label>বাড়ি</label>
-                <select id="entry-house" required></select>
-            </div>
-            <div class="form-group">
-                <label>টাকার পরিমাণ (৳)</label>
-                <input type="number" step="0.01" id="entry-amount" placeholder="0.00" required>
-            </div>
-            <button type="submit" class="btn-submit">ডাটা সেভ করুন</button>
+            <button type="submit" class="btn-save" style="width: 100%;">লগইন</button>
         </form>
     </div>
 </div>
 
+<!-- Main Module Modal -->
+<div class="modal-overlay" id="module-modal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="modal-title">মডিউল নাম</h3>
+            <button class="close-btn" onclick="closeModal('module-modal')">&times;</button>
+        </div>
+
+        <!-- Form Section -->
+        <div id="form-container">
+            <!-- Dynamic Form Fields will load here -->
+        </div>
+
+        <!-- List/Table Section -->
+        <div id="table-container" class="table-responsive">
+            <!-- Dynamic Tables will load here -->
+        </div>
+    </div>
+</div>
+
 <script>
-    // =========================================================================
-    // ১. গুগল অ্যাপস স্ক্রিপ্ট (Code.gs) এর লিঙ্ক
-    // =========================================================================
-    const APPS_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+    // Google Apps Script Backend Integration URL
+    const APPS_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL";
 
-    // =========================================================================
-    // ২. গ্রাম এবং বাড়ির তালিকা (প্রয়োজনে নতুন গ্রাম বা বাড়ি যোগ করুন)
-    // =========================================================================
-    const VILLAGE_LIST = ["উত্তর পাড়া", "দক্ষিণ পাড়া", "পূর্ব পাড়া", "পশ্চিম পাড়া", "কেন্দ্রীয় এলাকা"];
-    const HOUSE_LIST = ["বিশ্বাস বাড়ি", "মন্ডল বাড়ি", "ঘোষ বাড়ি", "সরকার বাড়ি", "হালদার বাড়ি", "অন্যান্য"];
+    // Global State Management
+    let currentUser = null; // null = Guest, { id: 'admin', role: 'admin' }, etc.
+    let activeModuleId = null;
 
-    // App State Variables
-    let currentRole = 'guest'; // Roles: 'guest', 'user', 'admin'
-    let transactions = [];
-    let activeModule = '';
+    // Default Demo Users Data
+    let usersList = [
+        { id: 1, date: '2026-08-24 10:00', name: 'অ্যাডমিন', village: 'কেন্দ্রীয়', mobile: '01700000000', userId: 'admin', pass: '1234', role: 'admin' },
+        { id: 2, date: '2026-08-24 10:05', name: 'রাহুল হালদার', village: 'উত্তর পাড়া', mobile: '01800000000', userId: 'user1', pass: '1234', role: 'user' }
+    ];
 
-    window.onload = function() {
-        document.getElementById('entry-date').valueAsDate = new Date();
-        populateDropdowns();
-        setupLoginRoleToggle();
-        fetchData();
+    // Data Store for Modules
+    let database = {
+        module1: [], // কমিটি কালেকশন
+        module2: [], // কমিটি জমা/ফেরত
+        module3: [], // খরচ
+        module5: []  // গ্রাম কালেকশন
     };
 
-    function populateDropdowns() {
-        const vSelect = document.getElementById('entry-village');
-        const hSelect = document.getElementById('entry-house');
+    const VILLAGES = ["উত্তর পাড়া", "দক্ষিণ পাড়া", "পূর্ব পাড়া", "পশ্চিম পাড়া", "কেন্দ্রীয় এলাকা"];
+    const HOUSES = ["বিশ্বাস বাড়ি", "মন্ডল বাড়ি", "ঘোষ বাড়ি", "সরকার বাড়ি", "হালদার বাড়ি"];
 
-        vSelect.innerHTML = '<option value="">-- গ্রাম নির্বাচন করুন --</option>';
-        VILLAGE_LIST.forEach(v => vSelect.innerHTML += `<option value="${v}">${v}</option>`);
-
-        hSelect.innerHTML = '<option value="">-- বাড়ি নির্বাচন করুন --</option>';
-        HOUSE_LIST.forEach(h => hSelect.innerHTML += `<option value="${h}">${h}</option>`);
-    }
-
-    function setupLoginRoleToggle() {
-        document.getElementById('login-role').addEventListener('change', function() {
-            document.getElementById('pin-group').style.display = (this.value === 'admin') ? 'block' : 'none';
-        });
-    }
-
-    // Role-based Access Control (RBAC) Logic
-    function handleModuleClick(moduleType) {
-        if(currentRole === 'guest') {
-            alert("গেস্ট ইউজার মডিউল খুলতে পারবেন না। অনুগ্রহ করে প্রথমে লগইন করুন!");
-            openLoginModal();
-            return;
-        }
-
-        if(moduleType === 'users' && currentRole !== 'admin') {
-            alert("কেবলমাত্র এডমিন ইউজার মডিউল এক্সেস করতে পারবেন!");
-            return;
-        }
-
-        activeModule = moduleType;
-        document.getElementById('entry-module-type').value = moduleType;
-        
-        const titles = {
-            'collection': '💰 ১. কালেকশন এন্ট্রি',
-            'expense': '🧾 ২. খরচ এন্ট্রি',
-            'deposit': '🔄 ৩. জমা / ফেরত এন্ট্রি',
-            'village_col': '🏛️ ৪. গ্রাম কালেকশন এন্ট্রি',
-            'surplus': '⚖️ ৫. উদ্বৃত্ত রিপোর্ট বিবরণী',
-            'users': '👥 ৬. ইউজার ম্যানেজমেন্ট'
-        };
-
-        document.getElementById('modal-module-title').innerText = titles[moduleType] || 'তথ্য এন্ট্রি';
-        document.getElementById('module-modal').classList.add('active');
-    }
+    window.onload = function() {
+        calculateTotals();
+    };
 
     function openLoginModal() {
-        if(currentRole !== 'guest') {
-            // Logout logic
-            currentRole = 'guest';
-            document.getElementById('role-badge').innerText = 'গেস্ট (লগইন ছাড়া)';
-            document.getElementById('auth-btn').innerText = 'লগইন করুন';
-            document.getElementById('app-container').classList.remove('admin-mode');
-            renderData();
+        if(currentUser) {
+            // Logout
+            currentUser = null;
+            document.getElementById('user-display').innerText = "স্ট্যাটাস: গেস্ট ইউজার";
+            document.getElementById('auth-btn').innerText = "Login";
+            alert("আপনি লগআউট করেছেন।");
             return;
         }
         document.getElementById('login-modal').classList.add('active');
@@ -356,131 +404,499 @@
         document.getElementById(modalId).classList.remove('active');
     }
 
-    function performLogin() {
-        const selectedRole = document.getElementById('login-role').value;
-        if(selectedRole === 'admin') {
-            const pin = document.getElementById('admin-pin').value;
-            if(pin === '1234') {
-                currentRole = 'admin';
-                document.getElementById('role-badge').innerText = 'মোড: এডমিন';
-                document.getElementById('app-container').classList.add('admin-mode');
-            } else {
-                alert("ভুল এডমিন পিন!");
-                return;
-            }
-        } else {
-            currentRole = 'user';
-            document.getElementById('role-badge').innerText = 'মোড: সাধারণ ইউজার';
-            document.getElementById('app-container').classList.remove('admin-mode');
-        }
-
-        document.getElementById('auth-btn').innerText = 'লগআউট';
-        closeModal('login-modal');
-        renderData();
-    }
-
-    function handleFormSubmit(e) {
+    function handleLogin(e) {
         e.preventDefault();
-        const data = {
+        const idInput = document.getElementById('login-id').value.trim();
+        const passInput = document.getElementById('login-pass').value.trim();
+
+        const foundUser = usersList.find(u => u.userId === idInput && u.pass === passInput);
+
+        if(foundUser) {
+            currentUser = foundUser;
+            document.getElementById('user-display').innerText = `ইউজার: ${currentUser.name} (${currentUser.role === 'admin' ? 'এডমিন' : 'সাধারণ ইউজার'})`;
+            document.getElementById('auth-btn').innerText = "Logout";
+            closeModal('login-modal');
+            document.getElementById('login-id').value = '';
+            document.getElementById('login-pass').value = '';
+        } else {
+            alert("ইউজার আইডি অথবা পাসওয়ার্ড ভুল হয়েছে!");
+        }
+    }
+
+    function openModule(moduleId) {
+        // Guest Access Guard
+        if (!currentUser) {
+            alert("গেস্ট ইউজাররা কোনো মডিউলে প্রবেশ করতে পারবেন না। অনুগ্রহ করে ইউজার আইডি ও পাসওয়ার্ড দিয়ে লগইন করুন।");
+            openLoginModal();
+            return;
+        }
+
+        // Regular User Guard for User Module (Module 6)
+        if (moduleId === 6 && currentUser.role !== 'admin') {
+            alert("সাধারণ ইউজাররা 'ইউজার মডিউল' এক্সেস করতে পারবেন না!");
+            return;
+        }
+
+        activeModuleId = moduleId;
+        const modalTitle = document.getElementById('modal-title');
+        const formContainer = document.getElementById('form-container');
+        
+        document.getElementById('module-modal').classList.add('active');
+
+        switch(moduleId) {
+            case 1:
+                modalTitle.innerText = "কমিটি কালেকশন";
+                renderFormModule1();
+                renderTableModule1();
+                break;
+            case 2:
+                modalTitle.innerText = "কমিটি জমা / ফেরত";
+                renderFormModule2();
+                renderTableModule2();
+                break;
+            case 3:
+                modalTitle.innerText = "খরচ মডিউল";
+                renderFormModule3();
+                renderTableModule3();
+                break;
+            case 4:
+                modalTitle.innerText = "উদ্বৃত্ত বিবরণী";
+                formContainer.innerHTML = ""; // No input form for Surplus
+                renderTableModule4();
+                break;
+            case 5:
+                modalTitle.innerText = "গ্রাম কালেকশন";
+                renderFormModule5();
+                renderTableModule5();
+                break;
+            case 6:
+                modalTitle.innerText = "ইউজার মডিউল";
+                renderFormModule6();
+                renderTableModule6();
+                break;
+        }
+    }
+
+    // --- Module 1: কমিটি কালেকশন ---
+    function renderFormModule1() {
+        let vOptions = VILLAGES.map(v => `<option value="${v}">${v}</option>`).join('');
+        let hOptions = HOUSES.map(h => `<option value="${h}">${h}</option>`).join('');
+        document.getElementById('form-container').innerHTML = `
+            <form onsubmit="saveModule1(event)">
+                <div class="form-grid">
+                    <div class="form-group"><label>নাম</label><input type="text" id="m1-name" required></div>
+                    <div class="form-group"><label>গ্রাম</label><select id="m1-village" required><option value="">--নির্বাচন করুন--</option>${vOptions}</select></div>
+                    <div class="form-group"><label>বাড়ি</label><select id="m1-house" required><option value="">--নির্বাচন করুন--</option>${hOptions}</select></div>
+                    <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m1-amount" required step="any"></div>
+                </div>
+                <button type="submit" class="btn-save">Save</button>
+            </form>
+        `;
+    }
+
+    function saveModule1(e) {
+        e.preventDefault();
+        const entry = {
             id: Date.now(),
-            date: document.getElementById('entry-date').value,
-            type: document.getElementById('entry-module-type').value,
-            title: document.getElementById('entry-title').value,
-            village: document.getElementById('entry-village').value,
-            house: document.getElementById('entry-house').value,
-            amount: parseFloat(document.getElementById('entry-amount').value)
+            dateTime: new Date().toLocaleString('bn-BD'),
+            name: document.getElementById('m1-name').value,
+            village: document.getElementById('m1-village').value,
+            house: document.getElementById('m1-house').value,
+            amount: parseFloat(document.getElementById('m1-amount').value),
+            userId: currentUser.userId
         };
-
-        transactions.push(data);
-        saveToAppsScript(data);
-        renderData();
-        closeModal('module-modal');
-        document.getElementById('module-form').reset();
-        document.getElementById('entry-date').valueAsDate = new Date();
-        populateDropdowns();
+        database.module1.push(entry);
+        calculateTotals();
+        renderTableModule1();
+        e.target.reset();
     }
 
-    function renderData() {
-        const tableBody = document.getElementById('master-table-body');
-        tableBody.innerHTML = '';
+    function renderTableModule1() {
+        let isAdmin = currentUser.role === 'admin';
+        let rows = database.module1.map((item, idx) => `
+            <tr>
+                <td>${item.dateTime}</td>
+                <td>${item.name}</td>
+                <td>${item.village}</td>
+                <td>${item.house}</td>
+                <td>${item.amount.toFixed(2)}</td>
+                <td>${item.userId}</td>
+                ${isAdmin ? `<td>
+                    <button class="btn-edit" onclick="editModule1(${idx})">এডিট</button>
+                    <button class="btn-delete" onclick="deleteModule1(${idx})">মুছুন</button>
+                </td>` : ''}
+            </tr>
+        `).join('');
 
-        let col = 0, exp = 0, dep = 0, vilCol = 0;
-
-        transactions.forEach((item, index) => {
-            if(item.type === 'collection') col += item.amount;
-            else if(item.type === 'expense') exp += item.amount;
-            else if(item.type === 'deposit') dep += item.amount;
-            else if(item.type === 'village_col') vilCol += item.amount;
-
-            tableBody.innerHTML += `
-                <tr>
-                    <td>${item.date}</td>
-                    <td><strong>${item.type}</strong></td>
-                    <td>${item.title}</td>
-                    <td>${item.village || '-'}</td>
-                    <td>${item.house || '-'}</td>
-                    <td>${item.amount.toFixed(2)} ৳</td>
-                    <td class="no-print action-btns">
-                        <button class="btn-edit" onclick="editEntry(${index})">এডিট</button>
-                        <button class="btn-delete" onclick="deleteEntry(${index})">ডিলিট</button>
-                    </td>
-                </tr>
-            `;
-        });
-
-        // Dashboard Card updates
-        document.getElementById('dash-collection').innerText = col.toFixed(2);
-        document.getElementById('dash-expense').innerText = exp.toFixed(2);
-        document.getElementById('dash-deposit').innerText = dep.toFixed(2);
-        document.getElementById('dash-village-col').innerText = vilCol.toFixed(2);
-
-        // Surplus Calculation
-        let surplus = (col + vilCol + dep) - exp;
-        document.getElementById('dash-surplus').innerText = surplus.toFixed(2);
+        document.getElementById('table-container').innerHTML = `
+            <h3>কালেকশন লিস্ট</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>তারিখ/সময়</th><th>নাম</th><th>গ্রাম</th><th>বাড়ি</th><th>পরিমাণ</th><th>ইউজার আইডি</th>
+                        ${isAdmin ? '<th>Action</th>' : ''}
+                    </tr>
+                </thead>
+                <tbody>${rows || '<tr><td colspan="7">কোনো ডাটা নেই</td></tr>'}</tbody>
+            </table>
+        `;
     }
 
-    function editEntry(index) {
-        if(currentRole !== 'admin') {
-            alert("শুধুমাত্র এডমিন ডাটা এডিট করতে পারবেন!");
-            return;
-        }
-        let item = transactions[index];
-        let newAmt = prompt("নতুন টাকার পরিমাণ লিখুন:", item.amount);
+    function editModule1(idx) {
+        let newAmt = prompt("নতুন পরিমাণ লিখুন:", database.module1[idx].amount);
         if(newAmt !== null && !isNaN(parseFloat(newAmt))) {
-            transactions[index].amount = parseFloat(newAmt);
-            renderData();
+            database.module1[idx].amount = parseFloat(newAmt);
+            calculateTotals();
+            renderTableModule1();
         }
     }
 
-    function deleteEntry(index) {
-        if(currentRole !== 'admin') {
-            alert("শুধুমাত্র এডমিন ডাটা মুছে ফেলতে পারবেন!");
+    function deleteModule1(idx) {
+        if(confirm("আপনি কি এটি মুছে ফেলতে চান?")) {
+            database.module1.splice(idx, 1);
+            calculateTotals();
+            renderTableModule1();
+        }
+    }
+
+    // --- Module 2: কমিটি জমা / ফেরত ---
+    function renderFormModule2() {
+        document.getElementById('form-container').innerHTML = `
+            <form onsubmit="saveModule2(event)">
+                <div class="form-grid">
+                    <div class="form-group"><label>জমা/ফেরতকারীর নাম</label><input type="text" id="m2-name" required></div>
+                    <div class="form-group"><label>জমা/ফেরতকারীর গ্রাম</label><input type="text" id="m2-village" required></div>
+                    <div class="form-group">
+                        <label>টাইপ</label>
+                        <select id="m2-type" required>
+                            <option value="জমা">জমা</option>
+                            <option value="ফেরত">ফেরত</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m2-amount" required step="any"></div>
+                </div>
+                <button type="submit" class="btn-save">Save</button>
+            </form>
+        `;
+    }
+
+    function saveModule2(e) {
+        e.preventDefault();
+        const entry = {
+            id: Date.now(),
+            dateTime: new Date().toLocaleString('bn-BD'),
+            name: document.getElementById('m2-name').value,
+            village: document.getElementById('m2-village').value,
+            type: document.getElementById('m2-type').value,
+            amount: parseFloat(document.getElementById('m2-amount').value),
+            userId: currentUser.userId
+        };
+        database.module2.push(entry);
+        calculateTotals();
+        renderTableModule2();
+        e.target.reset();
+    }
+
+    function renderTableModule2() {
+        let isAdmin = currentUser.role === 'admin';
+        let rows = database.module2.map((item, idx) => `
+            <tr>
+                <td>${item.dateTime}</td>
+                <td>${item.name}</td>
+                <td>${item.village}</td>
+                <td>${item.type}</td>
+                <td>${item.amount.toFixed(2)}</td>
+                <td>${item.userId}</td>
+                ${isAdmin ? `<td><button class="btn-delete" onclick="deleteModule2(${idx})">মুছুন</button></td>` : ''}
+            </tr>
+        `).join('');
+
+        document.getElementById('table-container').innerHTML = `
+            <h3>জমা / ফেরত লিস্ট</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>তারিখ/সময়</th><th>আমানতকারীর নাম</th><th>গ্রাম</th><th>জমা/ফেরত</th><th>পরিমাণ</th><th>ইউজার আইডি</th>
+                        ${isAdmin ? '<th>Action</th>' : ''}
+                    </tr>
+                </thead>
+                <tbody>${rows || '<tr><td colspan="7">কোনো ডাটা নেই</td></tr>'}</tbody>
+            </table>
+        `;
+    }
+
+    function deleteModule2(idx) {
+        if(confirm("আপনি কি নিশ্চিত মুছবেন?")) {
+            database.module2.splice(idx, 1);
+            calculateTotals();
+            renderTableModule2();
+        }
+    }
+
+    // --- Module 3: খরচ ---
+    function renderFormModule3() {
+        document.getElementById('form-container').innerHTML = `
+            <form onsubmit="saveModule3(event)">
+                <div class="form-grid">
+                    <div class="form-group"><label>খরচের খাত</label><input type="text" id="m3-title" required></div>
+                    <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m3-amount" required step="any"></div>
+                    <div class="form-group"><label>টাকা নেওয়া ব্যক্তির নাম</label><input type="text" id="m3-person" required></div>
+                    <div class="form-group"><label>নোট / মোবাইল</label><input type="text" id="m3-note"></div>
+                </div>
+                <button type="submit" class="btn-save">Save</button>
+            </form>
+        `;
+    }
+
+    function saveModule3(e) {
+        e.preventDefault();
+        const entry = {
+            id: Date.now(),
+            dateTime: new Date().toLocaleString('bn-BD'),
+            title: document.getElementById('m3-title').value,
+            amount: parseFloat(document.getElementById('m3-amount').value),
+            person: document.getElementById('m3-person').value,
+            note: document.getElementById('m3-note').value,
+            userId: currentUser.userId
+        };
+        database.module3.push(entry);
+        calculateTotals();
+        renderTableModule3();
+        e.target.reset();
+    }
+
+    function renderTableModule3() {
+        let isAdmin = currentUser.role === 'admin';
+        let rows = database.module3.map((item, idx) => `
+            <tr>
+                <td>${item.dateTime}</td>
+                <td>${item.title}</td>
+                <td>${item.amount.toFixed(2)}</td>
+                <td>${item.person}</td>
+                <td>${item.note || '-'}</td>
+                <td>${item.userId}</td>
+                ${isAdmin ? `<td><button class="btn-delete" onclick="deleteModule3(${idx})">মুছুন</button></td>` : ''}
+            </tr>
+        `).join('');
+
+        document.getElementById('table-container').innerHTML = `
+            <h3>খরচের লিস্ট</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>তারিখ/সময়</th><th>খরচের খাত</th><th>পরিমাণ</th><th>টাকা নেওয়া ব্যক্তির নাম</th><th>নোট/মোবাইল</th><th>ইউজার আইডি</th>
+                        ${isAdmin ? '<th>Action</th>' : ''}
+                    </tr>
+                </thead>
+                <tbody>${rows || '<tr><td colspan="7">কোনো ডাটা নেই</td></tr>'}</tbody>
+            </table>
+        `;
+    }
+
+    function deleteModule3(idx) {
+        if(confirm("মুছে ফেলতে চান?")) {
+            database.module3.splice(idx, 1);
+            calculateTotals();
+            renderTableModule3();
+        }
+    }
+
+    // --- Module 4: উদ্বৃত্ত (Surplus Summary Statement) ---
+    function renderTableModule4() {
+        let totals = getCalculatedTotals();
+        document.getElementById('table-container').innerHTML = `
+            <h3>উদ্বৃত্ত বিবরণী হিসাব</h3>
+            <table>
+                <thead>
+                    <tr><th>আইটেম / খাত</th><th>মোট টাকা (৳)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td style="text-align:left;">(+) মোট কালেকশন</td><td>${totals.totCol.toFixed(2)}</td></tr>
+                    <tr><td style="text-align:left;">(+) মোট গ্রাম কালেকশন</td><td>${totals.totVilCol.toFixed(2)}</td></tr>
+                    <tr><td style="text-align:left;">(+/-) নিট জমা ফেরত</td><td>${totals.netDeposit.toFixed(2)}</td></tr>
+                    <tr><td style="text-align:left;">(-) মোট খরচ</td><td>${totals.totExp.toFixed(2)}</td></tr>
+                    <tr style="font-weight:bold; background-color:#e8f5e9;">
+                        <td style="text-align:left;">(=) সর্বমোট উদ্বৃত্ত টাকা</td>
+                        <td>${totals.surplus.toFixed(2)}</td>
+                    </tr>
+                </tbody>
+            </table>
+        `;
+    }
+
+    // --- Module 5: গ্রাম কালেকশন ---
+    function renderFormModule5() {
+        let vOptions = VILLAGES.map(v => `<option value="${v}">${v}</option>`).join('');
+        document.getElementById('form-container').innerHTML = `
+            <form onsubmit="saveModule5(event)">
+                <div class="form-grid">
+                    <div class="form-group"><label>নাম</label><input type="text" id="m5-name" required></div>
+                    <div class="form-group"><label>গ্রাম</label><select id="m5-village" required><option value="">--নির্বাচন করুন--</option>${vOptions}</select></div>
+                    <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m5-amount" required step="any"></div>
+                    <div class="form-group"><label>নোট</label><input type="text" id="m5-note"></div>
+                </div>
+                <button type="submit" class="btn-save">Save</button>
+            </form>
+        `;
+    }
+
+    function saveModule5(e) {
+        e.preventDefault();
+        const entry = {
+            id: Date.now(),
+            dateTime: new Date().toLocaleString('bn-BD'),
+            name: document.getElementById('m5-name').value,
+            village: document.getElementById('m5-village').value,
+            amount: parseFloat(document.getElementById('m5-amount').value),
+            note: document.getElementById('m5-note').value,
+            userId: currentUser.userId
+        };
+        database.module5.push(entry);
+        calculateTotals();
+        renderTableModule5();
+        e.target.reset();
+    }
+
+    function renderTableModule5() {
+        let isAdmin = currentUser.role === 'admin';
+        let rows = database.module5.map((item, idx) => `
+            <tr>
+                <td>${item.dateTime}</td>
+                <td>${item.name}</td>
+                <td>${item.village}</td>
+                <td>${item.amount.toFixed(2)}</td>
+                <td>${item.note || '-'}</td>
+                <td>${item.userId}</td>
+                ${isAdmin ? `<td><button class="btn-delete" onclick="deleteModule5(${idx})">মুছুন</button></td>` : ''}
+            </tr>
+        `).join('');
+
+        document.getElementById('table-container').innerHTML = `
+            <h3>গ্রাম কালেকশন লিস্ট</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>তারিখ/সময়</th><th>নাম</th><th>গ্রাম</th><th>পরিমাণ</th><th>নোট</th><th>ইউজার আইডি</th>
+                        ${isAdmin ? '<th>Action</th>' : ''}
+                    </tr>
+                </thead>
+                <tbody>${rows || '<tr><td colspan="7">কোনো ডাটা নেই</td></tr>'}</tbody>
+            </table>
+        `;
+    }
+
+    function deleteModule5(idx) {
+        if(confirm("মুছে ফেলতে চান?")) {
+            database.module5.splice(idx, 1);
+            calculateTotals();
+            renderTableModule5();
+        }
+    }
+
+    // --- Module 6: ইউজার ---
+    function renderFormModule6() {
+        document.getElementById('form-container').innerHTML = `
+            <form onsubmit="saveUser(event)">
+                <div class="form-grid">
+                    <div class="form-group"><label>নাম</label><input type="text" id="u-name" required></div>
+                    <div class="form-group"><label>গ্রাম</label><input type="text" id="u-village" required></div>
+                    <div class="form-group"><label>মোবাইল</label><input type="text" id="u-mobile" required></div>
+                    <div class="form-group"><label>ইউজার আইডি</label><input type="text" id="u-id" required></div>
+                    <div class="form-group"><label>পাসওয়ার্ড</label><input type="text" id="u-pass" required></div>
+                    <div class="form-group">
+                        <label>রোল</label>
+                        <select id="u-role" required>
+                            <option value="user">সাধারণ ইউজার</option>
+                            <option value="admin">এডমিন</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn-save">Save</button>
+            </form>
+        `;
+    }
+
+    function saveUser(e) {
+        e.preventDefault();
+        const newUser = {
+            id: Date.now(),
+            date: new Date().toLocaleString('bn-BD'),
+            name: document.getElementById('u-name').value,
+            village: document.getElementById('u-village').value,
+            mobile: document.getElementById('u-mobile').value,
+            userId: document.getElementById('u-id').value,
+            pass: document.getElementById('u-pass').value,
+            role: document.getElementById('u-role').value
+        };
+        usersList.push(newUser);
+        calculateTotals();
+        renderTableModule6();
+        e.target.reset();
+    }
+
+    function renderTableModule6() {
+        let rows = usersList.map((u, idx) => `
+            <tr>
+                <td>${u.date}</td>
+                <td>${u.name}</td>
+                <td>${u.village}</td>
+                <td>${u.mobile}</td>
+                <td>${u.userId}</td>
+                <td>${u.pass}</td>
+                <td>${u.role}</td>
+                <td><button class="btn-delete" onclick="deleteUser(${idx})">মুছুন</button></td>
+            </tr>
+        `).join('');
+
+        document.getElementById('table-container').innerHTML = `
+            <h3>ইউজার তালিকা</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>তারিখ/সময়</th><th>নাম</th><th>গ্রাম</th><th>মোবাইল</th><th>ইউজার আইডি</th><th>পাসওয়ার্ড</th><th>রোল</th><th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+        `;
+    }
+
+    function deleteUser(idx) {
+        if(usersList[idx].userId === 'admin') {
+            alert("মূল এডমিন অ্যাকাউন্ট মোছা যাবে না!");
             return;
         }
-        if(confirm("আপনি কি নিশ্চিত এটি মুছবেন?")) {
-            transactions.splice(index, 1);
-            renderData();
+        if(confirm("ইউজারটি মুছে ফেলতে চান?")) {
+            usersList.splice(idx, 1);
+            calculateTotals();
+            renderTableModule6();
         }
     }
 
-    function saveToAppsScript(data) {
-        if(APPS_SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") return;
-        fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
+    // --- Calculation Engine ---
+    function getCalculatedTotals() {
+        let totCol = database.module1.reduce((acc, i) => acc + i.amount, 0);
+        let totVilCol = database.module5.reduce((acc, i) => acc + i.amount, 0);
+        let totExp = database.module3.reduce((acc, i) => acc + i.amount, 0);
+
+        let depositSum = database.module2.filter(i => i.type === 'জমা').reduce((acc, i) => acc + i.amount, 0);
+        let returnSum = database.module2.filter(i => i.type === 'ফেরত').reduce((acc, i) => acc + i.amount, 0);
+        let netDeposit = depositSum - returnSum;
+
+        let surplus = (totCol + totVilCol + netDeposit) - totExp;
+
+        return { totCol, totVilCol, totExp, netDeposit, surplus };
     }
 
-    function fetchData() {
-        if(APPS_SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") return;
-        fetch(APPS_SCRIPT_URL)
-            .then(res => res.json())
-            .then(data => {
-                transactions = data;
-                renderData();
-            });
+    function calculateTotals() {
+        let totals = getCalculatedTotals();
+        
+        document.getElementById('dash-val-1').innerText = totals.totCol.toFixed(2);
+        document.getElementById('dash-val-2').innerText = totals.netDeposit.toFixed(2);
+        document.getElementById('dash-val-3').innerText = totals.totExp.toFixed(2);
+        document.getElementById('dash-val-4').innerText = totals.surplus.toFixed(2);
+        document.getElementById('dash-val-5').innerText = totals.totVilCol.toFixed(2);
+        document.getElementById('dash-val-6').innerText = usersList.length;
     }
 </script>
 
