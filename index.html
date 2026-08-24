@@ -108,7 +108,6 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
-        /* Color Header for each module card */
         .card-header {
             color: white;
             padding: 15px;
@@ -129,7 +128,6 @@
             text-align: center;
         }
 
-        /* Bigger Amount Display Box */
         .card-amount-box {
             display: flex;
             flex-direction: column;
@@ -156,15 +154,10 @@
             word-break: break-all;
         }
 
-        /* Surplus Color Utility Classes */
-        .text-plus {
-            color: #2e7d32 !important;
-        }
-        .text-minus {
-            color: #d32f2f !important;
-        }
+        .text-plus { color: #2e7d32 !important; }
+        .text-minus { color: #d32f2f !important; }
 
-        /* Full Display Modal / Popup Styles */
+        /* Modal / Popup Styles */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -179,11 +172,8 @@
             padding: 10px;
         }
 
-        .modal-overlay.active {
-            display: flex;
-        }
+        .modal-overlay.active { display: flex; }
 
-        /* Form full display box */
         .modal-box {
             background-color: white;
             border-radius: 12px;
@@ -209,9 +199,7 @@
             border-top-right-radius: 12px;
         }
 
-        .modal-header h3 {
-            font-size: 22px;
-        }
+        .modal-header h3 { font-size: 22px; }
 
         .close-btn {
             background: rgba(255,255,255,0.2);
@@ -228,11 +216,8 @@
             transition: 0.2s;
         }
 
-        .close-btn:hover {
-            background: rgba(255,255,255,0.4);
-        }
+        .close-btn:hover { background: rgba(255,255,255,0.4); }
 
-        /* Form Controls */
         .form-section {
             background: #f8f9fa;
             padding: 20px;
@@ -268,9 +253,7 @@
             outline: none;
         }
 
-        .form-group input:focus, .form-group select:focus {
-            border-color: #1976d2;
-        }
+        .form-group input:focus, .form-group select:focus { border-color: #1976d2; }
 
         .btn-action-container {
             display: flex;
@@ -288,6 +271,21 @@
             font-size: 16px;
         }
 
+        .btn-print {
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .btn-cancel {
             background-color: #757575;
             color: white;
@@ -299,7 +297,6 @@
             font-size: 16px;
         }
 
-        /* Table Styles */
         .table-responsive {
             overflow-x: auto;
             flex-grow: 1;
@@ -350,9 +347,57 @@
             height: auto;
             margin: auto;
         }
+
+        /* Loading Indicator Overlay */
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-weight: bold;
+            font-size: 18px;
+            color: #1e3c72;
+        }
+
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #1e3c72;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 12px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* PDF Printing Custom Styles */
+        @media print {
+            body * { visibility: hidden; }
+            #printable-surplus-area, #printable-surplus-area * { visibility: visible; }
+            #printable-surplus-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .btn-print { display: none !important; }
+        }
     </style>
 </head>
 <body>
+
+<div id="loading-overlay">
+    <div class="spinner"></div>
+    <span>গুগল শিটের সাথে সংযোগ হচ্ছে...</span>
+</div>
 
 <div class="container">
     <!-- Header -->
@@ -366,7 +411,6 @@
 
     <!-- Dashboard 6 Module Cards -->
     <div class="dashboard-grid">
-        <!-- Card 1 -->
         <div class="card card-m1" onclick="openModule(1)">
             <div class="card-header">কমিটি কালেকশন</div>
             <div class="card-body">
@@ -377,7 +421,6 @@
             </div>
         </div>
 
-        <!-- Card 2 -->
         <div class="card card-m2" onclick="openModule(2)">
             <div class="card-header">কমিটি জমা / ফেরত</div>
             <div class="card-body">
@@ -388,7 +431,6 @@
             </div>
         </div>
 
-        <!-- Card 3 -->
         <div class="card card-m3" onclick="openModule(3)">
             <div class="card-header">খরচ মডিউল</div>
             <div class="card-body">
@@ -399,7 +441,6 @@
             </div>
         </div>
 
-        <!-- Card 4 -->
         <div class="card card-m4" onclick="openModule(4)">
             <div class="card-header">উদ্বৃত্ত বিবরণী</div>
             <div class="card-body">
@@ -410,7 +451,6 @@
             </div>
         </div>
 
-        <!-- Card 5 -->
         <div class="card card-m5" onclick="openModule(5)">
             <div class="card-header">গ্রাম কালেকশন</div>
             <div class="card-body">
@@ -421,7 +461,6 @@
             </div>
         </div>
 
-        <!-- Card 6 -->
         <div class="card card-m6" onclick="openModule(6)">
             <div class="card-header">ইউজার মডিউল</div>
             <div class="card-body">
@@ -463,36 +502,33 @@
             <button class="close-btn" onclick="closeModal('module-modal')">&times;</button>
         </div>
 
-        <!-- Form Section -->
-        <div id="form-container" class="form-section">
-            <!-- Dynamic Form Fields load here -->
-        </div>
+        <div id="form-container" class="form-section"></div>
 
-        <!-- Table Section -->
-        <div id="table-container" class="table-responsive">
-            <!-- Dynamic Tables load here -->
-        </div>
+        <div id="table-container" class="table-responsive"></div>
     </div>
 </div>
 
 <script>
+    // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+    //  গুগল অ্যাপস স্ক্রিপ্টের ডিপ্লয় করা Web App URL-টি নিচে উদ্ধৃতি চিহ্নের (" ") ভেতরে বসান
+    // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx...আপনার_সম্পূর্ণ_লিংক.../exec";
+    // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+
     // State Management
     let currentUser = null;
     let activeModuleId = null;
-    let editingIndex = null; // null = Add Mode, Number = Edit Mode
+    let editingIndex = null;
 
-    // Default User List
     let usersList = [
-        { id: 1, date: '2026-08-24 10:00', name: 'অ্যাডমিন', village: 'কেন্দ্রীয়', mobile: '01700000000', userId: 'admin', pass: '1234', role: 'admin' },
-        { id: 2, date: '2026-08-24 10:05', name: 'রাহুল হালদার', village: 'উত্তর পাড়া', mobile: '01800000000', userId: 'user1', pass: '1234', role: 'user' }
+        { id: 1, date: '2026-08-24 10:00', name: 'অ্যাডমিন', village: 'কেন্দ্রীয়', mobile: '01700000000', userId: 'admin', pass: '1234', role: 'admin' }
     ];
 
-    // Data Store
     let database = {
-        module1: [], // কমিটি কালেকশন
-        module2: [], // কমিটি জমা/ফেরত
-        module3: [], // খরচ
-        module5: []  // গ্রাম কালেকশন
+        module1: [],
+        module2: [],
+        module3: [],
+        module5: []
     };
 
     const VILLAGES = ["উত্তর পাড়া", "দক্ষিণ পাড়া", "পূর্ব পাড়া", "পশ্চিম পাড়া", "কেন্দ্রীয় এলাকা"];
@@ -507,18 +543,52 @@
         6: 'var(--color-m6)'
     };
 
-    // Page Load - Session Persistence from localStorage
+    function showLoader() { document.getElementById('loading-overlay').style.display = 'flex'; }
+    function hideLoader() { document.getElementById('loading-overlay').style.display = 'none'; }
+
+    // Backend API Call Helper Function
+    async function callBackendAPI(action, moduleKey = null, payload = null, id = null) {
+        if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("আপনার_সম্পূর্ণ_লিংক")) {
+            console.warn("গুগল অ্যাপস স্ক্রিপ্ট লিংক সেট করা নেই। অফলাইন মোডে কাজ চলছে।");
+            return null;
+        }
+
+        showLoader();
+        try {
+            const response = await fetch(APPS_SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action, module: moduleKey, payload, id })
+            });
+            const result = await response.json();
+            hideLoader();
+            return result;
+        } catch (err) {
+            hideLoader();
+            console.error("API Error:", err);
+            alert("গুগল শিটের সাথে ডাটা আদান-প্রদানে সমস্যা হয়েছে!");
+            return null;
+        }
+    }
+
+    // Load All Data from Google Sheet
+    async function loadDataFromGoogleSheet() {
+        const res = await callBackendAPI('getAll');
+        if (res && res.status === 'success' && res.data) {
+            if (res.data.database) database = res.data.database;
+            if (res.data.usersList && res.data.usersList.length > 0) usersList = res.data.usersList;
+            calculateTotals();
+        }
+    }
+
     window.onload = function() {
         const savedUser = localStorage.getItem('puja_app_user');
         if (savedUser) {
-            try {
-                currentUser = JSON.parse(savedUser);
-            } catch(e) {
-                currentUser = null;
-            }
+            try { currentUser = JSON.parse(savedUser); } catch(e) { currentUser = null; }
         }
         updateUserUI();
         calculateTotals();
+        loadDataFromGoogleSheet();
     };
 
     function updateUserUI() {
@@ -533,7 +603,6 @@
 
     function handleAuthClick() {
         if (currentUser) {
-            // Logout
             currentUser = null;
             localStorage.removeItem('puja_app_user');
             updateUserUI();
@@ -568,14 +637,12 @@
     }
 
     function openModule(moduleId) {
-        // Guest Access Guard
         if (!currentUser) {
             alert("গেস্ট ইউজাররা তথ্য দেখতে বা পরিবর্তন করতে পারবেন না। অনুগ্রহ করে লগইন করুন।");
             document.getElementById('login-modal').classList.add('active');
             return;
         }
 
-        // User Access Guard for User Module
         if (moduleId === 6 && currentUser.role !== 'admin') {
             alert("সাধারণ ইউজাররা 'ইউজার মডিউল' এক্সেস করতে পারবেন না!");
             return;
@@ -610,7 +677,7 @@
                 break;
             case 4:
                 modalTitle.innerText = "উদ্বৃত্ত বিবরণী";
-                formContainer.style.display = "none"; // No form for Surplus
+                formContainer.style.display = "none";
                 renderTableModule4();
                 break;
             case 5:
@@ -649,11 +716,9 @@
         `;
     }
 
-    function saveModule1(e) {
+    async function saveModule1(e) {
         e.preventDefault();
-        const entry = {
-            id: editingIndex !== null ? database.module1[editingIndex].id : Date.now(),
-            dateTime: editingIndex !== null ? database.module1[editingIndex].dateTime : new Date().toLocaleString('bn-BD'),
+        const payload = {
             name: document.getElementById('m1-name').value,
             village: document.getElementById('m1-village').value,
             house: document.getElementById('m1-house').value,
@@ -662,10 +727,17 @@
         };
 
         if (editingIndex !== null) {
-            database.module1[editingIndex] = entry;
+            const item = database.module1[editingIndex];
+            await callBackendAPI('update', 'module1', payload, item.id);
+            database.module1[editingIndex] = { ...item, ...payload };
             editingIndex = null;
         } else {
-            database.module1.push(entry);
+            const res = await callBackendAPI('save', 'module1', payload);
+            database.module1.push({
+                id: res && res.id ? res.id : Date.now(),
+                dateTime: new Date().toLocaleString('bn-BD'),
+                ...payload
+            });
         }
 
         calculateTotals();
@@ -709,8 +781,10 @@
         `;
     }
 
-    function deleteModule1(idx) {
+    async function deleteModule1(idx) {
         if(confirm("আপনি কি নিশ্চিত এটি মুছে ফেলতে চান?")) {
+            const item = database.module1[idx];
+            await callBackendAPI('delete', 'module1', null, item.id);
             database.module1.splice(idx, 1);
             calculateTotals();
             renderTableModule1();
@@ -742,11 +816,9 @@
         `;
     }
 
-    function saveModule2(e) {
+    async function saveModule2(e) {
         e.preventDefault();
-        const entry = {
-            id: editingIndex !== null ? database.module2[editingIndex].id : Date.now(),
-            dateTime: editingIndex !== null ? database.module2[editingIndex].dateTime : new Date().toLocaleString('bn-BD'),
+        const payload = {
             name: document.getElementById('m2-name').value,
             village: document.getElementById('m2-village').value,
             type: document.getElementById('m2-type').value,
@@ -755,10 +827,17 @@
         };
 
         if (editingIndex !== null) {
-            database.module2[editingIndex] = entry;
+            const item = database.module2[editingIndex];
+            await callBackendAPI('update', 'module2', payload, item.id);
+            database.module2[editingIndex] = { ...item, ...payload };
             editingIndex = null;
         } else {
-            database.module2.push(entry);
+            const res = await callBackendAPI('save', 'module2', payload);
+            database.module2.push({
+                id: res && res.id ? res.id : Date.now(),
+                dateTime: new Date().toLocaleString('bn-BD'),
+                ...payload
+            });
         }
 
         calculateTotals();
@@ -802,8 +881,10 @@
         `;
     }
 
-    function deleteModule2(idx) {
+    async function deleteModule2(idx) {
         if(confirm("মুছে ফেলতে চান?")) {
+            const item = database.module2[idx];
+            await callBackendAPI('delete', 'module2', null, item.id);
             database.module2.splice(idx, 1);
             calculateTotals();
             renderTableModule2();
@@ -829,11 +910,9 @@
         `;
     }
 
-    function saveModule3(e) {
+    async function saveModule3(e) {
         e.preventDefault();
-        const entry = {
-            id: editingIndex !== null ? database.module3[editingIndex].id : Date.now(),
-            dateTime: editingIndex !== null ? database.module3[editingIndex].dateTime : new Date().toLocaleString('bn-BD'),
+        const payload = {
             title: document.getElementById('m3-title').value,
             amount: parseFloat(document.getElementById('m3-amount').value),
             person: document.getElementById('m3-person').value,
@@ -842,10 +921,17 @@
         };
 
         if (editingIndex !== null) {
-            database.module3[editingIndex] = entry;
+            const item = database.module3[editingIndex];
+            await callBackendAPI('update', 'module3', payload, item.id);
+            database.module3[editingIndex] = { ...item, ...payload };
             editingIndex = null;
         } else {
-            database.module3.push(entry);
+            const res = await callBackendAPI('save', 'module3', payload);
+            database.module3.push({
+                id: res && res.id ? res.id : Date.now(),
+                dateTime: new Date().toLocaleString('bn-BD'),
+                ...payload
+            });
         }
 
         calculateTotals();
@@ -889,38 +975,54 @@
         `;
     }
 
-    function deleteModule3(idx) {
+    async function deleteModule3(idx) {
         if(confirm("মুছে ফেলতে চান?")) {
+            const item = database.module3[idx];
+            await callBackendAPI('delete', 'module3', null, item.id);
             database.module3.splice(idx, 1);
             calculateTotals();
             renderTableModule3();
         }
     }
 
-    // --- Module 4: উদ্বৃত্ত (Surplus Summary Statement) ---
+    // --- Module 4: উদ্বৃত্ত (Surplus Summary Statement & PDF Export) ---
     function renderTableModule4() {
         let totals = getCalculatedTotals();
         let surplusStyleClass = totals.surplus >= 0 ? "text-plus" : "text-minus";
         let surplusFormatted = totals.surplus >= 0 ? `৳ ${totals.surplus.toFixed(2)}` : `- ৳ ${Math.abs(totals.surplus).toFixed(2)}`;
 
         document.getElementById('table-container').innerHTML = `
-            <h3>উদ্বৃত্ত হিসাব বিবরণী</h3>
-            <table>
-                <thead>
-                    <tr><th>আইটেম / বিবরণী খাত</th><th>মোট টাকা (৳)</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td style="text-align:left;">(+) মোট কমিটি কালেকশন</td><td>৳ ${totals.totCol.toFixed(2)}</td></tr>
-                    <tr><td style="text-align:left;">(+) মোট গ্রাম কালেকশন</td><td>৳ ${totals.totVilCol.toFixed(2)}</td></tr>
-                    <tr><td style="text-align:left;">(+/-) নিট জমা / ফেরত</td><td>৳ ${totals.netDeposit.toFixed(2)}</td></tr>
-                    <tr><td style="text-align:left;">(-) মোট খরচ</td><td>৳ ${totals.totExp.toFixed(2)}</td></tr>
-                    <tr style="font-weight:bold; font-size: 18px; background-color:#f9f9f9;">
-                        <td style="text-align:left;">(=) সর্বমোট উদ্বৃত্ত টাকা</td>
-                        <td class="${surplusStyleClass}">${surplusFormatted}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3>উদ্বৃত্ত হিসাব বিবরণী</h3>
+                <button class="btn-print" onclick="downloadSurplusPDF()">📥 প্রিন্ট / PDF ডাউনলোড করুন</button>
+            </div>
+            <div id="printable-surplus-area">
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <h2>পূজার হিসাব - উদ্বৃত্ত বিবরণী</h2>
+                    <p>তারিখ: ${new Date().toLocaleDateString('bn-BD')}</p>
+                </div>
+                <table>
+                    <thead>
+                        <tr><th>আইটেম / বিবরণী খাত</th><th>মোট টাকা (৳)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td style="text-align:left;">(+) মোট কমিটি কালেকশন</td><td>৳ ${totals.totCol.toFixed(2)}</td></tr>
+                        <tr><td style="text-align:left;">(+) মোট গ্রাম কালেকশন</td><td>৳ ${totals.totVilCol.toFixed(2)}</td></tr>
+                        <tr><td style="text-align:left;">(+/-) নিট জমা / ফেরত</td><td>৳ ${totals.netDeposit.toFixed(2)}</td></tr>
+                        <tr><td style="text-align:left;">(-) মোট খরচ</td><td>৳ ${totals.totExp.toFixed(2)}</td></tr>
+                        <tr style="font-weight:bold; font-size: 18px; background-color:#f9f9f9;">
+                            <td style="text-align:left;">(=) সর্বমোট উদ্বৃত্ত টাকা</td>
+                            <td class="${surplusStyleClass}">${surplusFormatted}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         `;
+    }
+
+    // PDF / Print Function for Surplus Statement
+    function downloadSurplusPDF() {
+        window.print();
     }
 
     // --- Module 5: গ্রাম কালেকশন ---
@@ -944,11 +1046,9 @@
         `;
     }
 
-    function saveModule5(e) {
+    async function saveModule5(e) {
         e.preventDefault();
-        const entry = {
-            id: editingIndex !== null ? database.module5[editingIndex].id : Date.now(),
-            dateTime: editingIndex !== null ? database.module5[editingIndex].dateTime : new Date().toLocaleString('bn-BD'),
+        const payload = {
             name: document.getElementById('m5-name').value,
             village: document.getElementById('m5-village').value,
             amount: parseFloat(document.getElementById('m5-amount').value),
@@ -957,10 +1057,17 @@
         };
 
         if (editingIndex !== null) {
-            database.module5[editingIndex] = entry;
+            const item = database.module5[editingIndex];
+            await callBackendAPI('update', 'module5', payload, item.id);
+            database.module5[editingIndex] = { ...item, ...payload };
             editingIndex = null;
         } else {
-            database.module5.push(entry);
+            const res = await callBackendAPI('save', 'module5', payload);
+            database.module5.push({
+                id: res && res.id ? res.id : Date.now(),
+                dateTime: new Date().toLocaleString('bn-BD'),
+                ...payload
+            });
         }
 
         calculateTotals();
@@ -1004,8 +1111,10 @@
         `;
     }
 
-    function deleteModule5(idx) {
+    async function deleteModule5(idx) {
         if(confirm("মুছে ফেলতে চান?")) {
+            const item = database.module5[idx];
+            await callBackendAPI('delete', 'module5', null, item.id);
             database.module5.splice(idx, 1);
             calculateTotals();
             renderTableModule5();
@@ -1039,11 +1148,9 @@
         `;
     }
 
-    function saveUser(e) {
+    async function saveUser(e) {
         e.preventDefault();
-        const userObj = {
-            id: editingIndex !== null ? usersList[editingIndex].id : Date.now(),
-            date: editingIndex !== null ? usersList[editingIndex].date : new Date().toLocaleString('bn-BD'),
+        const payload = {
             name: document.getElementById('u-name').value,
             village: document.getElementById('u-village').value,
             mobile: document.getElementById('u-mobile').value,
@@ -1053,10 +1160,17 @@
         };
 
         if (editingIndex !== null) {
-            usersList[editingIndex] = userObj;
+            const item = usersList[editingIndex];
+            await callBackendAPI('update', 'module6', payload, item.id);
+            usersList[editingIndex] = { ...item, ...payload };
             editingIndex = null;
         } else {
-            usersList.push(userObj);
+            const res = await callBackendAPI('save', 'module6', payload);
+            usersList.push({
+                id: res && res.id ? res.id : Date.now(),
+                date: new Date().toLocaleString('bn-BD'),
+                ...payload
+            });
         }
 
         calculateTotals();
@@ -1099,12 +1213,14 @@
         `;
     }
 
-    function deleteUser(idx) {
+    async function deleteUser(idx) {
         if(usersList[idx].userId === 'admin') {
             alert("প্রধান এডমিন অ্যাকাউন্ট মুছা যাবে না!");
             return;
         }
         if(confirm("ইউজারটি মুছে ফেলতে চান?")) {
+            const item = usersList[idx];
+            await callBackendAPI('delete', 'module6', null, item.id);
             usersList.splice(idx, 1);
             calculateTotals();
             renderTableModule6();
@@ -1116,7 +1232,7 @@
         openModule(modId);
     }
 
-    // --- Global Calculation Engine ---
+    // Global Calculation Engine
     function getCalculatedTotals() {
         let totCol = database.module1.reduce((acc, i) => acc + i.amount, 0);
         let totVilCol = database.module5.reduce((acc, i) => acc + i.amount, 0);
@@ -1138,7 +1254,6 @@
         document.getElementById('dash-val-2').innerText = `৳ ${totals.netDeposit.toFixed(2)}`;
         document.getElementById('dash-val-3').innerText = `৳ ${totals.totExp.toFixed(2)}`;
         
-        // Surplus Display Logic (+ Green, - Red)
         const surplusElem = document.getElementById('dash-val-4');
         if (totals.surplus >= 0) {
             surplusElem.innerText = `৳ ${totals.surplus.toFixed(2)}`;
