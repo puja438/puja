@@ -3,127 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>পূজায় কালেকশন / খরচ / জমা</title>
+    <title>পূজায় কালেকশন / খরচ / জমা - ড্যাশবোর্ড</title>
     <style>
         :root {
-            --border-dark: #2c3e50;
-            --bg-gray: #f4f6f9;
-            --blue-btn: #0d6efd;
-            --formula-bg: #d1f2f9;
-            --formula-text: #055160;
-            --green-box: #e8f5e9;
-            --green-text: #198754;
-            --purple-box: #f3e5f5;
-            --purple-text: #6f42c1;
+            --primary: #d32f2f;
+            --primary-dark: #b71c1c;
+            --secondary: #0d6efd;
+            --success: #198754;
+            --warning: #ff9800;
+            --purple: #6f42c1;
+            --dark-border: #2c3e50;
+            --bg-light: #f8f9fa;
+            --card-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
 
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
-        body { background-color: var(--bg-gray); padding: 15px; color: #212529; }
-        .container { max-width: 500px; margin: auto; }
+        body { background-color: #f4f6f9; color: #212529; padding: 15px; }
+        .container { max-width: 900px; margin: auto; }
 
-        /* Header Title Box */
-        .title-box {
-            border: 2px solid var(--border-dark);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            background: white;
-            margin-bottom: 15px;
+        /* Header Title & Status */
+        header {
+            background: linear-gradient(135deg, #d32f2f, #ff5722);
+            color: white; padding: 20px; border-radius: 14px;
+            box-shadow: 0 5px 15px rgba(211, 47, 47, 0.3);
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 10px; margin-bottom: 20px;
         }
-        .title-box h1 { font-size: 20px; font-weight: bold; color: var(--border-dark); }
-
-        /* Status Bar */
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            font-size: 15px;
-            font-weight: 500;
+        header h1 { font-size: 22px; font-weight: bold; }
+        .user-status { display: flex; align-items: center; gap: 10px; }
+        .status-badge {
+            padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; background: rgba(255,255,255,0.2);
         }
-        .badge-guest { background: #6c757d; color: white; padding: 4px 12px; border-radius: 15px; font-size: 13px; }
-        .badge-admin { background: #198754; color: white; padding: 4px 12px; border-radius: 15px; font-size: 13px; }
-        .btn-login { background: var(--blue-btn); color: white; border: none; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .btn-auth {
+            background: white; color: var(--primary); font-weight: bold; border: none;
+            padding: 8px 18px; border-radius: 20px; cursor: pointer; transition: 0.2s;
+        }
+        .btn-auth:hover { background: #ffebee; }
 
         /* Formula Banner */
         .formula-card {
-            background-color: var(--formula-bg);
-            color: var(--formula-text);
-            padding: 12px 15px;
-            border-radius: 10px;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 15px;
-            border: 1px solid #b6effb;
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            color: #006064; padding: 14px 18px; border-radius: 12px;
+            font-size: 14px; font-weight: 600; margin-bottom: 20px;
+            border-left: 5px solid #00838f; box-shadow: var(--card-shadow);
         }
 
-        /* Numbered Feature Cards */
+        /* 6 Dashboard Summary Cards Grid */
+        .dashboard-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; margin-bottom: 25px;
+        }
         .card {
-            background: white;
-            border: 2px solid var(--border-dark);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
+            background: white; border: 2px solid var(--dark-border); border-radius: 14px;
+            padding: 16px; box-shadow: var(--card-shadow); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+            position: relative; overflow: hidden;
         }
-        .card-header {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--border-dark);
-            border-bottom: 1px solid #eee;
-            padding-bottom: 8px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+        .card-title {
+            font-size: 17px; font-weight: bold; color: var(--dark-border);
+            padding-bottom: 8px; border-bottom: 1px solid #eee; margin-bottom: 12px;
+            display: flex; align-items: center; gap: 8px;
         }
-        .card-body {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .card-body { display: flex; justify-content: space-between; align-items: center; }
+        .card-label { font-size: 16px; font-weight: 600; color: #555; }
+        .value-badge {
+            font-size: 18px; font-weight: bold; padding: 6px 14px; border-radius: 8px;
+            border: 1px solid var(--dark-border); background: white; color: var(--secondary);
         }
-        .card-label { font-size: 18px; font-weight: bold; }
-        .value-box {
-            border: 1px solid var(--border-dark);
-            border-radius: 8px;
-            padding: 8px 15px;
-            min-width: 120px;
-            text-align: right;
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--blue-btn);
-            background: #fff;
-        }
-        .value-box.expense { color: #dc3545; }
-        .value-box.green { background-color: var(--green-box); color: var(--green-text); border-color: var(--green-text); }
-        .value-box.purple { background-color: var(--purple-box); color: var(--purple-text); border-color: var(--purple-text); }
+        .value-badge.expense { color: var(--primary); }
+        .value-badge.surplus { background: #e8f5e9; color: var(--success); border-color: var(--success); }
+        .value-badge.purple { background: #f3e5f5; color: var(--purple); border-color: var(--purple); }
 
-        /* Form & Section Blocks */
-        .form-section, .table-section {
-            background: white;
-            border: 2px solid var(--border-dark);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
+        /* Modal Dialog Popup */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; padding: 15px;
         }
-        .form-group { margin-bottom: 10px; }
-        .form-group label { display: block; font-weight: bold; margin-bottom: 4px; font-size: 14px; }
-        input, select, button { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
-        .btn-submit { background: var(--border-dark); color: white; font-weight: bold; border: none; cursor: pointer; margin-top: 5px; }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: white; border-radius: 14px; max-width: 550px; width: 100%;
+            max-height: 90vh; overflow-y: auto; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative;
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px;
+        }
+        .modal-header h3 { color: var(--primary); font-size: 18px; }
+        .close-btn { font-size: 22px; cursor: pointer; border: none; background: none; color: #777; }
 
-        /* Table */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 13px; }
-        th { background: #f1f1f1; }
-        .action-btns { display: none; gap: 4px; justify-content: center; }
+        /* Forms */
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-weight: 600; font-size: 13px; margin-bottom: 5px; color: #444; }
+        input, select, button { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
+        .btn-submit { background: var(--primary); color: white; font-weight: bold; border: none; cursor: pointer; margin-top: 10px; }
+        .btn-submit:hover { background: var(--primary-dark); }
+
+        /* Data Tables */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #eee; padding: 10px; text-align: center; font-size: 13px; }
+        th { background: #ffebee; color: var(--primary); }
+        .action-btns { display: none; gap: 5px; justify-content: center; }
         .admin-mode .action-btns { display: flex; }
-        .btn-edit { background: #ffc107; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
-        .btn-delete { background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
+        .btn-edit { background: var(--warning); border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; color: white; }
+        .btn-delete { background: var(--primary); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
 
-        .btn-print { background: #198754; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 15px; }
-
+        /* Print Settings */
+        .btn-print { background: var(--success); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 15px; }
         @media print {
             .no-print { display: none !important; }
-            body { padding: 0; background: white; }
+            body { background: white; padding: 0; }
             .container { max-width: 100%; }
         }
     </style>
@@ -132,16 +119,16 @@
 
 <div class="container" id="app-container">
 
-    <!-- Header Box -->
-    <div class="title-box">
-        <h1>পূজায় কালেকশন / খরচ / জমা</h1>
-    </div>
-
-    <!-- Status Bar -->
-    <div class="status-bar no-print">
-        <div>বর্তমান স্ট্যাটাস: <span id="status-badge" class="badge-guest">গেস্ট (লগইন করা নেই)</span></div>
-        <button class="btn-login" onclick="toggleAdmin()" id="login-btn">➡️ লগইন</button>
-    </div>
+    <!-- Header Section -->
+    <header class="no-print">
+        <div>
+            <h1>🕉️ পূজায় কালেকশন / খরচ / জমা</h1>
+        </div>
+        <div class="user-status">
+            <span id="role-badge" class="status-badge">গেস্ট (লগইন ছাড়া)</span>
+            <button class="btn-auth" onclick="openLoginModal()" id="auth-btn">লগইন করুন</button>
+        </div>
+    </header>
 
     <!-- Printable Area -->
     <div id="printable-area">
@@ -150,147 +137,166 @@
             🧮 <strong>উদ্বৃত্ত হিসাবের সূত্র:</strong> উদ্বৃত্ত = (কালেকশন + গ্রাম কালেকশন + নিট জমা/ফেরত) - খরচ
         </div>
 
-        <!-- 1. Collection -->
-        <div class="card">
-            <div class="card-header">💰 ১. কালেকশন</div>
-            <div class="card-body">
-                <span class="card-label">টাকা</span>
-                <div class="value-box" id="val-collection">0.00</div>
+        <!-- 6 Main Dashboard Module Cards -->
+        <div class="dashboard-grid no-print">
+            <div class="card" onclick="handleModuleClick('collection')">
+                <div class="card-title">💰 ১. কালেকশন মডিউল</div>
+                <div class="card-body">
+                    <span class="card-label">টাকা</span>
+                    <div class="value-badge" id="dash-collection">0.00</div>
+                </div>
+            </div>
+
+            <div class="card" onclick="handleModuleClick('expense')">
+                <div class="card-title">🧾 ২. খরচ মডিউল</div>
+                <div class="card-body">
+                    <span class="card-label">টাকা</span>
+                    <div class="value-badge expense" id="dash-expense">0.00</div>
+                </div>
+            </div>
+
+            <div class="card" onclick="handleModuleClick('deposit')">
+                <div class="card-title">🔄 ৩. জমা / ফেরত মডিউল</div>
+                <div class="card-body">
+                    <span class="card-label">টাকা</span>
+                    <div class="value-badge" id="dash-deposit">0.00</div>
+                </div>
+            </div>
+
+            <div class="card" onclick="handleModuleClick('village_col')">
+                <div class="card-title">🏛️ ৪. গ্রাম কালেকশন মডিউল</div>
+                <div class="card-body">
+                    <span class="card-label">টাকা</span>
+                    <div class="value-badge" id="dash-village-col">0.00</div>
+                </div>
+            </div>
+
+            <div class="card" onclick="handleModuleClick('surplus')">
+                <div class="card-title">⚖️ ৫. উদ্বৃত্ত মডিউল</div>
+                <div class="card-body">
+                    <span class="card-label">টাকা</span>
+                    <div class="value-badge surplus" id="dash-surplus">0.00</div>
+                </div>
+            </div>
+
+            <div class="card" onclick="handleModuleClick('users')">
+                <div class="card-title">👥 ৬. ইউজার মডিউল</div>
+                <div class="card-body">
+                    <span class="card-label">মোট ইউজার</span>
+                    <div class="value-badge purple">জন = <span id="dash-user-count">১</span></div>
+                </div>
             </div>
         </div>
 
-        <!-- 2. Expense -->
-        <div class="card">
-            <div class="card-header">🧾 ২. খরচ</div>
-            <div class="card-body">
-                <span class="card-label">টাকা</span>
-                <div class="value-box expense" id="val-expense">0.00</div>
-            </div>
-        </div>
-
-        <!-- 3. Deposit / Return -->
-        <div class="card">
-            <div class="card-header">🔄 ৩. জমা / ফেরত</div>
-            <div class="card-body">
-                <span class="card-label">টাকা</span>
-                <div class="value-box" id="val-deposit">0.00</div>
-            </div>
-        </div>
-
-        <!-- 4. Village Collection -->
-        <div class="card">
-            <div class="card-header">🏛️ ৪. গ্রাম কালেকশন</div>
-            <div class="card-body">
-                <span class="card-label">টাকা</span>
-                <div class="value-box" id="val-village-col">0.00</div>
-            </div>
-        </div>
-
-        <!-- 5. Surplus / Balance -->
-        <div class="card">
-            <div class="card-header">⚖️ ৫. উদ্বৃত্ত</div>
-            <div class="card-body">
-                <span class="card-label">টাকা</span>
-                <div class="value-box green" id="val-surplus">0.00</div>
-            </div>
-        </div>
-
-        <!-- 6. User Stats -->
-        <div class="card no-print">
-            <div class="card-header">👥 ৬. ইউজার</div>
-            <div class="card-body">
-                <span class="card-label">মোট ইউজার</span>
-                <div class="value-box purple">জন = <span id="val-user-count">১</span></div>
-            </div>
-        </div>
-
-        <!-- Transaction Table -->
-        <div class="table-section">
-            <h3 style="margin-bottom: 10px; text-align: center;">হিসাবের বিবরণী</h3>
+        <!-- Print Summary Report -->
+        <div style="background: white; padding: 20px; border-radius: 12px; border: 2px solid var(--dark-border);">
+            <h3 style="text-align:center; color: var(--primary); margin-bottom: 10px;">সর্বশেষ হিসাব বিবরণী</h3>
             <table>
                 <thead>
                     <tr>
                         <th>তারিখ</th>
-                        <th>খাত</th>
+                        <th>মডিউল / খাত</th>
+                        <th>নাম / নোট</th>
                         <th>গ্রাম</th>
                         <th>বাড়ি</th>
                         <th>পরিমাণ (৳)</th>
-                        <th class="no-print">একশন</th>
+                        <th class="no-print">অ্যাকশন</th>
                     </tr>
                 </thead>
-                <tbody id="transaction-list">
-                    <!-- Rows dynamically inserted -->
+                <tbody id="master-table-body">
+                    <!-- Data populated dynamically -->
                 </tbody>
             </table>
         </div>
     </div>
 
     <button class="btn-print no-print" onclick="window.print()">🖨️ উদ্বৃত্ত রিপোর্ট প্রিন্ট করুন</button>
+</div>
 
-    <!-- Entry Form -->
-    <div class="form-section no-print">
-        <h3 style="margin-bottom: 10px;">নতুন হিসাব এন্ট্রি</h3>
-        <form id="entry-form" onsubmit="handleFormSubmit(event)">
+<!-- Login Modal -->
+<div class="modal" id="login-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>অ্যাকেসস লগইন</h3>
+            <button class="close-btn" onclick="closeModal('login-modal')">&times;</button>
+        </div>
+        <div class="form-group">
+            <label>ইউজার রোল নির্বাচন করুন</label>
+            <select id="login-role">
+                <option value="user">সাধারণ ইউজার</option>
+                <option value="admin">এডমিন (Admin)</option>
+            </select>
+        </div>
+        <div class="form-group" id="pin-group" style="display:none;">
+            <label>এডমিন পিন (PIN)</label>
+            <input type="password" id="admin-pin" placeholder="ডিফল্ট পিন: 1234">
+        </div>
+        <button class="btn-submit" onclick="performLogin()">লগইন করুন</button>
+    </div>
+</div>
+
+<!-- Data Entry & Module Modal -->
+<div class="modal" id="module-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modal-module-title">মডিউল তথ্য এন্ট্রি</h3>
+            <button class="close-btn" onclick="closeModal('module-modal')">&times;</button>
+        </div>
+        <form id="module-form" onsubmit="handleFormSubmit(event)">
+            <input type="hidden" id="entry-module-type">
             <div class="form-group">
                 <label>তারিখ</label>
-                <input type="date" id="date" required>
+                <input type="date" id="entry-date" required>
             </div>
             <div class="form-group">
-                <label>হিসাবের টাইপ</label>
-                <select id="type" required>
-                    <option value="collection">১. কালেকশন</option>
-                    <option value="expense">২. খরচ</option>
-                    <option value="deposit">৩. জমা / ফেরত</option>
-                    <option value="village_col">৪. গ্রাম কালেকশন</option>
-                </select>
+                <label>নাম / খাতের বিবরণ / নোট</label>
+                <input type="text" id="entry-title" placeholder="বিবরণ লিখুন" required>
             </div>
-            <div class="form-group">
-                <label>বিবরণ / নাম</label>
-                <input type="text" id="title" placeholder="যেমন: সাধারণ চাঁদা, আলোকসজ্জা" required>
-            </div>
-            <div class="form-group">
+            <div class="form-group" id="field-village">
                 <label>গ্রাম</label>
-                <select id="village-dropdown" required></select>
+                <select id="entry-village" required></select>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="field-house">
                 <label>বাড়ি</label>
-                <select id="house-dropdown" required></select>
+                <select id="entry-house" required></select>
             </div>
             <div class="form-group">
                 <label>টাকার পরিমাণ (৳)</label>
-                <input type="number" step="0.01" id="amount" placeholder="0.00" required>
+                <input type="number" step="0.01" id="entry-amount" placeholder="0.00" required>
             </div>
-            <button type="submit" class="btn-submit">সেভ করুন</button>
+            <button type="submit" class="btn-submit">ডাটা সেভ করুন</button>
         </form>
     </div>
-
 </div>
 
 <script>
     // =========================================================================
-    // ১. গুগল অ্যাপস স্ক্রিপ্ট (Code.gs) এর লিঙ্ক এখানে বসান
+    // ১. গুগল অ্যাপস স্ক্রিপ্ট (Code.gs) এর লিঙ্ক
     // =========================================================================
     const APPS_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
 
     // =========================================================================
-    // ২. গ্রাম এবং বাড়ির তালিকা (এখানে আপনি সহজে নাম যোগ বা পরিবর্তন করতে পারবেন)
+    // ২. গ্রাম এবং বাড়ির তালিকা (প্রয়োজনে নতুন গ্রাম বা বাড়ি যোগ করুন)
     // =========================================================================
     const VILLAGE_LIST = ["উত্তর পাড়া", "দক্ষিণ পাড়া", "পূর্ব পাড়া", "পশ্চিম পাড়া", "কেন্দ্রীয় এলাকা"];
     const HOUSE_LIST = ["বিশ্বাস বাড়ি", "মন্ডল বাড়ি", "ঘোষ বাড়ি", "সরকার বাড়ি", "হালদার বাড়ি", "অন্যান্য"];
 
-    let isAdmin = false;
+    // App State Variables
+    let currentRole = 'guest'; // Roles: 'guest', 'user', 'admin'
     let transactions = [];
+    let activeModule = '';
 
     window.onload = function() {
-        document.getElementById('date').valueAsDate = new Date();
+        document.getElementById('entry-date').valueAsDate = new Date();
         populateDropdowns();
+        setupLoginRoleToggle();
         fetchData();
     };
 
     function populateDropdowns() {
-        const vSelect = document.getElementById('village-dropdown');
-        const hSelect = document.getElementById('house-dropdown');
-        
+        const vSelect = document.getElementById('entry-village');
+        const hSelect = document.getElementById('entry-house');
+
         vSelect.innerHTML = '<option value="">-- গ্রাম নির্বাচন করুন --</option>';
         VILLAGE_LIST.forEach(v => vSelect.innerHTML += `<option value="${v}">${v}</option>`);
 
@@ -298,51 +304,105 @@
         HOUSE_LIST.forEach(h => hSelect.innerHTML += `<option value="${h}">${h}</option>`);
     }
 
-    function toggleAdmin() {
-        if(!isAdmin) {
-            let pass = prompt("এডমিন পাসওয়ার্ড দিন (ডিফল্ট: 1234):");
-            if(pass === "1234") {
-                isAdmin = true;
-                document.getElementById('status-badge').innerText = "এডমিন (লগইন করা আছে)";
-                document.getElementById('status-badge').className = "badge-admin";
-                document.getElementById('login-btn').innerText = "⬅️ লগআউট";
+    function setupLoginRoleToggle() {
+        document.getElementById('login-role').addEventListener('change', function() {
+            document.getElementById('pin-group').style.display = (this.value === 'admin') ? 'block' : 'none';
+        });
+    }
+
+    // Role-based Access Control (RBAC) Logic
+    function handleModuleClick(moduleType) {
+        if(currentRole === 'guest') {
+            alert("গেস্ট ইউজার মডিউল খুলতে পারবেন না। অনুগ্রহ করে প্রথমে লগইন করুন!");
+            openLoginModal();
+            return;
+        }
+
+        if(moduleType === 'users' && currentRole !== 'admin') {
+            alert("কেবলমাত্র এডমিন ইউজার মডিউল এক্সেস করতে পারবেন!");
+            return;
+        }
+
+        activeModule = moduleType;
+        document.getElementById('entry-module-type').value = moduleType;
+        
+        const titles = {
+            'collection': '💰 ১. কালেকশন এন্ট্রি',
+            'expense': '🧾 ২. খরচ এন্ট্রি',
+            'deposit': '🔄 ৩. জমা / ফেরত এন্ট্রি',
+            'village_col': '🏛️ ৪. গ্রাম কালেকশন এন্ট্রি',
+            'surplus': '⚖️ ৫. উদ্বৃত্ত রিপোর্ট বিবরণী',
+            'users': '👥 ৬. ইউজার ম্যানেজমেন্ট'
+        };
+
+        document.getElementById('modal-module-title').innerText = titles[moduleType] || 'তথ্য এন্ট্রি';
+        document.getElementById('module-modal').classList.add('active');
+    }
+
+    function openLoginModal() {
+        if(currentRole !== 'guest') {
+            // Logout logic
+            currentRole = 'guest';
+            document.getElementById('role-badge').innerText = 'গেস্ট (লগইন ছাড়া)';
+            document.getElementById('auth-btn').innerText = 'লগইন করুন';
+            document.getElementById('app-container').classList.remove('admin-mode');
+            renderData();
+            return;
+        }
+        document.getElementById('login-modal').classList.add('active');
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('active');
+    }
+
+    function performLogin() {
+        const selectedRole = document.getElementById('login-role').value;
+        if(selectedRole === 'admin') {
+            const pin = document.getElementById('admin-pin').value;
+            if(pin === '1234') {
+                currentRole = 'admin';
+                document.getElementById('role-badge').innerText = 'মোড: এডমিন';
                 document.getElementById('app-container').classList.add('admin-mode');
             } else {
-                alert("ভুল পাসওয়ার্ড!");
+                alert("ভুল এডমিন পিন!");
+                return;
             }
         } else {
-            isAdmin = false;
-            document.getElementById('status-badge').innerText = "গেস্ট (লগইন করা নেই)";
-            document.getElementById('status-badge').className = "badge-guest";
-            document.getElementById('login-btn').innerText = "➡️ লগইন";
+            currentRole = 'user';
+            document.getElementById('role-badge').innerText = 'মোড: সাধারণ ইউজার';
             document.getElementById('app-container').classList.remove('admin-mode');
         }
-        renderTable();
+
+        document.getElementById('auth-btn').innerText = 'লগআউট';
+        closeModal('login-modal');
+        renderData();
     }
 
     function handleFormSubmit(e) {
         e.preventDefault();
         const data = {
             id: Date.now(),
-            date: document.getElementById('date').value,
-            type: document.getElementById('type').value,
-            title: document.getElementById('title').value,
-            village: document.getElementById('village-dropdown').value,
-            house: document.getElementById('house-dropdown').value,
-            amount: parseFloat(document.getElementById('amount').value)
+            date: document.getElementById('entry-date').value,
+            type: document.getElementById('entry-module-type').value,
+            title: document.getElementById('entry-title').value,
+            village: document.getElementById('entry-village').value,
+            house: document.getElementById('entry-house').value,
+            amount: parseFloat(document.getElementById('entry-amount').value)
         };
 
         transactions.push(data);
         saveToAppsScript(data);
-        renderTable();
-        document.getElementById('entry-form').reset();
-        document.getElementById('date').valueAsDate = new Date();
+        renderData();
+        closeModal('module-modal');
+        document.getElementById('module-form').reset();
+        document.getElementById('entry-date').valueAsDate = new Date();
         populateDropdowns();
     }
 
-    function renderTable() {
-        const list = document.getElementById('transaction-list');
-        list.innerHTML = "";
+    function renderData() {
+        const tableBody = document.getElementById('master-table-body');
+        tableBody.innerHTML = '';
 
         let col = 0, exp = 0, dep = 0, vilCol = 0;
 
@@ -352,13 +412,14 @@
             else if(item.type === 'deposit') dep += item.amount;
             else if(item.type === 'village_col') vilCol += item.amount;
 
-            list.innerHTML += `
+            tableBody.innerHTML += `
                 <tr>
                     <td>${item.date}</td>
+                    <td><strong>${item.type}</strong></td>
                     <td>${item.title}</td>
-                    <td>${item.village}</td>
-                    <td>${item.house}</td>
-                    <td>${item.amount.toFixed(2)}</td>
+                    <td>${item.village || '-'}</td>
+                    <td>${item.house || '-'}</td>
+                    <td>${item.amount.toFixed(2)} ৳</td>
                     <td class="no-print action-btns">
                         <button class="btn-edit" onclick="editEntry(${index})">এডিট</button>
                         <button class="btn-delete" onclick="deleteEntry(${index})">ডিলিট</button>
@@ -367,32 +428,38 @@
             `;
         });
 
-        // Update card values
-        document.getElementById('val-collection').innerText = col.toFixed(2);
-        document.getElementById('val-expense').innerText = exp.toFixed(2);
-        document.getElementById('val-deposit').innerText = dep.toFixed(2);
-        document.getElementById('val-village-col').innerText = vilCol.toFixed(2);
+        // Dashboard Card updates
+        document.getElementById('dash-collection').innerText = col.toFixed(2);
+        document.getElementById('dash-expense').innerText = exp.toFixed(2);
+        document.getElementById('dash-deposit').innerText = dep.toFixed(2);
+        document.getElementById('dash-village-col').innerText = vilCol.toFixed(2);
 
-        // Formula: Surplus = (Collection + Village Collection + Deposit) - Expense
+        // Surplus Calculation
         let surplus = (col + vilCol + dep) - exp;
-        document.getElementById('val-surplus').innerText = surplus.toFixed(2);
+        document.getElementById('dash-surplus').innerText = surplus.toFixed(2);
     }
 
     function editEntry(index) {
-        if(!isAdmin) return alert("কেবলমাত্র এডমিন সংশোধনের অনুমতি রাখে!");
+        if(currentRole !== 'admin') {
+            alert("শুধুমাত্র এডমিন ডাটা এডিট করতে পারবেন!");
+            return;
+        }
         let item = transactions[index];
-        let newAmount = prompt("নতুন পরিমাণ (৳) লিখুন:", item.amount);
-        if(newAmount !== null && !isNaN(parseFloat(newAmount))) {
-            transactions[index].amount = parseFloat(newAmount);
-            renderTable();
+        let newAmt = prompt("নতুন টাকার পরিমাণ লিখুন:", item.amount);
+        if(newAmt !== null && !isNaN(parseFloat(newAmt))) {
+            transactions[index].amount = parseFloat(newAmt);
+            renderData();
         }
     }
 
     function deleteEntry(index) {
-        if(!isAdmin) return alert("কেবলমাত্র এডমিন মুছে ফেলার অনুমতি রাখে!");
+        if(currentRole !== 'admin') {
+            alert("শুধুমাত্র এডমিন ডাটা মুছে ফেলতে পারবেন!");
+            return;
+        }
         if(confirm("আপনি কি নিশ্চিত এটি মুছবেন?")) {
             transactions.splice(index, 1);
-            renderTable();
+            renderData();
         }
     }
 
@@ -412,7 +479,7 @@
             .then(res => res.json())
             .then(data => {
                 transactions = data;
-                renderTable();
+                renderData();
             });
     }
 </script>
