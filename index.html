@@ -38,7 +38,6 @@
             margin: 0 auto;
         }
 
-        /* Header Style */
         header {
             display: flex;
             justify-content: space-between;
@@ -86,7 +85,6 @@
             border-radius: 20px;
         }
 
-        /* Dashboard Grid */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -157,7 +155,6 @@
         .text-plus { color: #2e7d32 !important; }
         .text-minus { color: #d32f2f !important; }
 
-        /* Modal / Popup Styles */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -271,6 +268,11 @@
             font-size: 16px;
         }
 
+        .btn-save:disabled {
+            background-color: #a5d6a7;
+            cursor: not-allowed;
+        }
+
         .btn-print {
             background-color: #0288d1;
             color: white;
@@ -348,12 +350,11 @@
             margin: auto;
         }
 
-        /* Loading Indicator Overlay */
         #loading-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             z-index: 2000;
             justify-content: center;
             align-items: center;
@@ -378,7 +379,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* PDF Printing Custom Styles */
         @media print {
             body * { visibility: hidden; }
             #printable-surplus-area, #printable-surplus-area * { visibility: visible; }
@@ -396,11 +396,10 @@
 
 <div id="loading-overlay">
     <div class="spinner"></div>
-    <span>গুগল শিটের সাথে সংযোগ হচ্ছে...</span>
+    <span>গুগল শিটের সাথে সংযোগ হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।</span>
 </div>
 
 <div class="container">
-    <!-- Header -->
     <header>
         <h1>পূজার - কালেকশন / জমা / খরচ / উদ্বৃত্ত</h1>
         <div class="auth-status">
@@ -409,7 +408,6 @@
         </div>
     </header>
 
-    <!-- Dashboard 6 Module Cards -->
     <div class="dashboard-grid">
         <div class="card card-m1" onclick="openModule(1)">
             <div class="card-header">কমিটি কালেকশন</div>
@@ -473,7 +471,6 @@
     </div>
 </div>
 
-<!-- Login Modal -->
 <div class="modal-overlay" id="login-modal">
     <div class="modal-box login-box">
         <div class="modal-header" style="background-color: var(--color-m2);">
@@ -494,7 +491,6 @@
     </div>
 </div>
 
-<!-- Main Module Modal (Full Display) -->
 <div class="modal-overlay" id="module-modal">
     <div class="modal-box">
         <div class="modal-header" id="modal-header-bg">
@@ -503,26 +499,18 @@
         </div>
 
         <div id="form-container" class="form-section"></div>
-
         <div id="table-container" class="table-responsive"></div>
     </div>
 </div>
 
 <script>
-    // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-    //  গুগল অ্যাপস স্ক্রিপ্টের ডিপ্লয় করা Web App URL-টি নিচে উদ্ধৃতি চিহ্নের (" ") ভেতরে বসান
-    // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8zZ4q8Gy1sUTZdIh_vXh8gXTLga2MOTuVlON4H6X1O_GIbuTv7SCDpx3bXaTCom_9/exec";
-    // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 
-    // State Management
     let currentUser = null;
     let activeModuleId = null;
     let editingIndex = null;
 
-    let usersList = [
-        { id: 1, date: '2026-08-24 10:00', name: 'অ্যাডমিন', village: 'কেন্দ্রীয়', mobile: '01700000000', userId: 'admin', pass: '1234', role: 'admin' }
-    ];
+    let usersList = [];
 
     let database = {
         module1: [],
@@ -543,14 +531,13 @@
         6: 'var(--color-m6)'
     };
 
-    // সেভ বা কানেকশনের সময় স্ক্রিনের নোটিফিকেশন বন্ধ রাখার জন্য লোডার নিষ্ক্রিয় করা হলো
-    function showLoader() { }
+    // সেভ চলার সময় ডবল ক্লিক রোধ করতে ভিজ্যুয়াল লোডার সক্রিয় করা হলো
+    function showLoader() { document.getElementById('loading-overlay').style.display = 'flex'; }
     function hideLoader() { document.getElementById('loading-overlay').style.display = 'none'; }
 
-    // Backend API Call Helper Function
     async function callBackendAPI(action, moduleKey = null, payload = null, id = null) {
         if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("আপনার_সম্পূর্ণ_লিংক")) {
-            console.warn("গুগল অ্যাপস স্ক্রিপ্ট লিংক সেট করা নেই। অফলাইন মোডে কাজ চলছে।");
+            console.warn("গুগল অ্যাপস স্ক্রিপ্ট লিংক সেট করা নেই।");
             return null;
         }
 
@@ -567,16 +554,16 @@
         } catch (err) {
             hideLoader();
             console.error("API Error:", err);
+            alert("গুগল শিটের সাথে সংযোগে সমস্যা হয়েছে! আবার চেষ্টা করুন।");
             return null;
         }
     }
 
-    // Load All Data from Google Sheet
     async function loadDataFromGoogleSheet() {
         const res = await callBackendAPI('getAll');
         if (res && res.status === 'success' && res.data) {
             if (res.data.database) database = res.data.database;
-            if (res.data.usersList && res.data.usersList.length > 0) usersList = res.data.usersList;
+            if (res.data.usersList) usersList = res.data.usersList;
             calculateTotals();
         }
     }
@@ -709,7 +696,7 @@
                     <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m1-amount" value="${editItem ? editItem.amount : ''}" required step="any"></div>
                 </div>
                 <div class="btn-action-container">
-                    <button type="submit" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
+                    <button type="submit" id="btn-submit-m1" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
                     ${editItem ? `<button type="button" class="btn-cancel" onclick="cancelEdit(1)">বাতিল</button>` : ''}
                 </div>
             </form>
@@ -718,6 +705,9 @@
 
     async function saveModule1(e) {
         e.preventDefault();
+        const submitBtn = document.getElementById('btn-submit-m1');
+        if (submitBtn) submitBtn.disabled = true;
+
         const payload = {
             name: document.getElementById('m1-name').value,
             village: document.getElementById('m1-village').value,
@@ -729,18 +719,12 @@
         if (editingIndex !== null) {
             const item = database.module1[editingIndex];
             await callBackendAPI('update', 'module1', payload, item.id);
-            database.module1[editingIndex] = { ...item, ...payload };
-            editingIndex = null;
         } else {
-            const res = await callBackendAPI('save', 'module1', payload);
-            database.module1.push({
-                id: res && res.id ? res.id : Date.now(),
-                dateTime: new Date().toLocaleString('bn-BD'),
-                ...payload
-            });
+            await callBackendAPI('save', 'module1', payload);
         }
 
-        calculateTotals();
+        await loadDataFromGoogleSheet();
+        editingIndex = null;
         renderFormModule1();
         renderTableModule1();
     }
@@ -785,8 +769,7 @@
         if(confirm("আপনি কি নিশ্চিত এটি মুছে ফেলতে চান?")) {
             const item = database.module1[idx];
             await callBackendAPI('delete', 'module1', null, item.id);
-            database.module1.splice(idx, 1);
-            calculateTotals();
+            await loadDataFromGoogleSheet();
             renderTableModule1();
         }
     }
@@ -797,7 +780,7 @@
             <form onsubmit="saveModule2(event)">
                 <h4 style="margin-bottom: 10px; color: var(--color-m2);">${editItem ? 'জমা/ফেরত তথ্য এডিট' : 'নতুন জমা/ফেরত এন্ট্রি'}</h4>
                 <div class="form-grid">
-                    <div class="form-group"><label>আমানতকারীর নাম</label><input type="text" id="m2-name" value="${editItem ? editItem.name : ''}" required></div>
+                    <div class="form-group"><label>নাম</label><input type="text" id="m2-name" value="${editItem ? editItem.name : ''}" required></div>
                     <div class="form-group"><label>গ্রাম</label><input type="text" id="m2-village" value="${editItem ? editItem.village : ''}" required></div>
                     <div class="form-group">
                         <label>টাইপ</label>
@@ -809,7 +792,7 @@
                     <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m2-amount" value="${editItem ? editItem.amount : ''}" required step="any"></div>
                 </div>
                 <div class="btn-action-container">
-                    <button type="submit" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
+                    <button type="submit" id="btn-submit-m2" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
                     ${editItem ? `<button type="button" class="btn-cancel" onclick="cancelEdit(2)">বাতিল</button>` : ''}
                 </div>
             </form>
@@ -818,6 +801,9 @@
 
     async function saveModule2(e) {
         e.preventDefault();
+        const submitBtn = document.getElementById('btn-submit-m2');
+        if (submitBtn) submitBtn.disabled = true;
+
         const payload = {
             name: document.getElementById('m2-name').value,
             village: document.getElementById('m2-village').value,
@@ -829,18 +815,12 @@
         if (editingIndex !== null) {
             const item = database.module2[editingIndex];
             await callBackendAPI('update', 'module2', payload, item.id);
-            database.module2[editingIndex] = { ...item, ...payload };
-            editingIndex = null;
         } else {
-            const res = await callBackendAPI('save', 'module2', payload);
-            database.module2.push({
-                id: res && res.id ? res.id : Date.now(),
-                dateTime: new Date().toLocaleString('bn-BD'),
-                ...payload
-            });
+            await callBackendAPI('save', 'module2', payload);
         }
 
-        calculateTotals();
+        await loadDataFromGoogleSheet();
+        editingIndex = null;
         renderFormModule2();
         renderTableModule2();
     }
@@ -872,7 +852,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>তারিখ/সময়</th><th>আমানতকারীর নাম</th><th>গ্রাম</th><th>টাইপ</th><th>পরিমাণ</th><th>ইউজার আইডি</th>
+                        <th>তারিখ/সময়</th><th>নাম</th><th>গ্রাম</th><th>টাইপ</th><th>পরিমাণ</th><th>ইউজার আইডি</th>
                         ${isAdmin ? '<th>Action</th>' : ''}
                     </tr>
                 </thead>
@@ -885,8 +865,7 @@
         if(confirm("মুছে ফেলতে চান?")) {
             const item = database.module2[idx];
             await callBackendAPI('delete', 'module2', null, item.id);
-            database.module2.splice(idx, 1);
-            calculateTotals();
+            await loadDataFromGoogleSheet();
             renderTableModule2();
         }
     }
@@ -903,7 +882,7 @@
                     <div class="form-group"><label>নোট / মোবাইল</label><input type="text" id="m3-note" value="${editItem ? editItem.note : ''}"></div>
                 </div>
                 <div class="btn-action-container">
-                    <button type="submit" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
+                    <button type="submit" id="btn-submit-m3" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
                     ${editItem ? `<button type="button" class="btn-cancel" onclick="cancelEdit(3)">বাতিল</button>` : ''}
                 </div>
             </form>
@@ -912,6 +891,9 @@
 
     async function saveModule3(e) {
         e.preventDefault();
+        const submitBtn = document.getElementById('btn-submit-m3');
+        if (submitBtn) submitBtn.disabled = true;
+
         const payload = {
             title: document.getElementById('m3-title').value,
             amount: parseFloat(document.getElementById('m3-amount').value),
@@ -923,18 +905,12 @@
         if (editingIndex !== null) {
             const item = database.module3[editingIndex];
             await callBackendAPI('update', 'module3', payload, item.id);
-            database.module3[editingIndex] = { ...item, ...payload };
-            editingIndex = null;
         } else {
-            const res = await callBackendAPI('save', 'module3', payload);
-            database.module3.push({
-                id: res && res.id ? res.id : Date.now(),
-                dateTime: new Date().toLocaleString('bn-BD'),
-                ...payload
-            });
+            await callBackendAPI('save', 'module3', payload);
         }
 
-        calculateTotals();
+        await loadDataFromGoogleSheet();
+        editingIndex = null;
         renderFormModule3();
         renderTableModule3();
     }
@@ -979,13 +955,12 @@
         if(confirm("মুছে ফেলতে চান?")) {
             const item = database.module3[idx];
             await callBackendAPI('delete', 'module3', null, item.id);
-            database.module3.splice(idx, 1);
-            calculateTotals();
+            await loadDataFromGoogleSheet();
             renderTableModule3();
         }
     }
 
-    // --- Module 4: উদ্বৃত্ত (Surplus Summary Statement & PDF Export) ---
+    // --- Module 4: উদ্বৃত্ত (Surplus Summary Statement) ---
     function renderTableModule4() {
         let totals = getCalculatedTotals();
         let surplusStyleClass = totals.surplus >= 0 ? "text-plus" : "text-minus";
@@ -1020,7 +995,6 @@
         `;
     }
 
-    // PDF / Print Function for Surplus Statement
     function downloadSurplusPDF() {
         window.print();
     }
@@ -1039,7 +1013,7 @@
                     <div class="form-group"><label>নোট</label><input type="text" id="m5-note" value="${editItem ? editItem.note : ''}"></div>
                 </div>
                 <div class="btn-action-container">
-                    <button type="submit" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
+                    <button type="submit" id="btn-submit-m5" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
                     ${editItem ? `<button type="button" class="btn-cancel" onclick="cancelEdit(5)">বাতিল</button>` : ''}
                 </div>
             </form>
@@ -1048,6 +1022,9 @@
 
     async function saveModule5(e) {
         e.preventDefault();
+        const submitBtn = document.getElementById('btn-submit-m5');
+        if (submitBtn) submitBtn.disabled = true;
+
         const payload = {
             name: document.getElementById('m5-name').value,
             village: document.getElementById('m5-village').value,
@@ -1059,18 +1036,12 @@
         if (editingIndex !== null) {
             const item = database.module5[editingIndex];
             await callBackendAPI('update', 'module5', payload, item.id);
-            database.module5[editingIndex] = { ...item, ...payload };
-            editingIndex = null;
         } else {
-            const res = await callBackendAPI('save', 'module5', payload);
-            database.module5.push({
-                id: res && res.id ? res.id : Date.now(),
-                dateTime: new Date().toLocaleString('bn-BD'),
-                ...payload
-            });
+            await callBackendAPI('save', 'module5', payload);
         }
 
-        calculateTotals();
+        await loadDataFromGoogleSheet();
+        editingIndex = null;
         renderFormModule5();
         renderTableModule5();
     }
@@ -1115,8 +1086,7 @@
         if(confirm("মুছে ফেলতে চান?")) {
             const item = database.module5[idx];
             await callBackendAPI('delete', 'module5', null, item.id);
-            database.module5.splice(idx, 1);
-            calculateTotals();
+            await loadDataFromGoogleSheet();
             renderTableModule5();
         }
     }
@@ -1141,7 +1111,7 @@
                     </div>
                 </div>
                 <div class="btn-action-container">
-                    <button type="submit" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
+                    <button type="submit" id="btn-submit-m6" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
                     ${editItem ? `<button type="button" class="btn-cancel" onclick="cancelEdit(6)">বাতিল</button>` : ''}
                 </div>
             </form>
@@ -1150,6 +1120,9 @@
 
     async function saveUser(e) {
         e.preventDefault();
+        const submitBtn = document.getElementById('btn-submit-m6');
+        if (submitBtn) submitBtn.disabled = true;
+
         const payload = {
             name: document.getElementById('u-name').value,
             village: document.getElementById('u-village').value,
@@ -1162,18 +1135,12 @@
         if (editingIndex !== null) {
             const item = usersList[editingIndex];
             await callBackendAPI('update', 'module6', payload, item.id);
-            usersList[editingIndex] = { ...item, ...payload };
-            editingIndex = null;
         } else {
-            const res = await callBackendAPI('save', 'module6', payload);
-            usersList.push({
-                id: res && res.id ? res.id : Date.now(),
-                date: new Date().toLocaleString('bn-BD'),
-                ...payload
-            });
+            await callBackendAPI('save', 'module6', payload);
         }
 
-        calculateTotals();
+        await loadDataFromGoogleSheet();
+        editingIndex = null;
         renderFormModule6();
         renderTableModule6();
     }
@@ -1208,21 +1175,16 @@
                         <th>তারিখ/সময়</th><th>নাম</th><th>গ্রাম</th><th>মোবাইল</th><th>ইউজার আইডি</th><th>পাসওয়ার্ড</th><th>রোল</th><th>Action</th>
                     </tr>
                 </thead>
-                <tbody>${rows}</tbody>
+                <tbody>${rows || '<tr><td colspan="8">কোনো ইউজার ডাটা পাওয়া যায়নি</td></tr>'}</tbody>
             </table>
         `;
     }
 
     async function deleteUser(idx) {
-        if(usersList[idx].userId === 'admin') {
-            alert("প্রধান এডমিন অ্যাকাউন্ট মুছা যাবে না!");
-            return;
-        }
         if(confirm("ইউজারটি মুছে ফেলতে চান?")) {
             const item = usersList[idx];
             await callBackendAPI('delete', 'module6', null, item.id);
-            usersList.splice(idx, 1);
-            calculateTotals();
+            await loadDataFromGoogleSheet();
             renderTableModule6();
         }
     }
@@ -1232,7 +1194,6 @@
         openModule(modId);
     }
 
-    // Global Calculation Engine
     function getCalculatedTotals() {
         let totCol = database.module1.reduce((acc, i) => acc + i.amount, 0);
         let totVilCol = database.module5.reduce((acc, i) => acc + i.amount, 0);
