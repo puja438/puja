@@ -11,393 +11,95 @@
             --text-color: #222222;
             --border-color: #dddddd;
             
-            /* Module Theme Colors */
-            --color-m1: #d32f2f; /* কমিটি কালেকশন - লাল */
-            --color-m2: #1976d2; /* কমিটি জমা/ফেরত - নীল */
-            --color-m3: #e65100; /* খরচ - কমলা */
-            --color-m4: #2e7d32; /* উদ্বৃত্ত - সবুজ */
-            --color-m5: #7b1fa2; /* গ্রাম কালেকশন - বেগুনি */
-            --color-m6: #00838f; /* ইউজার - সায়ান/টিয়াল */
+            --color-m1: #d32f2f;
+            --color-m2: #1976d2;
+            --color-m3: #e65100;
+            --color-m4: #2e7d32;
+            --color-m5: #7b1fa2;
+            --color-m6: #00838f;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            padding: 15px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding: 15px; }
+        .container { max-width: 1200px; margin: 0 auto; }
 
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            padding: 18px 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
+            color: white; padding: 18px 25px; border-radius: 12px; margin-bottom: 25px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
-
-        header h1 {
-            font-size: 22px;
-            letter-spacing: 0.5px;
-        }
-
-        .auth-status {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
+        header h1 { font-size: 22px; letter-spacing: 0.5px; }
+        .auth-status { display: flex; align-items: center; gap: 12px; }
         .btn-login {
-            background-color: #ff9800;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 15px;
-            transition: 0.2s;
+            background-color: #ff9800; color: white; border: none; padding: 10px 20px;
+            border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.2s;
         }
+        .btn-login:hover { background-color: #e65100; }
+        .user-info-text { font-size: 15px; font-weight: bold; background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; }
 
-        .btn-login:hover {
-            background-color: #e65100;
-        }
-
-        .user-info-text {
-            font-size: 15px;
-            font-weight: bold;
-            background: rgba(255,255,255,0.2);
-            padding: 6px 14px;
-            border-radius: 20px;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 22px;
-        }
-
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 22px; }
         .card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: 1px solid #e0e0e0;
+            background-color: var(--card-bg); border-radius: 12px; overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: 1px solid #e0e0e0;
         }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-
-        .card-header {
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 20px;
-            font-weight: bold;
-        }
-
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+        .card-header { color: white; padding: 15px; text-align: center; font-size: 20px; font-weight: bold; }
         .card-m1 .card-header { background-color: var(--color-m1); }
         .card-m2 .card-header { background-color: var(--color-m2); }
         .card-m3 .card-header { background-color: var(--color-m3); }
         .card-m4 .card-header { background-color: var(--color-m4); }
         .card-m5 .card-header { background-color: var(--color-m5); }
         .card-m6 .card-header { background-color: var(--color-m6); }
-
-        .card-body {
-            padding: 20px;
-            text-align: center;
-        }
-
-        .card-amount-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .card-amount-label {
-            font-size: 16px;
-            color: #666;
-            font-weight: 600;
-        }
-
+        .card-body { padding: 20px; text-align: center; }
+        .card-amount-box { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+        .card-amount-label { font-size: 16px; color: #666; font-weight: 600; }
         .amount-val {
-            font-size: 28px;
-            font-weight: 800;
-            border: 2px solid #e0e0e0;
-            padding: 10px 25px;
-            border-radius: 8px;
-            background-color: #fafafa;
-            min-width: 180px;
-            display: inline-block;
-            word-break: break-all;
+            font-size: 28px; font-weight: 800; border: 2px solid #e0e0e0; padding: 10px 25px;
+            border-radius: 8px; background-color: #fafafa; min-width: 180px; display: inline-block; word-break: break-all;
         }
-
-        .text-plus { color: #2e7d32 !important; }
-        .text-minus { color: #d32f2f !important; }
 
         .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; padding: 10px;
         }
-
         .modal-overlay.active { display: flex; }
-
         .modal-box {
-            background-color: white;
-            border-radius: 12px;
-            width: 96%;
-            height: 94vh;
-            max-width: 1400px;
-            overflow-y: auto;
-            padding: 25px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background-color: white; border-radius: 12px; width: 96%; height: 94vh; max-width: 1400px;
+            overflow-y: auto; padding: 25px; position: relative; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            margin: -25px -25px 20px -25px;
-            color: white;
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
-        }
-
+        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; margin: -25px -25px 20px -25px; color: white; border-top-left-radius: 12px; border-top-right-radius: 12px; }
         .modal-header h3 { font-size: 22px; }
-
-        .close-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
-        }
-
+        .close-btn { background: rgba(255,255,255,0.2); border: none; font-size: 28px; cursor: pointer; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         .close-btn:hover { background: rgba(255,255,255,0.4); }
 
-        .form-section {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #e9ecef;
-            margin-bottom: 25px;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            font-size: 14px;
-            margin-bottom: 6px;
-            font-weight: 700;
-            color: #444;
-        }
-
-        .form-group input, .form-group select {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 15px;
-            outline: none;
-        }
-
-        .form-group input:focus, .form-group select:focus { border-color: #1976d2; }
-
-        .btn-action-container {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-save {
-            background-color: #2e7d32;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .btn-save:disabled {
-            background-color: #a5d6a7;
-            cursor: not-allowed;
-        }
-
-        .btn-print {
-            background-color: #0288d1;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 15px;
-            margin-bottom: 15px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-cancel {
-            background-color: #757575;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-            flex-grow: 1;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 15px;
-            margin-top: 10px;
-        }
-
-        table th, table td {
-            border: 1px solid #e0e0e0;
-            padding: 12px 10px;
-            text-align: center;
-        }
-
-        table th {
-            background-color: #f1f3f5;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .btn-edit {
-            background-color: #f39c12;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-right: 5px;
-        }
-
-        .btn-delete {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .login-box {
-            max-width: 420px;
-            height: auto;
-            margin: auto;
-        }
-
-        #loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(255, 255, 255, 0.85);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            font-weight: bold;
-            font-size: 18px;
-            color: #1e3c72;
-        }
-
-        .spinner {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #1e3c72;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 12px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        .form-section { background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e9ecef; margin-bottom: 25px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-size: 14px; margin-bottom: 6px; font-weight: 700; color: #444; }
+        .form-group input, .form-group select { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; outline: none; }
+        .btn-action-container { display: flex; gap: 10px; }
+        .btn-save { background-color: #2e7d32; color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        .btn-save:disabled { background-color: #a5d6a7; cursor: not-allowed; }
+        .btn-print { background-color: #0288d1; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 15px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 8px; }
+        
+        .table-responsive { overflow-x: auto; flex-grow: 1; }
+        table { width: 100%; border-collapse: collapse; font-size: 15px; margin-top: 10px; }
+        table th, table td { border: 1px solid #e0e0e0; padding: 12px 10px; text-align: center; }
+        table th { background-color: #f1f3f5; font-weight: bold; color: #333; }
+        .btn-edit { background-color: #f39c12; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-right: 5px; }
+        .btn-delete { background-color: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .login-box { max-width: 420px; height: auto; margin: auto; }
 
         @media print {
             body * { visibility: hidden; }
             #printable-surplus-area, #printable-surplus-area * { visibility: visible; }
-            #printable-surplus-area {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-            }
+            #printable-surplus-area { position: absolute; left: 0; top: 0; width: 100%; }
             .btn-print { display: none !important; }
         }
     </style>
 </head>
 <body>
-
-<div id="loading-overlay">
-    <div class="spinner"></div>
-    <span>গুগল শিটের সাথে সংযোগ হচ্ছে... অনুগ্রহ করে অপেক্ষা করুন।</span>
-</div>
 
 <div class="container">
     <header>
@@ -459,7 +161,7 @@
             </div>
         </div>
 
-        <div class="card card-m6" onclick="openModule(6)">
+        <div class="card card-m6" id="card-m6-container" onclick="openModule(6)" style="display: none;">
             <div class="card-header">ইউজার মডিউল</div>
             <div class="card-body">
                 <div class="card-amount-box">
@@ -477,7 +179,7 @@
             <h3>লগইন করুন</h3>
             <button class="close-btn" onclick="closeModal('login-modal')">&times;</button>
         </div>
-        <form onsubmit="handleLogin(event)">
+        <form onsubmit="handleLoginSubmit(event)">
             <div class="form-group" style="margin-bottom: 12px;">
                 <label>ইউজার আইডি</label>
                 <input type="text" id="login-id" required placeholder="ইউজার আইডি লিখুন">
@@ -486,7 +188,7 @@
                 <label>পাসওয়ার্ড</label>
                 <input type="password" id="login-pass" required placeholder="পাসওয়ার্ড লিখুন">
             </div>
-            <button type="submit" class="btn-save" style="width: 100%;">লগইন</button>
+            <button type="submit" id="login-btn" class="btn-save" style="width: 100%;">লগইন</button>
         </form>
     </div>
 </div>
@@ -497,737 +199,249 @@
             <h3 id="modal-title">মডিউল নাম</h3>
             <button class="close-btn" onclick="closeModal('module-modal')">&times;</button>
         </div>
-
         <div id="form-container" class="form-section"></div>
         <div id="table-container" class="table-responsive"></div>
     </div>
 </div>
 
 <script>
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8zZ4q8Gy1sUTZdIh_vXh8gXTLga2MOTuVlON4H6X1O_GIbuTv7SCDpx3bXaTCom_9/exec";
+    // =========================================================================
+    // নিচের 'GOOGLE_SCRIPT_URL' ভ্যারিয়েবলে আপনার Apps Script Web App Deployment Link টি বসান
+    // =========================================================================
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec";
 
-    let currentUser = null;
-    let activeModuleId = null;
-    let editingIndex = null;
+    let currentUser = { role: 'guest', name: 'গেস্ট ইউজার' };
+    let currentModule = 0;
+    let editingRowIndex = null;
 
-    let usersList = [];
-
-    let database = {
-        module1: [],
-        module2: [],
-        module3: [],
-        module5: []
+    const moduleConfigs = {
+        1: { name: 'Committee_Collection', title: 'কমিটি কালেকশন', color: 'var(--color-m1)', fields: [{ id: 'field1', label: 'নাম/বিবরণ', type: 'text' }, { id: 'field2', label: 'টাকা', type: 'number' }, { id: 'field3', label: 'মন্তব্য', type: 'text' }], headers: ['তারিখ ও সময়', 'নাম/বিবরণ', 'টাকা', 'মন্তব্য'] },
+        2: { name: 'Committee_Deposit', title: 'কমিটি জমা / ফেরত', color: 'var(--color-m2)', fields: [{ id: 'field1', label: 'ধরন', type: 'select', options: ['জমা', 'ফেরত'] }, { id: 'field2', label: 'নাম/বিবরণ', type: 'text' }, { id: 'field3', label: 'টাকা', type: 'number' }, { id: 'field4', label: 'মন্তব্য', type: 'text' }], headers: ['তারিখ ও সময়', 'ধরন', 'নাম/বিবরণ', 'টাকা', 'মন্তব্য'] },
+        3: { name: 'Expense', title: 'খরচ মডিউল', color: 'var(--color-m3)', fields: [{ id: 'field1', label: 'খাত/বিবরণ', type: 'text' }, { id: 'field2', label: 'টাকা', type: 'number' }, { id: 'field3', label: 'মন্তব্য', type: 'text' }], headers: ['তারিখ ও সময়', 'খাত/বিবরণ', 'টাকা', 'মন্তব্য'] },
+        4: { name: 'Surplus', title: 'উদ্বৃত্ত বিবরণী', color: 'var(--color-m4)', fields: [], headers: ['তারিখ ও সময়', 'বিবরণ', 'টাকা', 'মন্তব্য'] },
+        5: { name: 'Village_Collection', title: 'গ্রাম কালেকশন', color: 'var(--color-m5)', fields: [{ id: 'field1', label: 'গ্রাম/ব্যক্তি', type: 'text' }, { id: 'field2', label: 'টাকা', type: 'number' }, { id: 'field3', label: 'মন্তব্য', type: 'text' }], headers: ['তারিখ ও সময়', 'গ্রাম/ব্যক্তি', 'টাকা', 'মন্তব্য'] },
+        6: { name: 'Users', title: 'ইউজার মডিউল', color: 'var(--color-m6)', fields: [{ id: 'field1', label: 'ইউজার আইডি', type: 'text' }, { id: 'field2', label: 'পাসওয়ার্ড', type: 'text' }, { id: 'field3', label: 'রোল', type: 'select', options: ['user', 'admin'] }, { id: 'field4', label: 'নাম', type: 'text' }], headers: ['তারিখ ও সময়', 'ইউজার আইডি', 'পাসওয়ার্ড', 'রোল', 'নাম'] }
     };
-
-    const VILLAGES = ["উত্তর পাড়া", "দক্ষিণ পাড়া", "পূর্ব পাড়া", "পশ্চিম পাড়া", "কেন্দ্রীয় এলাকা"];
-    const HOUSES = ["বিশ্বাস বাড়ি", "মন্ডল বাড়ি", "ঘোষ বাড়ি", "সরকার বাড়ি", "হালদার বাড়ি"];
-
-    const MODULE_COLORS = {
-        1: 'var(--color-m1)',
-        2: 'var(--color-m2)',
-        3: 'var(--color-m3)',
-        4: 'var(--color-m4)',
-        5: 'var(--color-m5)',
-        6: 'var(--color-m6)'
-    };
-
-    // সেভ চলার সময় ডবল ক্লিক রোধ করতে ভিজ্যুয়াল লোডার সক্রিয় করা হলো
-    function showLoader() { document.getElementById('loading-overlay').style.display = 'flex'; }
-    function hideLoader() { document.getElementById('loading-overlay').style.display = 'none'; }
-
-    async function callBackendAPI(action, moduleKey = null, payload = null, id = null) {
-        if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("আপনার_সম্পূর্ণ_লিংক")) {
-            console.warn("গুগল অ্যাপস স্ক্রিপ্ট লিংক সেট করা নেই।");
-            return null;
-        }
-
-        showLoader();
-        try {
-            const response = await fetch(APPS_SCRIPT_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ action, module: moduleKey, payload, id })
-            });
-            const result = await response.json();
-            hideLoader();
-            return result;
-        } catch (err) {
-            hideLoader();
-            console.error("API Error:", err);
-            alert("গুগল শিটের সাথে সংযোগে সমস্যা হয়েছে! আবার চেষ্টা করুন।");
-            return null;
-        }
-    }
-
-    async function loadDataFromGoogleSheet() {
-        const res = await callBackendAPI('getAll');
-        if (res && res.status === 'success' && res.data) {
-            if (res.data.database) database = res.data.database;
-            if (res.data.usersList) usersList = res.data.usersList;
-            calculateTotals();
-        }
-    }
 
     window.onload = function() {
-        const savedUser = localStorage.getItem('puja_app_user');
-        if (savedUser) {
-            try { currentUser = JSON.parse(savedUser); } catch(e) { currentUser = null; }
-        }
         updateUserUI();
-        calculateTotals();
-        loadDataFromGoogleSheet();
+        loadDashboardDataDataSilent();
     };
 
+    async function apiCall(action, payload = {}) {
+        if (GOOGLE_SCRIPT_URL.includes("YOUR_DEPLOYMENT_ID")) {
+            alert("অনুগ্রহ করে index.html ফাইলের GOOGLE_SCRIPT_URL এ আপনার Deployment Link টি বসান!");
+            return null;
+        }
+        try {
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action, ...payload }),
+                redirect: 'follow'
+            });
+            const res = await response.json();
+            if (res.status === 'error') throw new Error(res.message);
+            return res.data;
+        } catch (err) {
+            alert("ত্রুটি: " + err.message);
+            return null;
+        }
+    }
+
+    async function loadDashboardDataDataSilent() {
+        const data = await apiCall('getDashboardData');
+        if (data) {
+            document.getElementById('dash-val-1').innerText = '৳ ' + (data.m1 || 0).toLocaleString();
+            document.getElementById('dash-val-2').innerText = '৳ ' + (data.m2 || 0).toLocaleString();
+            document.getElementById('dash-val-3').innerText = '৳ ' + (data.m3 || 0).toLocaleString();
+            document.getElementById('dash-val-4').innerText = '৳ ' + (data.m4 || 0).toLocaleString();
+            document.getElementById('dash-val-5').innerText = '৳ ' + (data.m5 || 0).toLocaleString();
+            document.getElementById('dash-val-6').innerText = (data.m6 || 0) + ' জন';
+        }
+    }
+
     function updateUserUI() {
-        if (currentUser) {
-            document.getElementById('user-display').innerText = `${currentUser.name} (${currentUser.role === 'admin' ? 'এডমিন' : 'ইউজার'})`;
-            document.getElementById('auth-btn').innerText = "Logout";
+        document.getElementById('user-display').innerText = `${currentUser.name} (${currentUser.role.toUpperCase()})`;
+        const authBtn = document.getElementById('auth-btn');
+        if (currentUser.role === 'guest') {
+            authBtn.innerText = 'Login';
+            document.getElementById('card-m6-container').style.display = 'none';
         } else {
-            document.getElementById('user-display').innerText = "গেস্ট ইউজার";
-            document.getElementById('auth-btn').innerText = "Login";
+            authBtn.innerText = 'Logout';
+            if (currentUser.role === 'admin') {
+                document.getElementById('card-m6-container').style.display = 'block';
+            } else {
+                document.getElementById('card-m6-container').style.display = 'none';
+            }
         }
     }
 
     function handleAuthClick() {
-        if (currentUser) {
-            currentUser = null;
-            localStorage.removeItem('puja_app_user');
-            updateUserUI();
-            alert("আপনি সফলভাবে লগআউট হয়েছেন।");
-        } else {
+        if (currentUser.role === 'guest') {
             document.getElementById('login-modal').classList.add('active');
+        } else {
+            currentUser = { role: 'guest', name: 'গেস্ট ইউজার' };
+            updateUserUI();
         }
     }
 
-    function closeModal(modalId) {
-        document.getElementById(modalId).classList.remove('active');
-        editingIndex = null;
-    }
-
-    function handleLogin(e) {
+    async function handleLoginSubmit(e) {
         e.preventDefault();
-        const idInput = document.getElementById('login-id').value.trim();
-        const passInput = document.getElementById('login-pass').value.trim();
+        const btn = document.getElementById('login-btn');
+        btn.disabled = true;
+        btn.innerText = 'যাচাই করা হচ্ছে...';
 
-        const foundUser = usersList.find(u => u.userId === idInput && u.pass === passInput);
+        const userId = document.getElementById('login-id').value;
+        const pass = document.getElementById('login-pass').value;
 
-        if (foundUser) {
-            currentUser = foundUser;
-            localStorage.setItem('puja_app_user', JSON.stringify(currentUser));
+        const res = await apiCall('login', { userId, password: pass });
+        btn.disabled = false;
+        btn.innerText = 'লগইন';
+
+        if (res && res.success) {
+            currentUser = { role: res.role, name: res.name };
             updateUserUI();
             closeModal('login-modal');
             document.getElementById('login-id').value = '';
             document.getElementById('login-pass').value = '';
         } else {
-            alert("ভুল ইউজার আইডি অথবা পাসওয়ার্ড!");
+            alert('ভুল ইউজার আইডি অথবা পাসওয়ার্ড!');
         }
     }
 
-    function openModule(moduleId) {
-        if (!currentUser) {
-            alert("গেস্ট ইউজাররা তথ্য দেখতে বা পরিবর্তন করতে পারবেন না। অনুগ্রহ করে লগইন করুন।");
-            document.getElementById('login-modal').classList.add('active');
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+    }
+
+    async function openModule(modId) {
+        if (modId === 6 && currentUser.role !== 'admin') {
+            alert('ইউজার মডিউল দেখার অধিকার শুধু অ্যাডমিনদের আছে।');
             return;
         }
 
-        if (moduleId === 6 && currentUser.role !== 'admin') {
-            alert("সাধারণ ইউজাররা 'ইউজার মডিউল' এক্সেস করতে পারবেন না!");
-            return;
-        }
+        currentModule = modId;
+        editingRowIndex = null;
+        const cfg = moduleConfigs[modId];
 
-        activeModuleId = moduleId;
-        editingIndex = null;
-        
-        const modalHeader = document.getElementById('modal-header-bg');
-        modalHeader.style.backgroundColor = MODULE_COLORS[moduleId];
+        document.getElementById('modal-title').innerText = cfg.title;
+        document.getElementById('modal-header-bg').style.backgroundColor = cfg.color;
 
-        const modalTitle = document.getElementById('modal-title');
-        const formContainer = document.getElementById('form-container');
-        
+        renderForm(cfg);
         document.getElementById('module-modal').classList.add('active');
+        loadModuleTable(modId);
+    }
 
-        switch(moduleId) {
-            case 1:
-                modalTitle.innerText = "কমিটি কালেকশন";
-                renderFormModule1();
-                renderTableModule1();
-                break;
-            case 2:
-                modalTitle.innerText = "কমিটি জমা / ফেরত";
-                renderFormModule2();
-                renderTableModule2();
-                break;
-            case 3:
-                modalTitle.innerText = "খরচ মডিউল";
-                renderFormModule3();
-                renderTableModule3();
-                break;
-            case 4:
-                modalTitle.innerText = "উদ্বৃত্ত বিবরণী";
-                formContainer.style.display = "none";
-                renderTableModule4();
-                break;
-            case 5:
-                modalTitle.innerText = "গ্রাম কালেকশন";
-                renderFormModule5();
-                renderTableModule5();
-                break;
-            case 6:
-                modalTitle.innerText = "ইউজার মডিউল";
-                renderFormModule6();
-                renderTableModule6();
-                break;
+    function renderForm(cfg) {
+        const container = document.getElementById('form-container');
+        if (currentUser.role === 'guest' || cfg.fields.length === 0) {
+            container.style.display = 'none';
+            return;
         }
-        if (moduleId !== 4) formContainer.style.display = "block";
+        container.style.display = 'block';
+
+        let html = '<form onsubmit="handleDataSave(event)"><div class="form-grid">';
+        cfg.fields.forEach(f => {
+            html += `<div class="form-group"><label>${f.label}</label>`;
+            if (f.type === 'select') {
+                html += `<select id="${f.id}" required>${f.options.map(o => `<option value="${o}">${o}</option>`).join('')}</select>`;
+            } else {
+                html += `<input type="${f.type}" id="${f.id}" required placeholder="${f.label} লিখুন">`;
+            }
+            html += `</div>`;
+        });
+        html += `</div><div class="btn-action-container">
+            <button type="submit" id="btn-save-main" class="btn-save">সেভ করুন</button>
+        </div></form>`;
+
+        container.innerHTML = html;
     }
 
-    // --- Module 1: কমিটি কালেকশন ---
-    function renderFormModule1(editItem = null) {
-        let vOptions = VILLAGES.map(v => `<option value="${v}" ${editItem && editItem.village === v ? 'selected' : ''}>${v}</option>`).join('');
-        let hOptions = HOUSES.map(h => `<option value="${h}" ${editItem && editItem.house === h ? 'selected' : ''}>${h}</option>`).join('');
+    async function loadModuleTable(modId) {
+        const cfg = moduleConfigs[modId];
+        const container = document.getElementById('table-container');
+        container.innerHTML = '<p style="text-align:center; padding: 20px;">ডাটা লোড হচ্ছে...</p>';
 
-        document.getElementById('form-container').innerHTML = `
-            <form onsubmit="saveModule1(event)">
-                <h4 style="margin-bottom: 10px; color: var(--color-m1);">${editItem ? 'তথ্য এডিট করুন' : 'নতুন কালেকশন এন্ট্রি'}</h4>
-                <div class="form-grid">
-                    <div class="form-group"><label>নাম</label><input type="text" id="m1-name" value="${editItem ? editItem.name : ''}" required></div>
-                    <div class="form-group"><label>গ্রাম</label><select id="m1-village" required><option value="">--নির্বাচন করুন--</option>${vOptions}</select></div>
-                    <div class="form-group"><label>বাড়ি</label><select id="m1-house" required><option value="">--নির্বাচন করুন--</option>${hOptions}</select></div>
-                    <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m1-amount" value="${editItem ? editItem.amount : ''}" required step="any"></div>
-                </div>
-                <div class="btn-action-container">
-                    <button type="submit" id="btn-submit-m1" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
-                    ${editItem ? `<button type="button" class="btn-cancel" onclick="cancelEdit(1)">বাতিল</button>` : ''}
-                </div>
-            </form>
-        `;
-    }
-
-    async function saveModule1(e) {
-        e.preventDefault();
-        const submitBtn = document.getElementById('btn-submit-m1');
-        if (submitBtn) submitBtn.disabled = true;
-
-        const payload = {
-            name: document.getElementById('m1-name').value,
-            village: document.getElementById('m1-village').value,
-            house: document.getElementById('m1-house').value,
-            amount: parseFloat(document.getElementById('m1-amount').value),
-            userId: currentUser.userId
-        };
-
-        if (editingIndex !== null) {
-            const item = database.module1[editingIndex];
-            await callBackendAPI('update', 'module1', payload, item.id);
-        } else {
-            await callBackendAPI('save', 'module1', payload);
-        }
-
-        await loadDataFromGoogleSheet();
-        editingIndex = null;
-        renderFormModule1();
-        renderTableModule1();
-    }
-
-    function editModule1(idx) {
-        editingIndex = idx;
-        renderFormModule1(database.module1[idx]);
-    }
-
-    function renderTableModule1() {
-        let isAdmin = currentUser.role === 'admin';
-        let rows = database.module1.map((item, idx) => `
-            <tr>
-                <td>${item.dateTime}</td>
-                <td>${item.name}</td>
-                <td>${item.village}</td>
-                <td>${item.house}</td>
-                <td>৳ ${item.amount.toFixed(2)}</td>
-                <td>${item.userId}</td>
-                ${isAdmin ? `<td>
-                    <button class="btn-edit" onclick="editModule1(${idx})">এডিট</button>
-                    <button class="btn-delete" onclick="deleteModule1(${idx})">মুছুন</button>
-                </td>` : ''}
-            </tr>
-        `).join('');
-
-        document.getElementById('table-container').innerHTML = `
-            <h3>কালেকশন তালিকা</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>তারিখ/সময়</th><th>নাম</th><th>গ্রাম</th><th>বাড়ি</th><th>পরিমাণ</th><th>ইউজার আইডি</th>
-                        ${isAdmin ? '<th>Action</th>' : ''}
-                    </tr>
-                </thead>
-                <tbody>${rows || '<tr><td colspan="7">কোনো ডাটা পাওয়া যায়নি</td></tr>'}</tbody>
-            </table>
-        `;
-    }
-
-    async function deleteModule1(idx) {
-        if(confirm("আপনি কি নিশ্চিত এটি মুছে ফেলতে চান?")) {
-            const item = database.module1[idx];
-            await callBackendAPI('delete', 'module1', null, item.id);
-            await loadDataFromGoogleSheet();
-            renderTableModule1();
-        }
-    }
-
-    // --- Module 2: কমিটি জমা / ফেরত ---
-    function renderFormModule2(editItem = null) {
-        document.getElementById('form-container').innerHTML = `
-            <form onsubmit="saveModule2(event)">
-                <h4 style="margin-bottom: 10px; color: var(--color-m2);">${editItem ? 'জমা/ফেরত তথ্য এডিট' : 'নতুন জমা/ফেরত এন্ট্রি'}</h4>
-                <div class="form-grid">
-                    <div class="form-group"><label>নাম</label><input type="text" id="m2-name" value="${editItem ? editItem.name : ''}" required></div>
-                    <div class="form-group"><label>গ্রাম</label><input type="text" id="m2-village" value="${editItem ? editItem.village : ''}" required></div>
-                    <div class="form-group">
-                        <label>টাইপ</label>
-                        <select id="m2-type" required>
-                            <option value="জমা" ${editItem && editItem.type === 'জমা' ? 'selected' : ''}>জমা</option>
-                            <option value="ফেরত" ${editItem && editItem.type === 'ফেরত' ? 'selected' : ''}>ফেরত</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m2-amount" value="${editItem ? editItem.amount : ''}" required step="any"></div>
-                </div>
-                <div class="btn-action-container">
-                    <button type="submit" id="btn-submit-m2" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
-                    ${editItem ? `<button type="button" class="btn-cancel" onclick="cancelEdit(2)">বাতিল</button>` : ''}
-                </div>
-            </form>
-        `;
-    }
-
-    async function saveModule2(e) {
-        e.preventDefault();
-        const submitBtn = document.getElementById('btn-submit-m2');
-        if (submitBtn) submitBtn.disabled = true;
-
-        const payload = {
-            name: document.getElementById('m2-name').value,
-            village: document.getElementById('m2-village').value,
-            type: document.getElementById('m2-type').value,
-            amount: parseFloat(document.getElementById('m2-amount').value),
-            userId: currentUser.userId
-        };
-
-        if (editingIndex !== null) {
-            const item = database.module2[editingIndex];
-            await callBackendAPI('update', 'module2', payload, item.id);
-        } else {
-            await callBackendAPI('save', 'module2', payload);
-        }
-
-        await loadDataFromGoogleSheet();
-        editingIndex = null;
-        renderFormModule2();
-        renderTableModule2();
-    }
-
-    function editModule2(idx) {
-        editingIndex = idx;
-        renderFormModule2(database.module2[idx]);
-    }
-
-    function renderTableModule2() {
-        let isAdmin = currentUser.role === 'admin';
-        let rows = database.module2.map((item, idx) => `
-            <tr>
-                <td>${item.dateTime}</td>
-                <td>${item.name}</td>
-                <td>${item.village}</td>
-                <td>${item.type}</td>
-                <td>৳ ${item.amount.toFixed(2)}</td>
-                <td>${item.userId}</td>
-                ${isAdmin ? `<td>
-                    <button class="btn-edit" onclick="editModule2(${idx})">এডিট</button>
-                    <button class="btn-delete" onclick="deleteModule2(${idx})">মুছুন</button>
-                </td>` : ''}
-            </tr>
-        `).join('');
-
-        document.getElementById('table-container').innerHTML = `
-            <h3>জমা / ফেরত তালিকা</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>তারিখ/সময়</th><th>নাম</th><th>গ্রাম</th><th>টাইপ</th><th>পরিমাণ</th><th>ইউজার আইডি</th>
-                        ${isAdmin ? '<th>Action</th>' : ''}
-                    </tr>
-                </thead>
-                <tbody>${rows || '<tr><td colspan="7">কোনো ডাটা পাওয়া যায়নি</td></tr>'}</tbody>
-            </table>
-        `;
-    }
-
-    async function deleteModule2(idx) {
-        if(confirm("মুছে ফেলতে চান?")) {
-            const item = database.module2[idx];
-            await callBackendAPI('delete', 'module2', null, item.id);
-            await loadDataFromGoogleSheet();
-            renderTableModule2();
-        }
-    }
-
-    // --- Module 3: খরচ ---
-    function renderFormModule3(editItem = null) {
-        document.getElementById('form-container').innerHTML = `
-            <form onsubmit="saveModule3(event)">
-                <h4 style="margin-bottom: 10px; color: var(--color-m3);">${editItem ? 'খরচের তথ্য এডিট' : 'নতুন খরচ এন্ট্রি'}</h4>
-                <div class="form-grid">
-                    <div class="form-group"><label>খরচের খাত</label><input type="text" id="m3-title" value="${editItem ? editItem.title : ''}" required></div>
-                    <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m3-amount" value="${editItem ? editItem.amount : ''}" required step="any"></div>
-                    <div class="form-group"><label>টাকা নেওয়া ব্যক্তির নাম</label><input type="text" id="m3-person" value="${editItem ? editItem.person : ''}" required></div>
-                    <div class="form-group"><label>নোট / মোবাইল</label><input type="text" id="m3-note" value="${editItem ? editItem.note : ''}"></div>
-                </div>
-                <div class="btn-action-container">
-                    <button type="submit" id="btn-submit-m3" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
-                    ${editItem ? `<button type="button" class="btn-cancel" onclick="cancelEdit(3)">বাতিল</button>` : ''}
-                </div>
-            </form>
-        `;
-    }
-
-    async function saveModule3(e) {
-        e.preventDefault();
-        const submitBtn = document.getElementById('btn-submit-m3');
-        if (submitBtn) submitBtn.disabled = true;
-
-        const payload = {
-            title: document.getElementById('m3-title').value,
-            amount: parseFloat(document.getElementById('m3-amount').value),
-            person: document.getElementById('m3-person').value,
-            note: document.getElementById('m3-note').value,
-            userId: currentUser.userId
-        };
-
-        if (editingIndex !== null) {
-            const item = database.module3[editingIndex];
-            await callBackendAPI('update', 'module3', payload, item.id);
-        } else {
-            await callBackendAPI('save', 'module3', payload);
-        }
-
-        await loadDataFromGoogleSheet();
-        editingIndex = null;
-        renderFormModule3();
-        renderTableModule3();
-    }
-
-    function editModule3(idx) {
-        editingIndex = idx;
-        renderFormModule3(database.module3[idx]);
-    }
-
-    function renderTableModule3() {
-        let isAdmin = currentUser.role === 'admin';
-        let rows = database.module3.map((item, idx) => `
-            <tr>
-                <td>${item.dateTime}</td>
-                <td>${item.title}</td>
-                <td>৳ ${item.amount.toFixed(2)}</td>
-                <td>${item.person}</td>
-                <td>${item.note || '-'}</td>
-                <td>${item.userId}</td>
-                ${isAdmin ? `<td>
-                    <button class="btn-edit" onclick="editModule3(${idx})">এডিট</button>
-                    <button class="btn-delete" onclick="deleteModule3(${idx})">মুছুন</button>
-                </td>` : ''}
-            </tr>
-        `).join('');
-
-        document.getElementById('table-container').innerHTML = `
-            <h3>খরচের তালিকা</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>তারিখ/সময়</th><th>খরচের খাত</th><th>পরিমাণ</th><th>টাকা নেওয়া ব্যক্তি</th><th>নোট/মোবাইল</th><th>ইউজার আইডি</th>
-                        ${isAdmin ? '<th>Action</th>' : ''}
-                    </tr>
-                </thead>
-                <tbody>${rows || '<tr><td colspan="7">কোনো ডাটা পাওয়া যায়নি</td></tr>'}</tbody>
-            </table>
-        `;
-    }
-
-    async function deleteModule3(idx) {
-        if(confirm("মুছে ফেলতে চান?")) {
-            const item = database.module3[idx];
-            await callBackendAPI('delete', 'module3', null, item.id);
-            await loadDataFromGoogleSheet();
-            renderTableModule3();
-        }
-    }
-
-    // --- Module 4: উদ্বৃত্ত (Surplus Summary Statement) ---
-    function renderTableModule4() {
-        let totals = getCalculatedTotals();
-        let surplusStyleClass = totals.surplus >= 0 ? "text-plus" : "text-minus";
-        let surplusFormatted = totals.surplus >= 0 ? `৳ ${totals.surplus.toFixed(2)}` : `- ৳ ${Math.abs(totals.surplus).toFixed(2)}`;
-
-        document.getElementById('table-container').innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h3>উদ্বৃত্ত হিসাব বিবরণী</h3>
-                <button class="btn-print" onclick="downloadSurplusPDF()">📥 প্রিন্ট / PDF ডাউনলোড করুন</button>
-            </div>
-            <div id="printable-surplus-area">
-                <div style="text-align: center; margin-bottom: 15px;">
-                    <h2>পূজার হিসাব - উদ্বৃত্ত বিবরণী</h2>
-                    <p>তারিখ: ${new Date().toLocaleDateString('bn-BD')}</p>
-                </div>
-                <table>
-                    <thead>
-                        <tr><th>আইটেম / বিবরণী খাত</th><th>মোট টাকা (৳)</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td style="text-align:left;">(+) মোট কমিটি কালেকশন</td><td>৳ ${totals.totCol.toFixed(2)}</td></tr>
-                        <tr><td style="text-align:left;">(+) মোট গ্রাম কালেকশন</td><td>৳ ${totals.totVilCol.toFixed(2)}</td></tr>
-                        <tr><td style="text-align:left;">(+/-) নিট জমা / ফেরত</td><td>৳ ${totals.netDeposit.toFixed(2)}</td></tr>
-                        <tr><td style="text-align:left;">(-) মোট খরচ</td><td>৳ ${totals.totExp.toFixed(2)}</td></tr>
-                        <tr style="font-weight:bold; font-size: 18px; background-color:#f9f9f9;">
-                            <td style="text-align:left;">(=) সর্বমোট উদ্বৃত্ত টাকা</td>
-                            <td class="${surplusStyleClass}">${surplusFormatted}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        `;
-    }
-
-    function downloadSurplusPDF() {
-        window.print();
-    }
-
-    // --- Module 5: গ্রাম কালেকশন ---
-    function renderFormModule5(editItem = null) {
-        let vOptions = VILLAGES.map(v => `<option value="${v}" ${editItem && editItem.village === v ? 'selected' : ''}>${v}</option>`).join('');
-
-        document.getElementById('form-container').innerHTML = `
-            <form onsubmit="saveModule5(event)">
-                <h4 style="margin-bottom: 10px; color: var(--color-m5);">${editItem ? 'গ্রাম কালেকশন এডিট' : 'নতুন গ্রাম কালেকশন এন্ট্রি'}</h4>
-                <div class="form-grid">
-                    <div class="form-group"><label>নাম</label><input type="text" id="m5-name" value="${editItem ? editItem.name : ''}" required></div>
-                    <div class="form-group"><label>গ্রাম</label><select id="m5-village" required><option value="">--নির্বাচন করুন--</option>${vOptions}</select></div>
-                    <div class="form-group"><label>পরিমাণ (৳)</label><input type="number" id="m5-amount" value="${editItem ? editItem.amount : ''}" required step="any"></div>
-                    <div class="form-group"><label>নোট</label><input type="text" id="m5-note" value="${editItem ? editItem.note : ''}"></div>
-                </div>
-                <div class="btn-action-container">
-                    <button type="submit" id="btn-submit-m5" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
-                    ${editItem ? `<button type="button" class="btn-cancel" onclick="cancelEdit(5)">বাতিল</button>` : ''}
-                </div>
-            </form>
-        `;
-    }
-
-    async function saveModule5(e) {
-        e.preventDefault();
-        const submitBtn = document.getElementById('btn-submit-m5');
-        if (submitBtn) submitBtn.disabled = true;
-
-        const payload = {
-            name: document.getElementById('m5-name').value,
-            village: document.getElementById('m5-village').value,
-            amount: parseFloat(document.getElementById('m5-amount').value),
-            note: document.getElementById('m5-note').value,
-            userId: currentUser.userId
-        };
-
-        if (editingIndex !== null) {
-            const item = database.module5[editingIndex];
-            await callBackendAPI('update', 'module5', payload, item.id);
-        } else {
-            await callBackendAPI('save', 'module5', payload);
-        }
-
-        await loadDataFromGoogleSheet();
-        editingIndex = null;
-        renderFormModule5();
-        renderTableModule5();
-    }
-
-    function editModule5(idx) {
-        editingIndex = idx;
-        renderFormModule5(database.module5[idx]);
-    }
-
-    function renderTableModule5() {
-        let isAdmin = currentUser.role === 'admin';
-        let rows = database.module5.map((item, idx) => `
-            <tr>
-                <td>${item.dateTime}</td>
-                <td>${item.name}</td>
-                <td>${item.village}</td>
-                <td>৳ ${item.amount.toFixed(2)}</td>
-                <td>${item.note || '-'}</td>
-                <td>${item.userId}</td>
-                ${isAdmin ? `<td>
-                    <button class="btn-edit" onclick="editModule5(${idx})">এডিট</button>
-                    <button class="btn-delete" onclick="deleteModule5(${idx})">মুছুন</button>
-                </td>` : ''}
-            </tr>
-        `).join('');
-
-        document.getElementById('table-container').innerHTML = `
-            <h3>গ্রাম কালেকশন তালিকা</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>তারিখ/সময়</th><th>নাম</th><th>গ্রাম</th><th>পরিমাণ</th><th>নোট</th><th>ইউজার আইডি</th>
-                        ${isAdmin ? '<th>Action</th>' : ''}
-                    </tr>
-                </thead>
-                <tbody>${rows || '<tr><td colspan="7">কোনো ডাটা পাওয়া যায়নি</td></tr>'}</tbody>
-            </table>
-        `;
-    }
-
-    async function deleteModule5(idx) {
-        if(confirm("মুছে ফেলতে চান?")) {
-            const item = database.module5[idx];
-            await callBackendAPI('delete', 'module5', null, item.id);
-            await loadDataFromGoogleSheet();
-            renderTableModule5();
-        }
-    }
-
-    // --- Module 6: ইউজার মডিউল ---
-    function renderFormModule6(editItem = null) {
-        document.getElementById('form-container').innerHTML = `
-            <form onsubmit="saveUser(event)">
-                <h4 style="margin-bottom: 10px; color: var(--color-m6);">${editItem ? 'ইউজার তথ্য এডিট' : 'নতুন ইউজার এন্ট্রি'}</h4>
-                <div class="form-grid">
-                    <div class="form-group"><label>নাম</label><input type="text" id="u-name" value="${editItem ? editItem.name : ''}" required></div>
-                    <div class="form-group"><label>গ্রাম</label><input type="text" id="u-village" value="${editItem ? editItem.village : ''}" required></div>
-                    <div class="form-group"><label>মোবাইল</label><input type="text" id="u-mobile" value="${editItem ? editItem.mobile : ''}" required></div>
-                    <div class="form-group"><label>ইউজার আইডি</label><input type="text" id="u-id" value="${editItem ? editItem.userId : ''}" required></div>
-                    <div class="form-group"><label>পাসওয়ার্ড</label><input type="text" id="u-pass" value="${editItem ? editItem.pass : ''}" required></div>
-                    <div class="form-group">
-                        <label>রোল</label>
-                        <select id="u-role" required>
-                            <option value="user" ${editItem && editItem.role === 'user' ? 'selected' : ''}>সাধারণ ইউজার</option>
-                            <option value="admin" ${editItem && editItem.role === 'admin' ? 'selected' : ''}>এডমিন</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="btn-action-container">
-                    <button type="submit" id="btn-submit-m6" class="btn-save">${editItem ? 'আপডেট করুন' : 'Save'}</button>
-                    ${editItem ? `<button type="button" class="btn-cancel" onclick="cancelEdit(6)">বাতিল</button>` : ''}
-                </div>
-            </form>
-        `;
-    }
-
-    async function saveUser(e) {
-        e.preventDefault();
-        const submitBtn = document.getElementById('btn-submit-m6');
-        if (submitBtn) submitBtn.disabled = true;
-
-        const payload = {
-            name: document.getElementById('u-name').value,
-            village: document.getElementById('u-village').value,
-            mobile: document.getElementById('u-mobile').value,
-            userId: document.getElementById('u-id').value,
-            pass: document.getElementById('u-pass').value,
-            role: document.getElementById('u-role').value
-        };
-
-        if (editingIndex !== null) {
-            const item = usersList[editingIndex];
-            await callBackendAPI('update', 'module6', payload, item.id);
-        } else {
-            await callBackendAPI('save', 'module6', payload);
-        }
-
-        await loadDataFromGoogleSheet();
-        editingIndex = null;
-        renderFormModule6();
-        renderTableModule6();
-    }
-
-    function editUser(idx) {
-        editingIndex = idx;
-        renderFormModule6(usersList[idx]);
-    }
-
-    function renderTableModule6() {
-        let rows = usersList.map((u, idx) => `
-            <tr>
-                <td>${u.date}</td>
-                <td>${u.name}</td>
-                <td>${u.village}</td>
-                <td>${u.mobile}</td>
-                <td>${u.userId}</td>
-                <td>${u.pass}</td>
-                <td>${u.role}</td>
-                <td>
-                    <button class="btn-edit" onclick="editUser(${idx})">এডিট</button>
-                    <button class="btn-delete" onclick="deleteUser(${idx})">মুছুন</button>
-                </td>
-            </tr>
-        `).join('');
-
-        document.getElementById('table-container').innerHTML = `
-            <h3>ইউজার তালিকা</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>তারিখ/সময়</th><th>নাম</th><th>গ্রাম</th><th>মোবাইল</th><th>ইউজার আইডি</th><th>পাসওয়ার্ড</th><th>রোল</th><th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>${rows || '<tr><td colspan="8">কোনো ইউজার ডাটা পাওয়া যায়নি</td></tr>'}</tbody>
-            </table>
-        `;
-    }
-
-    async function deleteUser(idx) {
-        if(confirm("ইউজারটি মুছে ফেলতে চান?")) {
-            const item = usersList[idx];
-            await callBackendAPI('delete', 'module6', null, item.id);
-            await loadDataFromGoogleSheet();
-            renderTableModule6();
-        }
-    }
-
-    function cancelEdit(modId) {
-        editingIndex = null;
-        openModule(modId);
-    }
-
-    function getCalculatedTotals() {
-        let totCol = database.module1.reduce((acc, i) => acc + i.amount, 0);
-        let totVilCol = database.module5.reduce((acc, i) => acc + i.amount, 0);
-        let totExp = database.module3.reduce((acc, i) => acc + i.amount, 0);
-
-        let depositSum = database.module2.filter(i => i.type === 'জমা').reduce((acc, i) => acc + i.amount, 0);
-        let returnSum = database.module2.filter(i => i.type === 'ফেরত').reduce((acc, i) => acc + i.amount, 0);
-        let netDeposit = depositSum - returnSum;
-
-        let surplus = (totCol + totVilCol + netDeposit) - totExp;
-
-        return { totCol, totVilCol, totExp, netDeposit, surplus };
-    }
-
-    function calculateTotals() {
-        let totals = getCalculatedTotals();
+        const rows = await apiCall('getModuleData', { moduleName: cfg.name });
         
-        document.getElementById('dash-val-1').innerText = `৳ ${totals.totCol.toFixed(2)}`;
-        document.getElementById('dash-val-2').innerText = `৳ ${totals.netDeposit.toFixed(2)}`;
-        document.getElementById('dash-val-3').innerText = `৳ ${totals.totExp.toFixed(2)}`;
-        
-        const surplusElem = document.getElementById('dash-val-4');
-        if (totals.surplus >= 0) {
-            surplusElem.innerText = `৳ ${totals.surplus.toFixed(2)}`;
-            surplusElem.className = "amount-val text-plus";
-        } else {
-            surplusElem.innerText = `- ৳ ${Math.abs(totals.surplus).toFixed(2)}`;
-            surplusElem.className = "amount-val text-minus";
+        let html = '';
+        if (modId === 4) {
+            html += `<button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
+                     <div id="printable-surplus-area">`;
         }
 
-        document.getElementById('dash-val-5').innerText = `৳ ${totals.totVilCol.toFixed(2)}`;
-        document.getElementById('dash-val-6').innerText = `${usersList.length} জন`;
+        html += `<table><thead><tr>`;
+        cfg.headers.forEach(h => html += `<th>${h}</th>`);
+        if (currentUser.role === 'admin') html += `<th>অ্যাকশন</th>`;
+        html += `</tr></thead><tbody>`;
+
+        if (!rows || rows.length === 0) {
+            html += `<tr><td colspan="${cfg.headers.length + (currentUser.role === 'admin' ? 1 : 0)}">কোনো তথ্য পাওয়া যায়নি</td></tr>`;
+        } else {
+            rows.forEach((r, idx) => {
+                html += `<tr>`;
+                r.forEach(val => html += `<td>${val}</td>`);
+                if (currentUser.role === 'admin') {
+                    html += `<td>
+                        <button class="btn-edit" onclick="editRow(${idx}, ${JSON.stringify(r).replace(/"/g, '&quot;')})">এডিট</button>
+                        <button class="btn-delete" onclick="deleteRow(${idx})">ডিলিট</button>
+                    </td>`;
+                }
+                html += `</tr>`;
+            });
+        }
+
+        html += `</tbody></table>`;
+        if (modId === 4) html += `</div>`;
+        container.innerHTML = html;
+    }
+
+    async function handleDataSave(e) {
+        e.preventDefault();
+        const cfg = moduleConfigs[currentModule];
+        const rowData = cfg.fields.map(f => document.getElementById(f.id).value);
+
+        const btn = document.getElementById('btn-save-main');
+        btn.disabled = true;
+        btn.innerText = 'সেভ হচ্ছে...';
+
+        let res;
+        if (editingRowIndex !== null) {
+            res = await apiCall('editData', { moduleName: cfg.name, rowIndex: editingRowIndex, data: rowData });
+        } else {
+            res = await apiCall('saveData', { moduleName: cfg.name, data: rowData });
+        }
+
+        btn.disabled = false;
+        btn.innerText = 'সেভ করুন';
+
+        if (res) {
+            editingRowIndex = null;
+            renderForm(cfg);
+            loadModuleTable(currentModule);
+            loadDashboardDataDataSilent();
+        }
+    }
+
+    function editRow(index, dataArray) {
+        editingRowIndex = index;
+        const cfg = moduleConfigs[currentModule];
+        cfg.fields.forEach((f, i) => {
+            const el = document.getElementById(f.id);
+            if (el) el.value = dataArray[i + 1] || '';
+        });
+        document.getElementById('btn-save-main').innerText = 'আপডেট করুন';
+    }
+
+    async function deleteRow(index) {
+        if (!confirm('আপনি কি নিশ্চিতভাবে এই রেকর্ডটি মুছে ফেলতে চান?')) return;
+        const cfg = moduleConfigs[currentModule];
+        const res = await apiCall('deleteData', { moduleName: cfg.name, rowIndex: index });
+        if (res) {
+            loadModuleTable(currentModule);
+            loadDashboardDataDataSilent();
+        }
     }
 </script>
-
 </body>
 </html>
