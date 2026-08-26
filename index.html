@@ -64,9 +64,16 @@
     .card-vc { border-top: 5px solid #d97706; }
     .card-user { border-top: 5px solid #4b5563; }
 
-    .module-view { display: none; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+    .module-view { display: none; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); position: relative; }
     .module-header { text-align: center; font-size: 24px; margin-bottom: 20px; font-weight: bold; }
     
+    /* Cross Close Button */
+    .close-btn {
+      position: absolute; top: 15px; right: 20px; font-size: 24px; font-weight: bold;
+      color: #6b7280; cursor: pointer; background: none; border: none; line-height: 1;
+    }
+    .close-btn:hover { color: #dc2626; }
+
     .form-box { max-width: 600px; margin: 0 auto 30px auto; border: 1px solid #e5e7eb; padding: 20px; border-radius: 8px; background: #fafafa; }
     .form-group { display: flex; align-items: center; margin-bottom: 12px; }
     .form-group label { width: 180px; font-weight: bold; }
@@ -94,7 +101,7 @@
       body * { visibility: hidden; }
       #modSurplus, #modSurplus * { visibility: visible; }
       #modSurplus { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; }
-      .btn-print { display: none; }
+      .btn-print, .close-btn { display: none; }
     }
   </style>
 </head>
@@ -166,6 +173,7 @@
 
     <!-- MODULE 1: COMMITTEE COLLECTION -->
     <div id="modCommitteeCollection" class="module-view">
+      <button class="close-btn" onclick="showDashboard()">✕</button>
       <div class="module-header">কমিটি কালেকশন</div>
       <div class="form-box">
         <div class="form-group"><label>নাম :-</label><input type="text" id="ccName"></div>
@@ -190,6 +198,7 @@
 
     <!-- MODULE 2: COMMITTEE DEPOSIT & RETURN -->
     <div id="modCommitteeDeposit" class="module-view">
+      <button class="close-btn" onclick="showDashboard()">✕</button>
       <div class="module-header">কমিটি জমা / ফেরত</div>
       <div class="form-box">
         <div class="form-group"><label>জমা / ফেরতকারীর নাম:</label><input type="text" id="cjName"></div>
@@ -217,6 +226,7 @@
 
     <!-- MODULE 3: EXPENSE -->
     <div id="modExpense" class="module-view">
+      <button class="close-btn" onclick="showDashboard()">✕</button>
       <div class="module-header">খরচ সমূহ</div>
       <div class="form-box">
         <div class="form-group"><label>খরচের খাত:</label><input type="text" id="exCategory"></div>
@@ -241,6 +251,7 @@
 
     <!-- MODULE 4: SURPLUS RECORD -->
     <div id="modSurplus" class="module-view">
+      <button class="close-btn" onclick="showDashboard()">✕</button>
       <div class="module-header">উদ্বৃত্ত তালিকা / রেকর্ড</div>
       <div class="surplus-sheet">
         <h3 style="text-align: center; margin-bottom: 15px;">পূজার সর্বমোট হিসাব</h3>
@@ -257,6 +268,7 @@
 
     <!-- MODULE 5: VILLAGE COLLECTION -->
     <div id="modVillageCollection" class="module-view">
+      <button class="close-btn" onclick="showDashboard()">✕</button>
       <div class="module-header">গ্রাম কালেকশন</div>
       <div class="form-box">
         <div class="form-group"><label>নাম:</label><input type="text" id="vcName"></div>
@@ -281,6 +293,7 @@
 
     <!-- MODULE 6: USERS (ADMIN ONLY) -->
     <div id="modUsers" class="module-view">
+      <button class="close-btn" onclick="showDashboard()">✕</button>
       <div class="module-header">ইউজার</div>
       <div class="form-box">
         <div class="form-group"><label>নাম:</label><input type="text" id="usrName"></div>
@@ -338,6 +351,27 @@
       checkAuthSession();
     };
 
+    function fetchDataFromSheet() {
+      if (!WEB_APP_URL || WEB_APP_URL === "YOUR_DEPLOYED_WEB_APP_URL_HERE") return;
+      
+      fetch(WEB_APP_URL)
+        .then(response => response.json())
+        .then(data => {
+          if (data) {
+            appData = {
+              CommitteeCollection: data.CommitteeCollection || [],
+              CommitteeDeposit: data.CommitteeDeposit || [],
+              Expense: data.Expense || [],
+              VillageCollection: data.VillageCollection || [],
+              Users: data.Users || []
+            };
+            calculateTotals();
+            renderAllTables();
+          }
+        })
+        .catch(err => console.error("Error fetching sheet data:", err));
+    }
+
     function checkAuthSession() {
       const savedUser = localStorage.getItem("poojaAppUser");
       if (savedUser) {
@@ -347,8 +381,14 @@
         document.getElementById("userBadgeText").innerText = `আইডি: ${currentUser.userId} (${currentUser.role})`;
         
         applyRolePermissions(currentUser.role);
-        calculateTotals();
-        renderAllTables();
+        fetchDataFromSheet();
+        
+        const activeMod = localStorage.getItem("poojaActiveModule");
+        if (activeMod && activeMod !== "dashboardView") {
+          openModule(activeMod);
+        } else {
+          showDashboard();
+        }
       } else {
         document.getElementById("loginScreen").style.display = "flex";
         document.getElementById("userProfileArea").style.display = "none";
@@ -379,6 +419,7 @@
 
     function handleLogout() {
       localStorage.removeItem("poojaAppUser");
+      localStorage.removeItem("poojaActiveModule");
       currentUser = null;
       location.reload();
     }
@@ -404,8 +445,6 @@
       actionCols.forEach(col => {
         col.style.display = (role === "Admin") ? "table-cell" : "none";
       });
-
-      showDashboard();
     }
 
     function openModule(moduleId) {
@@ -425,12 +464,14 @@
       document.querySelectorAll(".module-view").forEach(m => m.style.display = "none");
       document.getElementById(moduleId).style.display = "block";
       document.getElementById("btnBack").style.display = "inline-block";
+      localStorage.setItem("poojaActiveModule", moduleId);
     }
 
     function showDashboard() {
       document.querySelectorAll(".module-view").forEach(m => m.style.display = "none");
       document.getElementById("dashboardView").style.display = "block";
       document.getElementById("btnBack").style.display = "none";
+      localStorage.setItem("poojaActiveModule", "dashboardView");
     }
 
     function calculateTotals() {
@@ -442,7 +483,7 @@
 
       let totalEx = appData.Expense.reduce((sum, item) => sum + Number(item.amount || 0), 0);
       let totalVC = appData.VillageCollection.reduce((sum, item) => sum + Number(item.amount || 0), 0);
-      let totalUsers = appData.Users.length;
+      let totalUsers = appData.Users.length + defaultAccounts.length;
 
       let netSurplus = (totalCC + totalVC + totalCJ) - totalEx;
 
@@ -467,7 +508,7 @@
       btnSave.disabled = true;
       btnSave.innerText = "ডাটা সেভ হচ্ছে...";
 
-      let payload = { module: moduleName, timestamp: new Date().toLocaleString() };
+      let payload = { action: "save", module: moduleName, timestamp: new Date().toLocaleString() };
 
       if (moduleName === 'CommitteeCollection') {
         payload.name = document.getElementById("ccName").value;
@@ -521,6 +562,7 @@
         }).then(() => {
           btnSave.disabled = false;
           btnSave.innerText = "Save";
+          fetchDataFromSheet();
         }).catch(err => {
           console.error("Error saving data:", err);
           btnSave.disabled = false;
@@ -604,9 +646,19 @@
 
     function deleteRow(moduleName, index) {
       if (confirm("আপনি কি নিশ্চিত যে এই রেকর্ডটি মুছে ফেলতে চান?")) {
+        const deletedItem = appData[moduleName][index];
         appData[moduleName].splice(index, 1);
         renderTable(moduleName);
         calculateTotals();
+
+        if (WEB_APP_URL && WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
+          fetch(WEB_APP_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "delete", module: moduleName, item: deletedItem })
+          }).then(() => fetchDataFromSheet());
+        }
       }
     }
 
@@ -624,15 +676,15 @@
           : '';
 
         if (moduleName === 'CommitteeCollection') {
-          tr.innerHTML = `<td>${item.timestamp}</td><td>${item.name}</td><td>${item.village}</td><td>${item.bari}</td><td>${item.amount}</td><td>${item.userId}</td>${actionTd}`;
+          tr.innerHTML = `<td>${item.timestamp || ''}</td><td>${item.name || ''}</td><td>${item.village || ''}</td><td>${item.bari || ''}</td><td>${item.amount || 0}</td><td>${item.userId || ''}</td>${actionTd}`;
         } else if (moduleName === 'CommitteeDeposit') {
-          tr.innerHTML = `<td>${item.timestamp}</td><td>${item.name}</td><td>${item.village}</td><td>${item.type}</td><td>${item.amount}</td><td>${item.userId}</td>${actionTd}`;
+          tr.innerHTML = `<td>${item.timestamp || ''}</td><td>${item.name || ''}</td><td>${item.village || ''}</td><td>${item.type || ''}</td><td>${item.amount || 0}</td><td>${item.userId || ''}</td>${actionTd}`;
         } else if (moduleName === 'Expense') {
-          tr.innerHTML = `<td>${item.timestamp}</td><td>${item.category}</td><td>${item.amount}</td><td>${item.receiver}</td><td>${item.note}</td><td>${item.userId}</td>${actionTd}`;
+          tr.innerHTML = `<td>${item.timestamp || ''}</td><td>${item.category || ''}</td><td>${item.amount || 0}</td><td>${item.receiver || ''}</td><td>${item.note || ''}</td><td>${item.userId || ''}</td>${actionTd}`;
         } else if (moduleName === 'VillageCollection') {
-          tr.innerHTML = `<td>${item.timestamp}</td><td>${item.name}</td><td>${item.village}</td><td>${item.amount}</td><td>${item.note}</td><td>${item.userId}</td>${actionTd}`;
+          tr.innerHTML = `<td>${item.timestamp || ''}</td><td>${item.name || ''}</td><td>${item.village || ''}</td><td>${item.amount || 0}</td><td>${item.note || ''}</td><td>${item.userId || ''}</td>${actionTd}`;
         } else if (moduleName === 'Users') {
-          tr.innerHTML = `<td>${item.timestamp}</td><td>${item.name}</td><td>${item.village}</td><td>${item.mobile}</td><td>${item.userId}</td><td>***</td><td>${item.userRole}</td>${actionTd}`;
+          tr.innerHTML = `<td>${item.timestamp || ''}</td><td>${item.name || ''}</td><td>${item.village || ''}</td><td>${item.mobile || ''}</td><td>${item.userId || ''}</td><td>***</td><td>${item.userRole || item.role || ''}</td>${actionTd}`;
         }
 
         tbody.appendChild(tr);
