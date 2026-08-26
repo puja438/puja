@@ -362,7 +362,7 @@
   </div>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwK5V1mwGpJPmgnlXCv5x15Y-i0duw8ogUyute60MG8tBW7pX8xUUiBGxtSp75wq37A/exec";
+    const WEB_APP_URL = "YOUR_DEPLOYED_WEB_APP_URL_HERE"; // আপনার সঠিক ওয়েব অ্যাপ ইউআরএল এখানে দিন
 
     const villageList = ["আটঘর", "আন্দাকুল"];
     const bariList = ["মন্ডলবাড়ি", "মিস্ত্রি বাড়ি"];
@@ -523,7 +523,6 @@
 
       let netSurplus = (totalCC + totalVC + totalCJ) - totalEx;
 
-      // Dashboard inputs
       document.getElementById("dashTotalCC").value = totalCC;
       document.getElementById("dashTotalCJ").value = totalCJ;
       document.getElementById("dashTotalEx").value = totalEx;
@@ -531,7 +530,6 @@
       document.getElementById("dashTotalVC").value = totalVC;
       document.getElementById("dashTotalUsers").value = totalUsers;
 
-      // Module Badges
       document.getElementById("badgeTotalCC").innerText = `মোট কালেকশন: ৳${totalCC}`;
       document.getElementById("badgeTotalCJ").innerText = `নিট জমা/ফেরত: ৳${totalCJ}`;
       document.getElementById("badgeTotalEx").innerText = `মোট খরচ: ৳${totalEx}`;
@@ -539,7 +537,6 @@
       document.getElementById("badgeTotalSurplus").innerText = `সর্বমোট উদ্বৃত্ত: ৳${netSurplus}`;
       document.getElementById("badgeTotalUsers").innerText = `মোট ইউজার: ${totalUsers} জন`;
 
-      // Surplus Sheet
       document.getElementById("surplusCC").innerText = totalCC;
       document.getElementById("surplusVC").innerText = totalVC;
       document.getElementById("surplusCJ").innerText = totalCJ;
@@ -589,16 +586,6 @@
         payload.userRole = document.getElementById("usrRole").value;
       }
 
-      if (editState.module === moduleName && editState.index !== null) {
-        appData[moduleName][editState.index] = payload;
-      } else {
-        appData[moduleName].push(payload);
-      }
-
-      renderTable(moduleName);
-      calculateTotals();
-      clearForm(moduleName);
-
       if (WEB_APP_URL && WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
         fetch(WEB_APP_URL, {
           method: "POST",
@@ -608,7 +595,8 @@
         }).then(() => {
           btnSave.disabled = false;
           btnSave.innerText = "Save";
-          fetchDataFromSheet();
+          clearForm(moduleName);
+          setTimeout(fetchDataFromSheet, 1000); // শিট থেকে ডাটা সিঙ্ক করার জন্য ১ সেকেন্ড পর ফেচ করবে
         }).catch(err => {
           console.error("Error saving data:", err);
           btnSave.disabled = false;
@@ -703,7 +691,7 @@
             mode: "no-cors",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ action: "delete", module: moduleName, item: deletedItem })
-          }).then(() => fetchDataFromSheet());
+          }).then(() => setTimeout(fetchDataFromSheet, 1000));
         }
       }
     }
