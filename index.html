@@ -44,7 +44,6 @@
     .btn-logout { background: #dc2626; color: white; border: none; padding: 6px 14px; border-radius: 4px; font-weight: bold; cursor: pointer; }
 
     .container { max-width: 1100px; margin: 25px auto; padding: 0 15px; }
-    .btn-back { background: #4b5563; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; display: none; }
 
     .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
     .card {
@@ -65,15 +64,20 @@
     .card-user { border-top: 5px solid #4b5563; }
 
     .module-view { display: none; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); position: relative; }
-    .module-header { text-align: center; font-size: 24px; margin-bottom: 20px; font-weight: bold; }
+    .module-header { text-align: center; font-size: 24px; margin-bottom: 10px; font-weight: bold; }
     
+    .module-total-badge {
+      text-align: center; font-size: 18px; font-weight: bold; color: #1e3a8a;
+      background: #eff6ff; padding: 8px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #bfdbfe;
+    }
+
     .close-btn {
       position: absolute; top: 15px; right: 20px; font-size: 24px; font-weight: bold;
       color: #6b7280; cursor: pointer; background: none; border: none; line-height: 1;
     }
     .close-btn:hover { color: #dc2626; }
 
-    .form-box { max-width: 600px; margin: 0 auto 30px auto; border: 1px solid #e5e7eb; padding: 20px; border-radius: 8px; background: #fafafa; }
+    .form-box { max-width: 600px; margin: 0 auto 25px auto; border: 1px solid #e5e7eb; padding: 20px; border-radius: 8px; background: #fafafa; }
     .form-group { display: flex; align-items: center; margin-bottom: 12px; }
     .form-group label { width: 180px; font-weight: bold; }
     .form-group input, .form-group select { flex: 1; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; }
@@ -83,8 +87,12 @@
     .btn-save:hover { background-color: #155724; }
     .btn-cancel { padding: 10px 15px; background-color: #6b7280; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; display: none; }
 
-    .table-container { overflow-x: auto; margin-top: 15px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; text-align: center; }
+    .list-header-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+    .btn-refresh { background: #2563eb; color: white; border: none; padding: 6px 14px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 14px; }
+    .btn-refresh:hover { background: #1d4ed8; }
+
+    .table-container { overflow-x: auto; margin-top: 10px; }
+    table { width: 100%; border-collapse: collapse; text-align: center; }
     table th, table td { border: 1px solid #d1d5db; padding: 10px; font-size: 14px; }
     table th { background-color: #1f2937; color: white; }
     table tr:nth-child(even) { background-color: #f9fafb; }
@@ -133,7 +141,6 @@
   </div>
 
   <div class="container">
-    <button class="btn-back" id="btnBack" onclick="showDashboard()">← ড্যাশবোর্ডে ফিরুন</button>
 
     <!-- DASHBOARD VIEW -->
     <div id="dashboardView">
@@ -174,6 +181,8 @@
     <div id="modCommitteeCollection" class="module-view">
       <button class="close-btn" onclick="showDashboard()">✕</button>
       <div class="module-header">কমিটি কালেকশন</div>
+      <div class="module-total-badge" id="badgeTotalCC">মোট কালেকশন: ৳0</div>
+      
       <div class="form-box">
         <div class="form-group"><label>নাম :-</label><input type="text" id="ccName"></div>
         <div class="form-group"><label>গ্রাম:</label><select id="ccVillage"></select></div>
@@ -184,7 +193,11 @@
           <button class="btn-cancel" id="btnCancel_CommitteeCollection" onclick="cancelEdit('CommitteeCollection')">বাতিল</button>
         </div>
       </div>
-      <h3>কালেকশন লিস্ট</h3>
+
+      <div class="list-header-row">
+        <h3>কালেকশন লিস্ট</h3>
+        <button class="btn-refresh" onclick="fetchDataFromSheet()">রিফ্রেশ করুন</button>
+      </div>
       <div class="table-container">
         <table id="tblCommitteeCollection">
           <thead>
@@ -199,6 +212,8 @@
     <div id="modCommitteeDeposit" class="module-view">
       <button class="close-btn" onclick="showDashboard()">✕</button>
       <div class="module-header">কমিটি জমা / ফেরত</div>
+      <div class="module-total-badge" id="badgeTotalCJ">নিট জমা/ফেরত: ৳0</div>
+
       <div class="form-box">
         <div class="form-group"><label>জমা / ফেরতকারীর নাম:</label><input type="text" id="cjName"></div>
         <div class="form-group"><label>জমা / ফেরতকারীর গ্রাম:</label><select id="cjVillage"></select></div>
@@ -212,7 +227,11 @@
           <button class="btn-cancel" id="btnCancel_CommitteeDeposit" onclick="cancelEdit('CommitteeDeposit')">বাতিল</button>
         </div>
       </div>
-      <h3>লিস্ট</h3>
+
+      <div class="list-header-row">
+        <h3>লিস্ট</h3>
+        <button class="btn-refresh" onclick="fetchDataFromSheet()">রিফ্রেশ করুন</button>
+      </div>
       <div class="table-container">
         <table id="tblCommitteeDeposit">
           <thead>
@@ -227,6 +246,8 @@
     <div id="modExpense" class="module-view">
       <button class="close-btn" onclick="showDashboard()">✕</button>
       <div class="module-header">খরচ সমূহ</div>
+      <div class="module-total-badge" id="badgeTotalEx">মোট খরচ: ৳0</div>
+
       <div class="form-box">
         <div class="form-group"><label>খরচের খাত:</label><input type="text" id="exCategory"></div>
         <div class="form-group"><label>খরচের পরিমাণ:</label><input type="number" id="exAmount"></div>
@@ -237,7 +258,11 @@
           <button class="btn-cancel" id="btnCancel_Expense" onclick="cancelEdit('Expense')">বাতিল</button>
         </div>
       </div>
-      <h3>লিস্ট</h3>
+
+      <div class="list-header-row">
+        <h3>লিস্ট</h3>
+        <button class="btn-refresh" onclick="fetchDataFromSheet()">রিফ্রেশ করুন</button>
+      </div>
       <div class="table-container">
         <table id="tblExpense">
           <thead>
@@ -252,6 +277,8 @@
     <div id="modSurplus" class="module-view">
       <button class="close-btn" onclick="showDashboard()">✕</button>
       <div class="module-header">উদ্বৃত্ত তালিকা / রেকর্ড</div>
+      <div class="module-total-badge" id="badgeTotalSurplus">সর্বমোট উদ্বৃত্ত: ৳0</div>
+
       <div class="surplus-sheet">
         <h3 style="text-align: center; margin-bottom: 15px;">পূজার সর্বমোট হিসাব</h3>
         <div class="surplus-row"><span>+ মোট কালেকশন</span><span id="surplusCC">0</span></div>
@@ -269,6 +296,8 @@
     <div id="modVillageCollection" class="module-view">
       <button class="close-btn" onclick="showDashboard()">✕</button>
       <div class="module-header">গ্রাম কালেকশন</div>
+      <div class="module-total-badge" id="badgeTotalVC">মোট গ্রাম কালেকশন: ৳0</div>
+
       <div class="form-box">
         <div class="form-group"><label>নাম:</label><input type="text" id="vcName"></div>
         <div class="form-group"><label>গ্রাম:</label><select id="vcVillage"></select></div>
@@ -279,7 +308,11 @@
           <button class="btn-cancel" id="btnCancel_VillageCollection" onclick="cancelEdit('VillageCollection')">বাতিল</button>
         </div>
       </div>
-      <h3>কালেকশন লিস্ট</h3>
+
+      <div class="list-header-row">
+        <h3>কালেকশন লিস্ট</h3>
+        <button class="btn-refresh" onclick="fetchDataFromSheet()">রিফ্রেশ করুন</button>
+      </div>
       <div class="table-container">
         <table id="tblVillageCollection">
           <thead>
@@ -294,6 +327,8 @@
     <div id="modUsers" class="module-view">
       <button class="close-btn" onclick="showDashboard()">✕</button>
       <div class="module-header">ইউজার</div>
+      <div class="module-total-badge" id="badgeTotalUsers">মোট ইউজার: 0 জন</div>
+
       <div class="form-box">
         <div class="form-group"><label>নাম:</label><input type="text" id="usrName"></div>
         <div class="form-group"><label>গ্রাম:</label><select id="usrVillage"></select></div>
@@ -309,7 +344,11 @@
           <button class="btn-cancel" id="btnCancel_Users" onclick="cancelEdit('Users')">বাতিল</button>
         </div>
       </div>
-      <h3>লিস্ট</h3>
+
+      <div class="list-header-row">
+        <h3>লিস্ট</h3>
+        <button class="btn-refresh" onclick="fetchDataFromSheet()">রিফ্রেশ করুন</button>
+      </div>
       <div class="table-container">
         <table id="tblUsers">
           <thead>
@@ -462,14 +501,12 @@
       document.getElementById("dashboardView").style.display = "none";
       document.querySelectorAll(".module-view").forEach(m => m.style.display = "none");
       document.getElementById(moduleId).style.display = "block";
-      document.getElementById("btnBack").style.display = "inline-block";
       localStorage.setItem("poojaActiveModule", moduleId);
     }
 
     function showDashboard() {
       document.querySelectorAll(".module-view").forEach(m => m.style.display = "none");
       document.getElementById("dashboardView").style.display = "block";
-      document.getElementById("btnBack").style.display = "none";
       localStorage.setItem("poojaActiveModule", "dashboardView");
     }
 
@@ -486,6 +523,7 @@
 
       let netSurplus = (totalCC + totalVC + totalCJ) - totalEx;
 
+      // Dashboard inputs
       document.getElementById("dashTotalCC").value = totalCC;
       document.getElementById("dashTotalCJ").value = totalCJ;
       document.getElementById("dashTotalEx").value = totalEx;
@@ -493,6 +531,15 @@
       document.getElementById("dashTotalVC").value = totalVC;
       document.getElementById("dashTotalUsers").value = totalUsers;
 
+      // Module Badges
+      document.getElementById("badgeTotalCC").innerText = `মোট কালেকশন: ৳${totalCC}`;
+      document.getElementById("badgeTotalCJ").innerText = `নিট জমা/ফেরত: ৳${totalCJ}`;
+      document.getElementById("badgeTotalEx").innerText = `মোট খরচ: ৳${totalEx}`;
+      document.getElementById("badgeTotalVC").innerText = `মোট গ্রাম কালেকশন: ৳${totalVC}`;
+      document.getElementById("badgeTotalSurplus").innerText = `সর্বমোট উদ্বৃত্ত: ৳${netSurplus}`;
+      document.getElementById("badgeTotalUsers").innerText = `মোট ইউজার: ${totalUsers} জন`;
+
+      // Surplus Sheet
       document.getElementById("surplusCC").innerText = totalCC;
       document.getElementById("surplusVC").innerText = totalVC;
       document.getElementById("surplusCJ").innerText = totalCJ;
