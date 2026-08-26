@@ -16,7 +16,6 @@
     * { box-sizing: border-box; font-family: 'SolaimanLipi', 'Kalpurush', Arial, sans-serif; margin: 0; padding: 0; }
     body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 40px; }
     
-    /* Login Modal Overlay */
     #loginScreen {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(15, 23, 42, 0.85); display: flex; justify-content: center;
@@ -34,7 +33,6 @@
     .btn-login:hover { background: #1d4ed8; }
     .login-error { color: #dc2626; font-size: 13px; margin-top: 12px; display: none; font-weight: bold; }
 
-    /* Header Navbar */
     .navbar {
       background-color: #1e3a8a; color: white; padding: 15px 30px;
       display: flex; justify-content: space-between; align-items: center;
@@ -48,7 +46,6 @@
     .container { max-width: 1100px; margin: 25px auto; padding: 0 15px; }
     .btn-back { background: #4b5563; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; display: none; }
 
-    /* Dashboard Cards Grid */
     .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
     .card {
       background: var(--card-bg); border-radius: 8px; padding: 20px;
@@ -60,7 +57,6 @@
     .card .val-box { display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: bold; }
     .card input[type="text"] { width: 140px; padding: 6px; text-align: right; border: 1px solid var(--border-color); border-radius: 4px; background: #f9fafb; font-weight: bold; }
 
-    /* Custom Module Colors */
     .card-cc { border-top: 5px solid #2563eb; }
     .card-cj { border-top: 5px solid #059669; }
     .card-ex { border-top: 5px solid #dc2626; }
@@ -68,7 +64,6 @@
     .card-vc { border-top: 5px solid #d97706; }
     .card-user { border-top: 5px solid #4b5563; }
 
-    /* Views / Modules Layout */
     .module-view { display: none; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
     .module-header { text-align: center; font-size: 24px; margin-bottom: 20px; font-weight: bold; }
     
@@ -76,10 +71,12 @@
     .form-group { display: flex; align-items: center; margin-bottom: 12px; }
     .form-group label { width: 180px; font-weight: bold; }
     .form-group input, .form-group select { flex: 1; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; }
-    .btn-save { display: block; width: 100%; padding: 10px; background-color: var(--green-btn); color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    
+    .btn-group-form { display: flex; gap: 10px; }
+    .btn-save { flex: 1; padding: 10px; background-color: var(--green-btn); color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; }
     .btn-save:hover { background-color: #155724; }
+    .btn-cancel { padding: 10px 15px; background-color: #6b7280; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; display: none; }
 
-    /* Data Tables */
     .table-container { overflow-x: auto; margin-top: 15px; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; text-align: center; }
     table th, table td { border: 1px solid #d1d5db; padding: 10px; font-size: 14px; }
@@ -89,9 +86,16 @@
     .btn-edit { background-color: #2563eb; }
     .btn-delete { background-color: #dc2626; }
 
-    /* Surplus Record Sheet Style */
-    .surplus-sheet { max-width: 500px; margin: 0 auto; border: 2px solid #000; padding: 15px; background: #fff; }
+    .surplus-sheet { max-width: 500px; margin: 0 auto; border: 2px solid #000; padding: 20px; background: #fff; }
     .surplus-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ccc; font-size: 18px; font-weight: bold; }
+    .btn-print { display: block; width: 200px; margin: 20px auto 0 auto; padding: 10px; background: #1e3a8a; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; text-align: center; }
+
+    @media print {
+      body * { visibility: hidden; }
+      #modSurplus, #modSurplus * { visibility: visible; }
+      #modSurplus { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; }
+      .btn-print { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -168,7 +172,10 @@
         <div class="form-group"><label>গ্রাম:</label><select id="ccVillage"></select></div>
         <div class="form-group"><label>বাড়ি:</label><select id="ccBari"></select></div>
         <div class="form-group"><label>পরিমাণ:</label><input type="number" id="ccAmount" placeholder="৳"></div>
-        <button class="btn-save" onclick="saveData('CommitteeCollection')">Save</button>
+        <div class="btn-group-form">
+          <button class="btn-save" id="btnSave_CommitteeCollection" onclick="saveData('CommitteeCollection')">Save</button>
+          <button class="btn-cancel" id="btnCancel_CommitteeCollection" onclick="cancelEdit('CommitteeCollection')">বাতিল</button>
+        </div>
       </div>
       <h3>কালেকশন লিস্ট</h3>
       <div class="table-container">
@@ -192,7 +199,10 @@
           <select id="cjType"><option value="জমা">জমা</option><option value="ফেরত">ফেরত</option></select>
         </div>
         <div class="form-group"><label>জমা / ফেরত পরিমাণ:</label><input type="number" id="cjAmount"></div>
-        <button class="btn-save" onclick="saveData('CommitteeDeposit')">Save</button>
+        <div class="btn-group-form">
+          <button class="btn-save" id="btnSave_CommitteeDeposit" onclick="saveData('CommitteeDeposit')">Save</button>
+          <button class="btn-cancel" id="btnCancel_CommitteeDeposit" onclick="cancelEdit('CommitteeDeposit')">বাতিল</button>
+        </div>
       </div>
       <h3>লিস্ট</h3>
       <div class="table-container">
@@ -213,7 +223,10 @@
         <div class="form-group"><label>খরচের পরিমাণ:</label><input type="number" id="exAmount"></div>
         <div class="form-group"><label>টাকা নেওয়া ব্যক্তির নাম:</label><input type="text" id="exReceiver"></div>
         <div class="form-group"><label>নোট / মোবাইল:</label><input type="text" id="exNote"></div>
-        <button class="btn-save" onclick="saveData('Expense')">Save</button>
+        <div class="btn-group-form">
+          <button class="btn-save" id="btnSave_Expense" onclick="saveData('Expense')">Save</button>
+          <button class="btn-cancel" id="btnCancel_Expense" onclick="cancelEdit('Expense')">বাতিল</button>
+        </div>
       </div>
       <h3>লিস্ট</h3>
       <div class="table-container">
@@ -230,6 +243,7 @@
     <div id="modSurplus" class="module-view">
       <div class="module-header">উদ্বৃত্ত তালিকা / রেকর্ড</div>
       <div class="surplus-sheet">
+        <h3 style="text-align: center; margin-bottom: 15px;">পূজার সর্বমোট হিসাব</h3>
         <div class="surplus-row"><span>+ মোট কালেকশন</span><span id="surplusCC">0</span></div>
         <div class="surplus-row"><span>+ মোট গ্রাম কালেকশন</span><span id="surplusVC">0</span></div>
         <div class="surplus-row"><span>(+/-) নিট জমা ফেরত</span><span id="surplusCJ">0</span></div>
@@ -238,6 +252,7 @@
           <span>= সর্বমোট উদ্বৃত্ত টাকা</span><span id="surplusNet">0</span>
         </div>
       </div>
+      <button class="btn-print" onclick="window.print()">প্রিন্ট করুন</button>
     </div>
 
     <!-- MODULE 5: VILLAGE COLLECTION -->
@@ -248,7 +263,10 @@
         <div class="form-group"><label>গ্রাম:</label><select id="vcVillage"></select></div>
         <div class="form-group"><label>পরিমাণ:</label><input type="number" id="vcAmount"></div>
         <div class="form-group"><label>মন্তব্য:</label><input type="text" id="vcNote"></div>
-        <button class="btn-save" onclick="saveData('VillageCollection')">Save</button>
+        <div class="btn-group-form">
+          <button class="btn-save" id="btnSave_VillageCollection" onclick="saveData('VillageCollection')">Save</button>
+          <button class="btn-cancel" id="btnCancel_VillageCollection" onclick="cancelEdit('VillageCollection')">বাতিল</button>
+        </div>
       </div>
       <h3>কালেকশন লিস্ট</h3>
       <div class="table-container">
@@ -274,7 +292,10 @@
           <label>রোল:</label>
           <select id="usrRole"><option value="Admin">Admin</option><option value="User">User</option><option value="Guest">Guest</option></select>
         </div>
-        <button class="btn-save" onclick="saveData('Users')">Save</button>
+        <div class="btn-group-form">
+          <button class="btn-save" id="btnSave_Users" onclick="saveData('Users')">Save</button>
+          <button class="btn-cancel" id="btnCancel_Users" onclick="cancelEdit('Users')">বাতিল</button>
+        </div>
       </div>
       <h3>লিস্ট</h3>
       <div class="table-container">
@@ -290,12 +311,11 @@
   </div>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw8zZ4q8Gy1sUTZdIh_vXh8gXTLga2MOTuVlON4H6X1O_GIbuTv7SCDpx3bXaTCom_9/exec";
+    const WEB_APP_URL = "YOUR_DEPLOYED_WEB_APP_URL_HERE";
 
     const villageList = ["আটঘর", "আন্দাকুল"];
     const bariList = ["মন্ডলবাড়ি", "মিস্ত্রি বাড়ি"];
 
-    // প্রাথমিক ডিফল্ট ইউজার অ্যাকাউন্টসমূহ
     const defaultAccounts = [
       { userId: "admin", password: "123", role: "Admin" },
       { userId: "user", password: "123", role: "User" },
@@ -311,13 +331,13 @@
     };
 
     let currentUser = null;
+    let editState = { module: null, index: null };
 
     window.onload = function() {
       populateDropdowns();
       checkAuthSession();
     };
 
-    // লগইন চেক ও সেশন চালু রাখা
     function checkAuthSession() {
       const savedUser = localStorage.getItem("poojaAppUser");
       if (savedUser) {
@@ -328,19 +348,18 @@
         
         applyRolePermissions(currentUser.role);
         calculateTotals();
+        renderAllTables();
       } else {
         document.getElementById("loginScreen").style.display = "flex";
         document.getElementById("userProfileArea").style.display = "none";
       }
     }
 
-    // লগইন ফাংশন
     function handleLogin() {
       const uid = document.getElementById("loginUserId").value.trim();
       const pass = document.getElementById("loginPassword").value.trim();
       const errEl = document.getElementById("loginError");
 
-      // ইউজার লিস্ট অথবা ডিফল্ট একাউন্টে ম্যাচিং চেক
       let foundUser = appData.Users.find(u => u.userId === uid && u.password === pass);
       if (!foundUser) {
         foundUser = defaultAccounts.find(u => u.userId === uid && u.password === pass);
@@ -358,7 +377,6 @@
       }
     }
 
-    // লগআউট ফাংশন
     function handleLogout() {
       localStorage.removeItem("poojaAppUser");
       currentUser = null;
@@ -378,17 +396,9 @@
       bariList.forEach(b => bSelect.add(new Option(b, b)));
     }
 
-    // রোল অনুযায়ী অ্যাকসেস কন্ট্রোল
     function applyRolePermissions(role) {
       const cardUser = document.getElementById("cardUserModule");
-
-      if (role === "User") {
-        cardUser.style.display = "none";
-      } else if (role === "Admin") {
-        cardUser.style.display = "block";
-      } else { // Guest
-        cardUser.style.display = "block";
-      }
+      cardUser.style.display = (role === "User") ? "none" : "block";
 
       const actionCols = document.querySelectorAll(".col-action");
       actionCols.forEach(col => {
@@ -402,8 +412,8 @@
       if (!currentUser) return;
 
       if (currentUser.role === "Guest") {
-        alert("গেস্ট ব্যবহারকারী কোনো মডিউলে প্রবেশ করতে পারবেন না। কেবল মোট হিসাব দেখতে পারবেন।");
-        return;
+        alert("গেস্ট ব্যবহারকারী কেবল উদ্বৃত্ত তালিকা ও মোট হিসাব দেখতে পারবেন।");
+        if (moduleId !== "modSurplus") return;
       }
 
       if (currentUser.role === "User" && moduleId === "modUsers") {
@@ -425,7 +435,6 @@
 
     function calculateTotals() {
       let totalCC = appData.CommitteeCollection.reduce((sum, item) => sum + Number(item.amount || 0), 0);
-      
       let totalCJ = appData.CommitteeDeposit.reduce((sum, item) => {
         let amt = Number(item.amount || 0);
         return item.type === "জমা" ? sum + amt : sum - amt;
@@ -435,7 +444,7 @@
       let totalVC = appData.VillageCollection.reduce((sum, item) => sum + Number(item.amount || 0), 0);
       let totalUsers = appData.Users.length;
 
-      let netSurplus = (totalCC + totalCJ) - totalEx;
+      let netSurplus = (totalCC + totalVC + totalCJ) - totalEx;
 
       document.getElementById("dashTotalCC").value = totalCC;
       document.getElementById("dashTotalCJ").value = totalCJ;
@@ -453,6 +462,10 @@
 
     function saveData(moduleName) {
       if (!currentUser || currentUser.role === "Guest") return;
+
+      const btnSave = document.getElementById(`btnSave_${moduleName}`);
+      btnSave.disabled = true;
+      btnSave.innerText = "ডাটা সেভ হচ্ছে...";
 
       let payload = { module: moduleName, timestamp: new Date().toLocaleString() };
 
@@ -489,8 +502,15 @@
         payload.userRole = document.getElementById("usrRole").value;
       }
 
-      appData[moduleName].push(payload);
+      if (editState.module === moduleName && editState.index !== null) {
+        appData[moduleName][editState.index] = payload;
+      } else {
+        appData[moduleName].push(payload);
+      }
+
+      renderTable(moduleName);
       calculateTotals();
+      clearForm(moduleName);
 
       if (WEB_APP_URL && WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
         fetch(WEB_APP_URL, {
@@ -498,11 +518,129 @@
           mode: "no-cors",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
-        }).then(() => alert("ডাটা সফলভাবে গুগল শিটে সেভ হয়েছে!"))
-          .catch(err => console.error("Error saving data:", err));
+        }).then(() => {
+          btnSave.disabled = false;
+          btnSave.innerText = "Save";
+        }).catch(err => {
+          console.error("Error saving data:", err);
+          btnSave.disabled = false;
+          btnSave.innerText = "Save";
+        });
       } else {
-        alert("ডাটা লোকালি সেভ হয়েছে। (গুগল শিটে সেভ করতে WEB_APP_URL লিংক বসান)");
+        btnSave.disabled = false;
+        btnSave.innerText = "Save";
       }
+    }
+
+    function editRow(moduleName, index) {
+      const item = appData[moduleName][index];
+      editState = { module: moduleName, index: index };
+
+      if (moduleName === 'CommitteeCollection') {
+        document.getElementById("ccName").value = item.name || '';
+        document.getElementById("ccVillage").value = item.village || '';
+        document.getElementById("ccBari").value = item.bari || '';
+        document.getElementById("ccAmount").value = item.amount || '';
+      } else if (moduleName === 'CommitteeDeposit') {
+        document.getElementById("cjName").value = item.name || '';
+        document.getElementById("cjVillage").value = item.village || '';
+        document.getElementById("cjType").value = item.type || 'জমা';
+        document.getElementById("cjAmount").value = item.amount || '';
+      } else if (moduleName === 'Expense') {
+        document.getElementById("exCategory").value = item.category || '';
+        document.getElementById("exAmount").value = item.amount || '';
+        document.getElementById("exReceiver").value = item.receiver || '';
+        document.getElementById("exNote").value = item.note || '';
+      } else if (moduleName === 'VillageCollection') {
+        document.getElementById("vcName").value = item.name || '';
+        document.getElementById("vcVillage").value = item.village || '';
+        document.getElementById("vcAmount").value = item.amount || '';
+        document.getElementById("vcNote").value = item.note || '';
+      } else if (moduleName === 'Users') {
+        document.getElementById("usrName").value = item.name || '';
+        document.getElementById("usrVillage").value = item.village || '';
+        document.getElementById("usrMobile").value = item.mobile || '';
+        document.getElementById("usrId").value = item.userId || '';
+        document.getElementById("usrPass").value = item.password || '';
+        document.getElementById("usrRole").value = item.userRole || 'User';
+      }
+
+      document.getElementById(`btnSave_${moduleName}`).innerText = "Update Data";
+      document.getElementById(`btnCancel_${moduleName}`).style.display = "inline-block";
+    }
+
+    function cancelEdit(moduleName) {
+      clearForm(moduleName);
+    }
+
+    function clearForm(moduleName) {
+      editState = { module: null, index: null };
+      
+      if (moduleName === 'CommitteeCollection') {
+        document.getElementById("ccName").value = "";
+        document.getElementById("ccAmount").value = "";
+      } else if (moduleName === 'CommitteeDeposit') {
+        document.getElementById("cjName").value = "";
+        document.getElementById("cjAmount").value = "";
+      } else if (moduleName === 'Expense') {
+        document.getElementById("exCategory").value = "";
+        document.getElementById("exAmount").value = "";
+        document.getElementById("exReceiver").value = "";
+        document.getElementById("exNote").value = "";
+      } else if (moduleName === 'VillageCollection') {
+        document.getElementById("vcName").value = "";
+        document.getElementById("vcAmount").value = "";
+        document.getElementById("vcNote").value = "";
+      } else if (moduleName === 'Users') {
+        document.getElementById("usrName").value = "";
+        document.getElementById("usrMobile").value = "";
+        document.getElementById("usrId").value = "";
+        document.getElementById("usrPass").value = "";
+      }
+
+      document.getElementById(`btnSave_${moduleName}`).innerText = "Save";
+      document.getElementById(`btnCancel_${moduleName}`).style.display = "none";
+    }
+
+    function deleteRow(moduleName, index) {
+      if (confirm("আপনি কি নিশ্চিত যে এই রেকর্ডটি মুছে ফেলতে চান?")) {
+        appData[moduleName].splice(index, 1);
+        renderTable(moduleName);
+        calculateTotals();
+      }
+    }
+
+    function renderTable(moduleName) {
+      const tbody = document.querySelector(`#tbl${moduleName} tbody`);
+      tbody.innerHTML = "";
+
+      appData[moduleName].forEach((item, index) => {
+        let tr = document.createElement("tr");
+        let actionTd = (currentUser && currentUser.role === "Admin") 
+          ? `<td>
+              <button class="action-btn btn-edit" onclick="editRow('${moduleName}', ${index})">Edit</button>
+              <button class="action-btn btn-delete" onclick="deleteRow('${moduleName}', ${index})">Delete</button>
+            </td>` 
+          : '';
+
+        if (moduleName === 'CommitteeCollection') {
+          tr.innerHTML = `<td>${item.timestamp}</td><td>${item.name}</td><td>${item.village}</td><td>${item.bari}</td><td>${item.amount}</td><td>${item.userId}</td>${actionTd}`;
+        } else if (moduleName === 'CommitteeDeposit') {
+          tr.innerHTML = `<td>${item.timestamp}</td><td>${item.name}</td><td>${item.village}</td><td>${item.type}</td><td>${item.amount}</td><td>${item.userId}</td>${actionTd}`;
+        } else if (moduleName === 'Expense') {
+          tr.innerHTML = `<td>${item.timestamp}</td><td>${item.category}</td><td>${item.amount}</td><td>${item.receiver}</td><td>${item.note}</td><td>${item.userId}</td>${actionTd}`;
+        } else if (moduleName === 'VillageCollection') {
+          tr.innerHTML = `<td>${item.timestamp}</td><td>${item.name}</td><td>${item.village}</td><td>${item.amount}</td><td>${item.note}</td><td>${item.userId}</td>${actionTd}`;
+        } else if (moduleName === 'Users') {
+          tr.innerHTML = `<td>${item.timestamp}</td><td>${item.name}</td><td>${item.village}</td><td>${item.mobile}</td><td>${item.userId}</td><td>***</td><td>${item.userRole}</td>${actionTd}`;
+        }
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderAllTables() {
+      ['CommitteeCollection', 'CommitteeDeposit', 'Expense', 'VillageCollection', 'Users'].forEach(renderTable);
     }
   </script>
 </body>
