@@ -1,447 +1,438 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>পূজার - কালেকশন / জমা / খরচ / উদ্বৃত্ত</title>
-    <style>
-        :root {
-            --bg-color: #f0f2f5;
-            --card-bg: #ffffff;
-            --text-color: #222222;
-            --border-color: #dddddd;
-            
-            --color-m1: #d32f2f;
-            --color-m2: #1976d2;
-            --color-m3: #e65100;
-            --color-m4: #2e7d32;
-            --color-m5: #7b1fa2;
-            --color-m6: #00838f;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>পূজার কালেকশন / জমা / খরচ / উদ্বৃত্ত</title>
+  <style>
+    :root {
+      --bg-color: #f4f6f9;
+      --card-bg: #ffffff;
+      --primary-blue: #1a56db;
+      --green-btn: #1e7e34;
+      --text-color: #222222;
+      --border-color: #cccccc;
+    }
+    * { box-sizing: border-box; font-family: 'SolaimanLipi', 'Kalpurush', Arial, sans-serif; margin: 0; padding: 0; }
+    body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 40px; }
+    
+    /* Header Navbar */
+    .navbar {
+      background-color: #1e3a8a; color: white; padding: 15px 30px;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .navbar h2 { font-size: 22px; font-weight: bold; }
+    .role-selector { display: flex; align-items: center; gap: 10px; }
+    .role-selector select { padding: 6px 12px; border-radius: 4px; border: none; font-weight: bold; cursor: pointer; }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 15px; }
-        .container { max-width: 1200px; margin: 0 auto; }
+    .container { max-width: 1100px; margin: 25px auto; padding: 0 15px; }
+    .btn-back { background: #4b5563; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; display: none; }
 
-        header {
-            display: flex; justify-content: space-between; align-items: center;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white; padding: 18px 25px; border-radius: 12px; margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        }
-        header h1 { font-size: 22px; letter-spacing: 0.5px; }
-        .auth-status { display: flex; align-items: center; gap: 12px; }
-        .btn-login {
-            background-color: #ff9800; color: white; border: none; padding: 10px 20px;
-            border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.2s;
-        }
-        .btn-login:hover { background-color: #e65100; }
-        .user-info-text { font-size: 15px; font-weight: bold; background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; }
+    /* Dashboard Cards Grid */
+    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+    .card {
+      background: var(--card-bg); border-radius: 8px; padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #e5e7eb; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.12); }
+    .card h3 { font-size: 20px; margin-bottom: 15px; border-bottom: 2px solid #f3f4f6; padding-bottom: 8px; }
+    .card .val-box { display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: bold; }
+    .card input[type="text"] { width: 140px; padding: 6px; text-align: right; border: 1px solid var(--border-color); border-radius: 4px; background: #f9fafb; font-weight: bold; }
 
-        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 22px; }
-        .card {
-            background-color: var(--card-bg); border-radius: 12px; overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: 1px solid #e0e0e0;
-        }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-        .card-header { color: white; padding: 15px; text-align: center; font-size: 20px; font-weight: bold; }
-        .card-m1 .card-header { background-color: var(--color-m1); }
-        .card-m2 .card-header { background-color: var(--color-m2); }
-        .card-m3 .card-header { background-color: var(--color-m3); }
-        .card-m4 .card-header { background-color: var(--color-m4); }
-        .card-m5 .card-header { background-color: var(--color-m5); }
-        .card-m6 .card-header { background-color: var(--color-m6); }
-        .card-body { padding: 20px; text-align: center; }
-        .card-amount-box { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
-        .card-amount-label { font-size: 16px; color: #666; font-weight: 600; }
-        .amount-val {
-            font-size: 28px; font-weight: 800; border: 2px solid #e0e0e0; padding: 10px 25px;
-            border-radius: 8px; background-color: #fafafa; min-width: 180px; display: inline-block; word-break: break-all;
-        }
+    /* Custom Module Colors */
+    .card-cc { border-top: 5px solid #2563eb; }
+    .card-cj { border-top: 5px solid #059669; }
+    .card-ex { border-top: 5px solid #dc2626; }
+    .card-surplus { border-top: 5px solid #7c3aed; }
+    .card-vc { border-top: 5px solid #d97706; }
+    .card-user { border-top: 5px solid #4b5563; }
 
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; padding: 10px;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal-box {
-            background-color: white; border-radius: 12px; width: 96%; height: 94vh; max-width: 1400px;
-            overflow-y: auto; padding: 25px; position: relative; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; margin: -25px -25px 20px -25px; color: white; border-top-left-radius: 12px; border-top-right-radius: 12px; }
-        .modal-header h3 { font-size: 22px; }
-        .close-btn { background: rgba(255,255,255,0.2); border: none; font-size: 28px; cursor: pointer; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .close-btn:hover { background: rgba(255,255,255,0.4); }
+    /* Views / Modules Layout */
+    .module-view { display: none; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+    .module-header { text-align: center; font-size: 24px; margin-bottom: 20px; font-weight: bold; }
+    
+    .form-box { max-width: 600px; margin: 0 auto 30px auto; border: 1px solid #e5e7eb; padding: 20px; border-radius: 8px; background: #fafafa; }
+    .form-group { display: flex; align-items: center; margin-bottom: 12px; }
+    .form-group label { width: 180px; font-weight: bold; }
+    .form-group input, .form-group select { flex: 1; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; }
+    .btn-save { display: block; width: 100%; padding: 10px; background-color: var(--green-btn); color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    .btn-save:hover { background-color: #155724; }
 
-        .form-section { background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e9ecef; margin-bottom: 25px; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 15px; }
-        .form-group { display: flex; flex-direction: column; }
-        .form-group label { font-size: 14px; margin-bottom: 6px; font-weight: 700; color: #444; }
-        .form-group input, .form-group select { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; outline: none; }
-        .btn-action-container { display: flex; gap: 10px; }
-        .btn-save { background-color: #2e7d32; color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; }
-        .btn-save:disabled { background-color: #a5d6a7; cursor: not-allowed; }
-        .btn-print { background-color: #0288d1; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 15px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 8px; }
-        
-        .table-responsive { overflow-x: auto; flex-grow: 1; }
-        table { width: 100%; border-collapse: collapse; font-size: 15px; margin-top: 10px; }
-        table th, table td { border: 1px solid #e0e0e0; padding: 12px 10px; text-align: center; }
-        table th { background-color: #f1f3f5; font-weight: bold; color: #333; }
-        .btn-edit { background-color: #f39c12; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-right: 5px; }
-        .btn-delete { background-color: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .login-box { max-width: 420px; height: auto; margin: auto; }
+    /* Data Tables */
+    .table-container { overflow-x: auto; margin-top: 15px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; text-align: center; }
+    table th, table td { border: 1px solid #d1d5db; padding: 10px; font-size: 14px; }
+    table th { background-color: #1f2937; color: white; }
+    table tr:nth-child(even) { background-color: #f9fafb; }
+    .action-btn { padding: 4px 8px; margin: 0 2px; border: none; border-radius: 3px; cursor: pointer; color: white; font-size: 12px; }
+    .btn-edit { background-color: #2563eb; }
+    .btn-delete { background-color: #dc2626; }
 
-        @media print {
-            body * { visibility: hidden; }
-            #printable-surplus-area, #printable-surplus-area * { visibility: visible; }
-            #printable-surplus-area { position: absolute; left: 0; top: 0; width: 100%; }
-            .btn-print { display: none !important; }
-        }
-    </style>
+    /* Surplus Record Sheet Style */
+    .surplus-sheet { max-width: 500px; margin: 0 auto; border: 2px solid #000; padding: 15px; background: #fff; }
+    .surplus-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ccc; font-size: 18px; font-weight: bold; }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>পূজার - কালেকশন / জমা / খরচ / উদ্বৃত্ত</h1>
-        <div class="auth-status">
-            <span id="user-display" class="user-info-text">গেস্ট ইউজার</span>
-            <button id="auth-btn" class="btn-login" onclick="handleAuthClick()">Login</button>
-        </div>
-    </header>
-
-    <div class="dashboard-grid">
-        <div class="card card-m1" onclick="openModule(1)">
-            <div class="card-header">কমিটি কালেকশন</div>
-            <div class="card-body">
-                <div class="card-amount-box">
-                    <span class="card-amount-label">মোট কালেকশন</span>
-                    <span class="amount-val" id="dash-val-1">৳ 0.00</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card card-m2" onclick="openModule(2)">
-            <div class="card-header">কমিটি জমা / ফেরত</div>
-            <div class="card-body">
-                <div class="card-amount-box">
-                    <span class="card-amount-label">নিট জমা পরিমাণ</span>
-                    <span class="amount-val" id="dash-val-2">৳ 0.00</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card card-m3" onclick="openModule(3)">
-            <div class="card-header">খরচ মডিউল</div>
-            <div class="card-body">
-                <div class="card-amount-box">
-                    <span class="card-amount-label">মোট খরচ</span>
-                    <span class="amount-val" id="dash-val-3">৳ 0.00</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card card-m4" onclick="openModule(4)">
-            <div class="card-header">উদ্বৃত্ত বিবরণী</div>
-            <div class="card-body">
-                <div class="card-amount-box">
-                    <span class="card-amount-label">সর্বমোট উদ্বৃত্ত</span>
-                    <span class="amount-val" id="dash-val-4">৳ 0.00</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card card-m5" onclick="openModule(5)">
-            <div class="card-header">গ্রাম কালেকশন</div>
-            <div class="card-body">
-                <div class="card-amount-box">
-                    <span class="card-amount-label">মোট গ্রাম কালেকশন</span>
-                    <span class="amount-val" id="dash-val-5">৳ 0.00</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card card-m6" id="card-m6-container" onclick="openModule(6)" style="display: none;">
-            <div class="card-header">ইউজার মডিউল</div>
-            <div class="card-body">
-                <div class="card-amount-box">
-                    <span class="card-amount-label">মোট রেজিস্টার্ড ইউজার</span>
-                    <span class="amount-val" id="dash-val-6">0 জন</span>
-                </div>
-            </div>
-        </div>
+  <div class="navbar">
+    <h2>পূজার কালেকশন / জমা / খরচ / উদ্বৃত্ত</h2>
+    <div class="role-selector">
+      <label for="userRole" style="color:white; font-weight:bold;">রোল চয়ন:</label>
+      <select id="userRole" onchange="applyRolePermissions()">
+        <option value="Admin">Admin</option>
+        <option value="User">User</option>
+        <option value="Guest" selected>Guest</option>
+      </select>
     </div>
-</div>
+  </div>
 
-<div class="modal-overlay" id="login-modal">
-    <div class="modal-box login-box">
-        <div class="modal-header" style="background-color: var(--color-m2);">
-            <h3>লগইন করুন</h3>
-            <button class="close-btn" onclick="closeModal('login-modal')">&times;</button>
+  <div class="container">
+    <button class="btn-back" id="btnBack" onclick="showDashboard()">← ড্যাশবোর্ডে ফিরুন</button>
+
+    <!-- DASHBOARD VIEW -->
+    <div id="dashboardView">
+      <div class="dashboard-grid">
+        <div class="card card-cc" onclick="openModule('modCommitteeCollection')">
+          <h3>কমিটি কালেকশন</h3>
+          <div class="val-box"><span>টাকা</span><input type="text" id="dashTotalCC" value="0" readonly></div>
         </div>
-        <form onsubmit="handleLoginSubmit(event)">
-            <div class="form-group" style="margin-bottom: 12px;">
-                <label>ইউজার আইডি</label>
-                <input type="text" id="login-id" required placeholder="ইউজার আইডি লিখুন">
-            </div>
-            <div class="form-group" style="margin-bottom: 20px;">
-                <label>পাসওয়ার্ড</label>
-                <input type="password" id="login-pass" required placeholder="পাসওয়ার্ড লিখুন">
-            </div>
-            <button type="submit" id="login-btn" class="btn-save" style="width: 100%;">লগইন</button>
-        </form>
-    </div>
-</div>
 
-<div class="modal-overlay" id="module-modal">
-    <div class="modal-box">
-        <div class="modal-header" id="modal-header-bg">
-            <h3 id="modal-title">মডিউল নাম</h3>
-            <button class="close-btn" onclick="closeModal('module-modal')">&times;</button>
+        <div class="card card-cj" onclick="openModule('modCommitteeDeposit')">
+          <h3>কমিটি জমা ও ফেরত</h3>
+          <div class="val-box"><span>টাকা</span><input type="text" id="dashTotalCJ" value="0" readonly></div>
         </div>
-        <div id="form-container" class="form-section"></div>
-        <div id="table-container" class="table-responsive"></div>
+
+        <div class="card card-ex" onclick="openModule('modExpense')">
+          <h3>খরচ</h3>
+          <div class="val-box"><span>টাকা</span><input type="text" id="dashTotalEx" value="0" readonly></div>
+        </div>
+
+        <div class="card card-surplus" onclick="openModule('modSurplus')">
+          <h3>উদ্বৃত্ত</h3>
+          <div class="val-box"><span>টাকা</span><input type="text" id="dashTotalSurplus" value="0" readonly></div>
+        </div>
+
+        <div class="card card-vc" onclick="openModule('modVillageCollection')">
+          <h3>গ্রাম কালেকশন</h3>
+          <div class="val-box"><span>টাকা</span><input type="text" id="dashTotalVC" value="0" readonly></div>
+        </div>
+
+        <div class="card card-user" id="cardUserModule" onclick="openModule('modUsers')">
+          <h3>ইউজার</h3>
+          <div class="val-box"><span>জন</span><input type="text" id="dashTotalUsers" value="0" readonly></div>
+        </div>
+      </div>
     </div>
-</div>
 
-<script>
-    // =========================================================================
-    // নিচের 'GOOGLE_SCRIPT_URL' ভ্যারিয়েবলে আপনার Apps Script Web App Deployment Link টি বসান
-    // =========================================================================
-    const GOOGLE_SCRIPT_URL "https://script.google.com/macros/s/AKfycbwawREKgRYWTsASNHRwoTxmEGFkYqgbKGT3qcp8XFfUSCFyMztbKMo4QkYPVgfvS88Zmg/exec";
+    <!-- MODULE 1: COMMITTEE COLLECTION -->
+    <div id="modCommitteeCollection" class="module-view">
+      <div class="module-header">কমিটি কালেকশন</div>
+      <div class="form-box">
+        <div class="form-group"><label>নাম :-</label><input type="text" id="ccName"></div>
+        <div class="form-group"><label>গ্রাম:</label><select id="ccVillage"></select></div>
+        <div class="form-group"><label>বাড়ি:</label><select id="ccBari"></select></div>
+        <div class="form-group"><label>পরিমাণ:</label><input type="number" id="ccAmount" placeholder="৳"></div>
+        <button class="btn-save" onclick="saveData('CommitteeCollection')">Save</button>
+      </div>
+      <h3>কালেকশন লিস্ট</h3>
+      <div class="table-container">
+        <table id="tblCommitteeCollection">
+          <thead>
+            <tr><th>তারিখ/সময়</th><th>নাম</th><th>গ্রাম</th><th>বাড়ি</th><th>পরিমাণ</th><th>ইউজার আইডি</th><th class="col-action">Action</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
 
-    let currentUser = { role: 'guest', name: 'গেস্ট ইউজার' };
-    let currentModule = 0;
-    let editingRowIndex = null;
+    <!-- MODULE 2: COMMITTEE DEPOSIT & RETURN -->
+    <div id="modCommitteeDeposit" class="module-view">
+      <div class="module-header">কমিটি জমা / ফেরত</div>
+      <div class="form-box">
+        <div class="form-group"><label>জমা / ফেরতকারীর নাম:</label><input type="text" id="cjName"></div>
+        <div class="form-group"><label>জমা / ফেরতকারীর গ্রাম:</label><select id="cjVillage"></select></div>
+        <div class="form-group">
+          <label>জমা / ফেরত:</label>
+          <select id="cjType"><option value="জমা">জমা</option><option value="ফেরত">ফেরত</option></select>
+        </div>
+        <div class="form-group"><label>জমা / ফেরত পরিমাণ:</label><input type="number" id="cjAmount"></div>
+        <button class="btn-save" onclick="saveData('CommitteeDeposit')">Save</button>
+      </div>
+      <h3>লিস্ট</h3>
+      <div class="table-container">
+        <table id="tblCommitteeDeposit">
+          <thead>
+            <tr><th>তারিখ/সময়</th><th>জমা/ফেরতকারীর নাম</th><th>গ্রাম</th><th>জমা / ফেরত</th><th>পরিমাণ</th><th>ইউজার আইডি</th><th class="col-action">Action</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
 
-    const moduleConfigs = {
-        1: { name: 'Committee_Collection', title: 'কমিটি কালেকশন', color: 'var(--color-m1)', fields: [{ id: 'field1', label: 'নাম/বিবরণ', type: 'text' }, { id: 'field2', label: 'টাকা', type: 'number' }, { id: 'field3', label: 'মন্তব্য', type: 'text' }], headers: ['তারিখ ও সময়', 'নাম/বিবরণ', 'টাকা', 'মন্তব্য'] },
-        2: { name: 'Committee_Deposit', title: 'কমিটি জমা / ফেরত', color: 'var(--color-m2)', fields: [{ id: 'field1', label: 'ধরন', type: 'select', options: ['জমা', 'ফেরত'] }, { id: 'field2', label: 'নাম/বিবরণ', type: 'text' }, { id: 'field3', label: 'টাকা', type: 'number' }, { id: 'field4', label: 'মন্তব্য', type: 'text' }], headers: ['তারিখ ও সময়', 'ধরন', 'নাম/বিবরণ', 'টাকা', 'মন্তব্য'] },
-        3: { name: 'Expense', title: 'খরচ মডিউল', color: 'var(--color-m3)', fields: [{ id: 'field1', label: 'খাত/বিবরণ', type: 'text' }, { id: 'field2', label: 'টাকা', type: 'number' }, { id: 'field3', label: 'মন্তব্য', type: 'text' }], headers: ['তারিখ ও সময়', 'খাত/বিবরণ', 'টাকা', 'মন্তব্য'] },
-        4: { name: 'Surplus', title: 'উদ্বৃত্ত বিবরণী', color: 'var(--color-m4)', fields: [], headers: ['তারিখ ও সময়', 'বিবরণ', 'টাকা', 'মন্তব্য'] },
-        5: { name: 'Village_Collection', title: 'গ্রাম কালেকশন', color: 'var(--color-m5)', fields: [{ id: 'field1', label: 'গ্রাম/ব্যক্তি', type: 'text' }, { id: 'field2', label: 'টাকা', type: 'number' }, { id: 'field3', label: 'মন্তব্য', type: 'text' }], headers: ['তারিখ ও সময়', 'গ্রাম/ব্যক্তি', 'টাকা', 'মন্তব্য'] },
-        6: { name: 'Users', title: 'ইউজার মডিউল', color: 'var(--color-m6)', fields: [{ id: 'field1', label: 'ইউজার আইডি', type: 'text' }, { id: 'field2', label: 'পাসওয়ার্ড', type: 'text' }, { id: 'field3', label: 'রোল', type: 'select', options: ['user', 'admin'] }, { id: 'field4', label: 'নাম', type: 'text' }], headers: ['তারিখ ও সময়', 'ইউজার আইডি', 'পাসওয়ার্ড', 'রোল', 'নাম'] }
+    <!-- MODULE 3: EXPENSE -->
+    <div id="modExpense" class="module-view">
+      <div class="module-header">খরচ সমূহ</div>
+      <div class="form-box">
+        <div class="form-group"><label>খরচের খাত:</label><input type="text" id="exCategory"></div>
+        <div class="form-group"><label>খরচের পরিমাণ:</label><input type="number" id="exAmount"></div>
+        <div class="form-group"><label>টাকা নেওয়া ব্যক্তির নাম:</label><input type="text" id="exReceiver"></div>
+        <div class="form-group"><label>নোট / মোবাইল:</label><input type="text" id="exNote"></div>
+        <button class="btn-save" onclick="saveData('Expense')">Save</button>
+      </div>
+      <h3>লিস্ট</h3>
+      <div class="table-container">
+        <table id="tblExpense">
+          <thead>
+            <tr><th>তারিখ/সময়</th><th>খরচের খাত</th><th>পরিমাণ</th><th>টাকা নেওয়া ব্যক্তির নাম</th><th>নোট/মোবাইল</th><th>ইউজার আইডি</th><th class="col-action">Action</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MODULE 4: SURPLUS RECORD -->
+    <div id="modSurplus" class="module-view">
+      <div class="module-header">উদ্বৃত্ত তালিকা / রেকর্ড</div>
+      <div class="surplus-sheet">
+        <div class="surplus-row"><span>+ মোট কালেকশন</span><span id="surplusCC">0</span></div>
+        <div class="surplus-row"><span>+ মোট গ্রাম কালেকশন</span><span id="surplusVC">0</span></div>
+        <div class="surplus-row"><span>(+/-) নিট জমা ফেরত</span><span id="surplusCJ">0</span></div>
+        <div class="surplus-row"><span>- মোট খরচ</span><span id="surplusEx">0</span></div>
+        <div class="surplus-row" style="border-top: 2px solid #000; border-bottom: double 4px #000;">
+          <span>= সর্বমোট উদ্বৃত্ত টাকা</span><span id="surplusNet">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5: VILLAGE COLLECTION -->
+    <div id="modVillageCollection" class="module-view">
+      <div class="module-header">গ্রাম কালেকশন</div>
+      <div class="form-box">
+        <div class="form-group"><label>নাম:</label><input type="text" id="vcName"></div>
+        <div class="form-group"><label>গ্রাম:</label><select id="vcVillage"></select></div>
+        <div class="form-group"><label>পরিমাণ:</label><input type="number" id="vcAmount"></div>
+        <div class="form-group"><label>মন্তব্য:</label><input type="text" id="vcNote"></div>
+        <button class="btn-save" onclick="saveData('VillageCollection')">Save</button>
+      </div>
+      <h3>কালেকশন লিস্ট</h3>
+      <div class="table-container">
+        <table id="tblVillageCollection">
+          <thead>
+            <tr><th>তারিখ/সময়</th><th>নাম</th><th>গ্রাম</th><th>পরিমাণ</th><th>মন্তব্য</th><th>ইউজার আইডি</th><th class="col-action">Action</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MODULE 6: USERS (ADMIN ONLY) -->
+    <div id="modUsers" class="module-view">
+      <div class="module-header">ইউজার</div>
+      <div class="form-box">
+        <div class="form-group"><label>নাম:</label><input type="text" id="usrName"></div>
+        <div class="form-group"><label>গ্রাম:</label><select id="usrVillage"></select></div>
+        <div class="form-group"><label>মোবাইল:</label><input type="text" id="usrMobile"></div>
+        <div class="form-group"><label>ইউজার আইডি:</label><input type="text" id="usrId"></div>
+        <div class="form-group"><label>পাসওয়ার্ড:</label><input type="password" id="usrPass"></div>
+        <div class="form-group">
+          <label>রোল:</label>
+          <select id="usrRole"><option value="Admin">Admin</option><option value="User">User</option><option value="Guest">Guest</option></select>
+        </div>
+        <button class="btn-save" onclick="saveData('Users')">Save</button>
+      </div>
+      <h3>লিস্ট</h3>
+      <div class="table-container">
+        <table id="tblUsers">
+          <thead>
+            <tr><th>তারিখ</th><th>নাম</th><th>গ্রাম</th><th>মোবাইল</th><th>ইউজার আইডি</th><th>পাসওয়ার্ড</th><th>রোল</th><th class="col-action">Action</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ==========================================
+    // ১. আপনার ডিপ্লয় করা GOOGLE APPS SCRIPT WEB APP URL এখানে বসান
+    // ==========================================
+    const WEB_APP_URL = "YOUR_DEPLOYED_WEB_APP_URL_HERE";
+
+    // ==========================================
+    // ২. গ্রাম ও বাড়ির ডাইনামিক ড্রপডাউন ডাটা
+    // (ভবিষ্যতে নতুন নাম যুক্ত বা বাদ দিতে এই এরে পরিবর্তন করুন)
+    // ==========================================
+    const villageList = ["আটঘর", "আন্দাকুল"];
+    const bariList = ["মন্ডলবাড়ি", "মিস্ত্রি বাড়ি"];
+
+    // মেমরি ডাটাবেজ
+    let appData = {
+      CommitteeCollection: [],
+      CommitteeDeposit: [],
+      Expense: [],
+      VillageCollection: [],
+      Users: []
     };
 
     window.onload = function() {
-        updateUserUI();
-        loadDashboardDataDataSilent();
+      populateDropdowns();
+      applyRolePermissions();
+      calculateTotals();
     };
 
-    async function apiCall(action, payload = {}) {
-        if (GOOGLE_SCRIPT_URL.includes("YOUR_DEPLOYMENT_ID")) {
-            alert("অনুগ্রহ করে index.html ফাইলের GOOGLE_SCRIPT_URL এ আপনার Deployment Link টি বসান!");
-            return null;
-        }
-        try {
-            const response = await fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ action, ...payload }),
-                redirect: 'follow'
-            });
-            const res = await response.json();
-            if (res.status === 'error') throw new Error(res.message);
-            return res.data;
-        } catch (err) {
-            alert("ত্রুটি: " + err.message);
-            return null;
-        }
+    function populateDropdowns() {
+      const vSelects = ["ccVillage", "cjVillage", "vcVillage", "usrVillage"];
+      vSelects.forEach(id => {
+        const el = document.getElementById(id);
+        el.innerHTML = "";
+        villageList.forEach(v => el.add(new Option(v, v)));
+      });
+
+      const bSelect = document.getElementById("ccBari");
+      bSelect.innerHTML = "";
+      bariList.forEach(b => bSelect.add(new Option(b, b)));
     }
 
-    async function loadDashboardDataDataSilent() {
-        const data = await apiCall('getDashboardData');
-        if (data) {
-            document.getElementById('dash-val-1').innerText = '৳ ' + (data.m1 || 0).toLocaleString();
-            document.getElementById('dash-val-2').innerText = '৳ ' + (data.m2 || 0).toLocaleString();
-            document.getElementById('dash-val-3').innerText = '৳ ' + (data.m3 || 0).toLocaleString();
-            document.getElementById('dash-val-4').innerText = '৳ ' + (data.m4 || 0).toLocaleString();
-            document.getElementById('dash-val-5').innerText = '৳ ' + (data.m5 || 0).toLocaleString();
-            document.getElementById('dash-val-6').innerText = (data.m6 || 0) + ' জন';
-        }
+    // রোলভিত্তিক এক্সেস ফিল্টারিং
+    function applyRolePermissions() {
+      const role = document.getElementById("userRole").value;
+      const cardUser = document.getElementById("cardUserModule");
+
+      if (role === "User") {
+        cardUser.style.display = "none";
+      } else if (role === "Admin") {
+        cardUser.style.display = "block";
+      } else { // Guest
+        cardUser.style.display = "block";
+      }
+
+      const actionCols = document.querySelectorAll(".col-action");
+      actionCols.forEach(col => {
+        col.style.display = (role === "Admin") ? "table-cell" : "none";
+      });
+
+      showDashboard();
     }
 
-    function updateUserUI() {
-        document.getElementById('user-display').innerText = `${currentUser.name} (${currentUser.role.toUpperCase()})`;
-        const authBtn = document.getElementById('auth-btn');
-        if (currentUser.role === 'guest') {
-            authBtn.innerText = 'Login';
-            document.getElementById('card-m6-container').style.display = 'none';
-        } else {
-            authBtn.innerText = 'Logout';
-            if (currentUser.role === 'admin') {
-                document.getElementById('card-m6-container').style.display = 'block';
-            } else {
-                document.getElementById('card-m6-container').style.display = 'none';
-            }
-        }
+    function openModule(moduleId) {
+      const role = document.getElementById("userRole").value;
+      
+      // গেস্ট কোনো মডিউলে ঢুকতে পারবে না
+      if (role === "Guest") {
+        alert("গেস্ট ব্যবহারকারী কোনো মডিউলে প্রবেশ করতে পারবেন না। কেবল মোট হিসাব দেখতে পারবেন।");
+        return;
+      }
+
+      // সাধারণ ইউজার ইউজার মডিউলে ঢুকতে পারবে না
+      if (role === "User" && moduleId === "modUsers") {
+        alert("ইউজার মডিউল কেবল এডমিনের জন্য সংরক্ষিত।");
+        return;
+      }
+
+      document.getElementById("dashboardView").style.display = "none";
+      document.querySelectorAll(".module-view").forEach(m => m.style.display = "none");
+      document.getElementById(moduleId).style.display = "block";
+      document.getElementById("btnBack").style.display = "inline-block";
     }
 
-    function handleAuthClick() {
-        if (currentUser.role === 'guest') {
-            document.getElementById('login-modal').classList.add('active');
-        } else {
-            currentUser = { role: 'guest', name: 'গেস্ট ইউজার' };
-            updateUserUI();
-        }
+    function showDashboard() {
+      document.querySelectorAll(".module-view").forEach(m => m.style.display = "none");
+      document.getElementById("dashboardView").style.display = "block";
+      document.getElementById("btnBack").style.display = "none";
     }
 
-    async function handleLoginSubmit(e) {
-        e.preventDefault();
-        const btn = document.getElementById('login-btn');
-        btn.disabled = true;
-        btn.innerText = 'যাচাই করা হচ্ছে...';
+    // হিসাবের লজিক (উদ্বৃত্ত এবং সামারি)
+    function calculateTotals() {
+      let totalCC = appData.CommitteeCollection.reduce((sum, item) => sum + Number(item.amount || 0), 0);
+      
+      let totalCJ = appData.CommitteeDeposit.reduce((sum, item) => {
+        let amt = Number(item.amount || 0);
+        return item.type === "জমা" ? sum + amt : sum - amt;
+      }, 0);
 
-        const userId = document.getElementById('login-id').value;
-        const pass = document.getElementById('login-pass').value;
+      let totalEx = appData.Expense.reduce((sum, item) => sum + Number(item.amount || 0), 0);
+      let totalVC = appData.VillageCollection.reduce((sum, item) => sum + Number(item.amount || 0), 0);
+      let totalUsers = appData.Users.length;
 
-        const res = await apiCall('login', { userId, password: pass });
-        btn.disabled = false;
-        btn.innerText = 'লগইন';
+      // গ্রাম কালেকশন আলাদা থাকবে, উদ্বৃত্তে যোগ হবে না
+      let netSurplus = (totalCC + totalCJ) - totalEx;
 
-        if (res && res.success) {
-            currentUser = { role: res.role, name: res.name };
-            updateUserUI();
-            closeModal('login-modal');
-            document.getElementById('login-id').value = '';
-            document.getElementById('login-pass').value = '';
-        } else {
-            alert('ভুল ইউজার আইডি অথবা পাসওয়ার্ড!');
-        }
+      // ড্যাশবোর্ড ফিল্ড আপডেট
+      document.getElementById("dashTotalCC").value = totalCC;
+      document.getElementById("dashTotalCJ").value = totalCJ;
+      document.getElementById("dashTotalEx").value = totalEx;
+      document.getElementById("dashTotalSurplus").value = netSurplus;
+      document.getElementById("dashTotalVC").value = totalVC;
+      document.getElementById("dashTotalUsers").value = totalUsers;
+
+      // উদ্বৃত্ত শিট আপডেট
+      document.getElementById("surplusCC").innerText = totalCC;
+      document.getElementById("surplusVC").innerText = totalVC;
+      document.getElementById("surplusCJ").innerText = totalCJ;
+      document.getElementById("surplusEx").innerText = totalEx;
+      document.getElementById("surplusNet").innerText = netSurplus;
     }
 
-    function closeModal(id) {
-        document.getElementById(id).classList.remove('active');
+    // গুগল শিটে ডাটা সেভ
+    function saveData(moduleName) {
+      const role = document.getElementById("userRole").value;
+      if (role === "Guest") return;
+
+      let payload = { module: moduleName, timestamp: new Date().toLocaleString() };
+
+      if (moduleName === 'CommitteeCollection') {
+        payload.name = document.getElementById("ccName").value;
+        payload.village = document.getElementById("ccVillage").value;
+        payload.bari = document.getElementById("ccBari").value;
+        payload.amount = document.getElementById("ccAmount").value;
+        payload.userId = role;
+      } else if (moduleName === 'CommitteeDeposit') {
+        payload.name = document.getElementById("cjName").value;
+        payload.village = document.getElementById("cjVillage").value;
+        payload.type = document.getElementById("cjType").value;
+        payload.amount = document.getElementById("cjAmount").value;
+        payload.userId = role;
+      } else if (moduleName === 'Expense') {
+        payload.category = document.getElementById("exCategory").value;
+        payload.amount = document.getElementById("exAmount").value;
+        payload.receiver = document.getElementById("exReceiver").value;
+        payload.note = document.getElementById("exNote").value;
+        payload.userId = role;
+      } else if (moduleName === 'VillageCollection') {
+        payload.name = document.getElementById("vcName").value;
+        payload.village = document.getElementById("vcVillage").value;
+        payload.amount = document.getElementById("vcAmount").value;
+        payload.note = document.getElementById("vcNote").value;
+        payload.userId = role;
+      } else if (moduleName === 'Users') {
+        payload.name = document.getElementById("usrName").value;
+        payload.village = document.getElementById("usrVillage").value;
+        payload.mobile = document.getElementById("usrMobile").value;
+        payload.userId = document.getElementById("usrId").value;
+        payload.password = document.getElementById("usrPass").value;
+        payload.userRole = document.getElementById("usrRole").value;
+      }
+
+      appData[moduleName].push(payload);
+      calculateTotals();
+
+      // Web App এ পাঠানো
+      if (WEB_APP_URL && WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
+        fetch(WEB_APP_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        }).then(() => alert("ডাটা সফলভাবে গুগল শিটে সেভ হয়েছে!"))
+          .catch(err => console.error("Error saving data:", err));
+      } else {
+        alert("ডাটা লোকালি সেভ হয়েছে। (গুগল শিটে সেভ করতে WEB_APP_URL লিংক বসান)");
+      }
     }
-
-    async function openModule(modId) {
-        if (modId === 6 && currentUser.role !== 'admin') {
-            alert('ইউজার মডিউল দেখার অধিকার শুধু অ্যাডমিনদের আছে।');
-            return;
-        }
-
-        currentModule = modId;
-        editingRowIndex = null;
-        const cfg = moduleConfigs[modId];
-
-        document.getElementById('modal-title').innerText = cfg.title;
-        document.getElementById('modal-header-bg').style.backgroundColor = cfg.color;
-
-        renderForm(cfg);
-        document.getElementById('module-modal').classList.add('active');
-        loadModuleTable(modId);
-    }
-
-    function renderForm(cfg) {
-        const container = document.getElementById('form-container');
-        if (currentUser.role === 'guest' || cfg.fields.length === 0) {
-            container.style.display = 'none';
-            return;
-        }
-        container.style.display = 'block';
-
-        let html = '<form onsubmit="handleDataSave(event)"><div class="form-grid">';
-        cfg.fields.forEach(f => {
-            html += `<div class="form-group"><label>${f.label}</label>`;
-            if (f.type === 'select') {
-                html += `<select id="${f.id}" required>${f.options.map(o => `<option value="${o}">${o}</option>`).join('')}</select>`;
-            } else {
-                html += `<input type="${f.type}" id="${f.id}" required placeholder="${f.label} লিখুন">`;
-            }
-            html += `</div>`;
-        });
-        html += `</div><div class="btn-action-container">
-            <button type="submit" id="btn-save-main" class="btn-save">সেভ করুন</button>
-        </div></form>`;
-
-        container.innerHTML = html;
-    }
-
-    async function loadModuleTable(modId) {
-        const cfg = moduleConfigs[modId];
-        const container = document.getElementById('table-container');
-        container.innerHTML = '<p style="text-align:center; padding: 20px;">ডাটা লোড হচ্ছে...</p>';
-
-        const rows = await apiCall('getModuleData', { moduleName: cfg.name });
-        
-        let html = '';
-        if (modId === 4) {
-            html += `<button class="btn-print" onclick="window.print()">🖨️ প্রিন্ট করুন</button>
-                     <div id="printable-surplus-area">`;
-        }
-
-        html += `<table><thead><tr>`;
-        cfg.headers.forEach(h => html += `<th>${h}</th>`);
-        if (currentUser.role === 'admin') html += `<th>অ্যাকশন</th>`;
-        html += `</tr></thead><tbody>`;
-
-        if (!rows || rows.length === 0) {
-            html += `<tr><td colspan="${cfg.headers.length + (currentUser.role === 'admin' ? 1 : 0)}">কোনো তথ্য পাওয়া যায়নি</td></tr>`;
-        } else {
-            rows.forEach((r, idx) => {
-                html += `<tr>`;
-                r.forEach(val => html += `<td>${val}</td>`);
-                if (currentUser.role === 'admin') {
-                    html += `<td>
-                        <button class="btn-edit" onclick="editRow(${idx}, ${JSON.stringify(r).replace(/"/g, '&quot;')})">এডিট</button>
-                        <button class="btn-delete" onclick="deleteRow(${idx})">ডিলিট</button>
-                    </td>`;
-                }
-                html += `</tr>`;
-            });
-        }
-
-        html += `</tbody></table>`;
-        if (modId === 4) html += `</div>`;
-        container.innerHTML = html;
-    }
-
-    async function handleDataSave(e) {
-        e.preventDefault();
-        const cfg = moduleConfigs[currentModule];
-        const rowData = cfg.fields.map(f => document.getElementById(f.id).value);
-
-        const btn = document.getElementById('btn-save-main');
-        btn.disabled = true;
-        btn.innerText = 'সেভ হচ্ছে...';
-
-        let res;
-        if (editingRowIndex !== null) {
-            res = await apiCall('editData', { moduleName: cfg.name, rowIndex: editingRowIndex, data: rowData });
-        } else {
-            res = await apiCall('saveData', { moduleName: cfg.name, data: rowData });
-        }
-
-        btn.disabled = false;
-        btn.innerText = 'সেভ করুন';
-
-        if (res) {
-            editingRowIndex = null;
-            renderForm(cfg);
-            loadModuleTable(currentModule);
-            loadDashboardDataDataSilent();
-        }
-    }
-
-    function editRow(index, dataArray) {
-        editingRowIndex = index;
-        const cfg = moduleConfigs[currentModule];
-        cfg.fields.forEach((f, i) => {
-            const el = document.getElementById(f.id);
-            if (el) el.value = dataArray[i + 1] || '';
-        });
-        document.getElementById('btn-save-main').innerText = 'আপডেট করুন';
-    }
-
-    async function deleteRow(index) {
-        if (!confirm('আপনি কি নিশ্চিতভাবে এই রেকর্ডটি মুছে ফেলতে চান?')) return;
-        const cfg = moduleConfigs[currentModule];
-        const res = await apiCall('deleteData', { moduleName: cfg.name, rowIndex: index });
-        if (res) {
-            loadModuleTable(currentModule);
-            loadDashboardDataDataSilent();
-        }
-    }
-</script>
+  </script>
 </body>
 </html>
