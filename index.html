@@ -16,6 +16,24 @@
     * { box-sizing: border-box; font-family: 'SolaimanLipi', 'Kalpurush', Arial, sans-serif; margin: 0; padding: 0; }
     body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 40px; }
     
+    /* Login Modal Overlay */
+    #loginScreen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.85); display: flex; justify-content: center;
+      align-items: center; z-index: 9999; backdrop-filter: blur(4px);
+    }
+    .login-card {
+      background: #ffffff; padding: 30px; border-radius: 10px; width: 340px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; border: 1px solid #e2e8f0;
+    }
+    .login-card h3 { color: #1e3a8a; font-size: 22px; margin-bottom: 20px; font-weight: bold; }
+    .login-field { text-align: left; margin-bottom: 15px; }
+    .login-field label { font-size: 14px; font-weight: bold; color: #334155; display: block; margin-bottom: 5px; }
+    .login-field input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; outline: none; font-size: 14px; }
+    .btn-login { width: 100%; padding: 10px; background: #1e3a8a; color: white; border: none; border-radius: 5px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
+    .btn-login:hover { background: #1d4ed8; }
+    .login-error { color: #dc2626; font-size: 13px; margin-top: 12px; display: none; font-weight: bold; }
+
     /* Header Navbar */
     .navbar {
       background-color: #1e3a8a; color: white; padding: 15px 30px;
@@ -23,8 +41,9 @@
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
     .navbar h2 { font-size: 22px; font-weight: bold; }
-    .role-selector { display: flex; align-items: center; gap: 10px; }
-    .role-selector select { padding: 6px 12px; border-radius: 4px; border: none; font-weight: bold; cursor: pointer; }
+    .user-profile { display: flex; align-items: center; gap: 12px; }
+    .user-badge { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; font-size: 14px; font-weight: bold; }
+    .btn-logout { background: #dc2626; color: white; border: none; padding: 6px 14px; border-radius: 4px; font-weight: bold; cursor: pointer; }
 
     .container { max-width: 1100px; margin: 25px auto; padding: 0 15px; }
     .btn-back { background: #4b5563; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; display: none; }
@@ -77,15 +96,29 @@
 </head>
 <body>
 
+  <!-- LOGIN SCREEN -->
+  <div id="loginScreen">
+    <div class="login-card">
+      <h3>সিস্টেম লগইন</h3>
+      <div class="login-field">
+        <label>ইউজার আইডি:</label>
+        <input type="text" id="loginUserId" placeholder="আপনার আইডি লিখুন">
+      </div>
+      <div class="login-field">
+        <label>পাসওয়ার্ড:</label>
+        <input type="password" id="loginPassword" placeholder="আপনার পাসওয়ার্ড লিখুন">
+      </div>
+      <button class="btn-login" onclick="handleLogin()">লগইন করুন</button>
+      <div class="login-error" id="loginError">ইউজার আইডি অথবা পাসওয়ার্ড সঠিক নয়!</div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
   <div class="navbar">
     <h2>পূজার কালেকশন / জমা / খরচ / উদ্বৃত্ত</h2>
-    <div class="role-selector">
-      <label for="userRole" style="color:white; font-weight:bold;">রোল চয়ন:</label>
-      <select id="userRole" onchange="applyRolePermissions()">
-        <option value="Admin">Admin</option>
-        <option value="User">User</option>
-        <option value="Guest" selected>Guest</option>
-      </select>
+    <div class="user-profile" id="userProfileArea" style="display:none;">
+      <span class="user-badge" id="userBadgeText">আইডি: Admin (Admin)</span>
+      <button class="btn-logout" onclick="handleLogout()">লগআউট</button>
     </div>
   </div>
 
@@ -257,19 +290,18 @@
   </div>
 
   <script>
-    // ==========================================
-    // ১. আপনার ডিপ্লয় করা GOOGLE APPS SCRIPT WEB APP URL এখানে বসান
-    // ==========================================
     const WEB_APP_URL = "YOUR_DEPLOYED_WEB_APP_URL_HERE";
 
-    // ==========================================
-    // ২. গ্রাম ও বাড়ির ডাইনামিক ড্রপডাউন ডাটা
-    // (ভবিষ্যতে নতুন নাম যুক্ত বা বাদ দিতে এই এরে পরিবর্তন করুন)
-    // ==========================================
     const villageList = ["আটঘর", "আন্দাকুল"];
     const bariList = ["মন্ডলবাড়ি", "মিস্ত্রি বাড়ি"];
 
-    // মেমরি ডাটাবেজ
+    // প্রাথমিক ডিফল্ট ইউজার অ্যাকাউন্টসমূহ
+    const defaultAccounts = [
+      { userId: "admin", password: "123", role: "Admin" },
+      { userId: "user", password: "123", role: "User" },
+      { userId: "guest", password: "123", role: "Guest" }
+    ];
+
     let appData = {
       CommitteeCollection: [],
       CommitteeDeposit: [],
@@ -278,11 +310,60 @@
       Users: []
     };
 
+    let currentUser = null;
+
     window.onload = function() {
       populateDropdowns();
-      applyRolePermissions();
-      calculateTotals();
+      checkAuthSession();
     };
+
+    // লগইন চেক ও সেশন চালু রাখা
+    function checkAuthSession() {
+      const savedUser = localStorage.getItem("poojaAppUser");
+      if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("userProfileArea").style.display = "flex";
+        document.getElementById("userBadgeText").innerText = `আইডি: ${currentUser.userId} (${currentUser.role})`;
+        
+        applyRolePermissions(currentUser.role);
+        calculateTotals();
+      } else {
+        document.getElementById("loginScreen").style.display = "flex";
+        document.getElementById("userProfileArea").style.display = "none";
+      }
+    }
+
+    // লগইন ফাংশন
+    function handleLogin() {
+      const uid = document.getElementById("loginUserId").value.trim();
+      const pass = document.getElementById("loginPassword").value.trim();
+      const errEl = document.getElementById("loginError");
+
+      // ইউজার লিস্ট অথবা ডিফল্ট একাউন্টে ম্যাচিং চেক
+      let foundUser = appData.Users.find(u => u.userId === uid && u.password === pass);
+      if (!foundUser) {
+        foundUser = defaultAccounts.find(u => u.userId === uid && u.password === pass);
+      }
+
+      if (foundUser) {
+        errEl.style.display = "none";
+        currentUser = foundUser;
+        localStorage.setItem("poojaAppUser", JSON.stringify(foundUser));
+        document.getElementById("loginUserId").value = "";
+        document.getElementById("loginPassword").value = "";
+        checkAuthSession();
+      } else {
+        errEl.style.display = "block";
+      }
+    }
+
+    // লগআউট ফাংশন
+    function handleLogout() {
+      localStorage.removeItem("poojaAppUser");
+      currentUser = null;
+      location.reload();
+    }
 
     function populateDropdowns() {
       const vSelects = ["ccVillage", "cjVillage", "vcVillage", "usrVillage"];
@@ -297,9 +378,8 @@
       bariList.forEach(b => bSelect.add(new Option(b, b)));
     }
 
-    // রোলভিত্তিক এক্সেস ফিল্টারিং
-    function applyRolePermissions() {
-      const role = document.getElementById("userRole").value;
+    // রোল অনুযায়ী অ্যাকসেস কন্ট্রোল
+    function applyRolePermissions(role) {
       const cardUser = document.getElementById("cardUserModule");
 
       if (role === "User") {
@@ -319,16 +399,14 @@
     }
 
     function openModule(moduleId) {
-      const role = document.getElementById("userRole").value;
-      
-      // গেস্ট কোনো মডিউলে ঢুকতে পারবে না
-      if (role === "Guest") {
+      if (!currentUser) return;
+
+      if (currentUser.role === "Guest") {
         alert("গেস্ট ব্যবহারকারী কোনো মডিউলে প্রবেশ করতে পারবেন না। কেবল মোট হিসাব দেখতে পারবেন।");
         return;
       }
 
-      // সাধারণ ইউজার ইউজার মডিউলে ঢুকতে পারবে না
-      if (role === "User" && moduleId === "modUsers") {
+      if (currentUser.role === "User" && moduleId === "modUsers") {
         alert("ইউজার মডিউল কেবল এডমিনের জন্য সংরক্ষিত।");
         return;
       }
@@ -345,7 +423,6 @@
       document.getElementById("btnBack").style.display = "none";
     }
 
-    // হিসাবের লজিক (উদ্বৃত্ত এবং সামারি)
     function calculateTotals() {
       let totalCC = appData.CommitteeCollection.reduce((sum, item) => sum + Number(item.amount || 0), 0);
       
@@ -358,10 +435,8 @@
       let totalVC = appData.VillageCollection.reduce((sum, item) => sum + Number(item.amount || 0), 0);
       let totalUsers = appData.Users.length;
 
-      // গ্রাম কালেকশন আলাদা থাকবে, উদ্বৃত্তে যোগ হবে না
       let netSurplus = (totalCC + totalCJ) - totalEx;
 
-      // ড্যাশবোর্ড ফিল্ড আপডেট
       document.getElementById("dashTotalCC").value = totalCC;
       document.getElementById("dashTotalCJ").value = totalCJ;
       document.getElementById("dashTotalEx").value = totalEx;
@@ -369,7 +444,6 @@
       document.getElementById("dashTotalVC").value = totalVC;
       document.getElementById("dashTotalUsers").value = totalUsers;
 
-      // উদ্বৃত্ত শিট আপডেট
       document.getElementById("surplusCC").innerText = totalCC;
       document.getElementById("surplusVC").innerText = totalVC;
       document.getElementById("surplusCJ").innerText = totalCJ;
@@ -377,10 +451,8 @@
       document.getElementById("surplusNet").innerText = netSurplus;
     }
 
-    // গুগল শিটে ডাটা সেভ
     function saveData(moduleName) {
-      const role = document.getElementById("userRole").value;
-      if (role === "Guest") return;
+      if (!currentUser || currentUser.role === "Guest") return;
 
       let payload = { module: moduleName, timestamp: new Date().toLocaleString() };
 
@@ -389,25 +461,25 @@
         payload.village = document.getElementById("ccVillage").value;
         payload.bari = document.getElementById("ccBari").value;
         payload.amount = document.getElementById("ccAmount").value;
-        payload.userId = role;
+        payload.userId = currentUser.userId;
       } else if (moduleName === 'CommitteeDeposit') {
         payload.name = document.getElementById("cjName").value;
         payload.village = document.getElementById("cjVillage").value;
         payload.type = document.getElementById("cjType").value;
         payload.amount = document.getElementById("cjAmount").value;
-        payload.userId = role;
+        payload.userId = currentUser.userId;
       } else if (moduleName === 'Expense') {
         payload.category = document.getElementById("exCategory").value;
         payload.amount = document.getElementById("exAmount").value;
         payload.receiver = document.getElementById("exReceiver").value;
         payload.note = document.getElementById("exNote").value;
-        payload.userId = role;
+        payload.userId = currentUser.userId;
       } else if (moduleName === 'VillageCollection') {
         payload.name = document.getElementById("vcName").value;
         payload.village = document.getElementById("vcVillage").value;
         payload.amount = document.getElementById("vcAmount").value;
         payload.note = document.getElementById("vcNote").value;
-        payload.userId = role;
+        payload.userId = currentUser.userId;
       } else if (moduleName === 'Users') {
         payload.name = document.getElementById("usrName").value;
         payload.village = document.getElementById("usrVillage").value;
@@ -420,7 +492,6 @@
       appData[moduleName].push(payload);
       calculateTotals();
 
-      // Web App এ পাঠানো
       if (WEB_APP_URL && WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
         fetch(WEB_APP_URL, {
           method: "POST",
