@@ -446,7 +446,7 @@
       if (foundUser) {
         errEl.style.display = "none";
         currentUser = foundUser;
-        localStorage.setItem("poojaAppUser", JSON.stringify(foundUser));
+        localStorage.setItem("poojaAppUser", JSON.stringify(currentUser));
         document.getElementById("loginUserId").value = "";
         document.getElementById("loginPassword").value = "";
         checkAuthSession();
@@ -519,7 +519,7 @@
 
       let totalEx = appData.Expense.reduce((sum, item) => sum + Number(item.amount || 0), 0);
       let totalVC = appData.VillageCollection.reduce((sum, item) => sum + Number(item.amount || 0), 0);
-      let totalUsers = appData.Users.length + defaultAccounts.length;
+      let totalUsers = appData.Users.length;
 
       let netSurplus = (totalCC + totalVC + totalCJ) - totalEx;
 
