@@ -384,7 +384,7 @@
     };
 
     function fetchDataFromSheetFirst() {
-      if (!WEB_APP_URL || WEB_APP_URL === "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
+      if (!WEB_APP_URL || WEB_APP_URL === "https://script.google.com/macros/s/AKfycbxjYSNj7308hDtiacwFgyz5gpv3YTErl4vOYV8M3TsmjWxylbMij7voHPkN9kv8_mSM/exec") {
         checkAuthSession();
         return;
       }
@@ -410,7 +410,7 @@
     }
 
     function fetchDataFromSheet() {
-      if (!WEB_APP_URL || WEB_APP_URL === "YOUR_DEPLOYED_WEB_APP_URL_HERE") return;
+      if (!WEB_APP_URL || WEB_APP_URL === "https://script.google.com/macros/s/AKfycbxjYSNj7308hDtiacwFgyz5gpv3YTErl4vOYV8M3TsmjWxylbMij7voHPkN9kv8_mSM/exec") return;
       
       fetch(WEB_APP_URL)
         .then(response => response.json())
