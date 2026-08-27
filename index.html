@@ -362,16 +362,10 @@
   </div>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxwQjgnSpbWdf5rGkuPFzEYFoQvQBQ6fmm0UF1SviDNHWjfoqQDojYfgrOuTHczDLfWyw/exec"; // আপনার সঠিক ওয়েব অ্যাপ ইউআরএল এখানে দিন
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxwQjgnSpbWdf5rGkuPFzEYFoQvQBQ6fmm0UF1SviDNHWjfoqQDojYfgrOuTHczDLfWyw/exec";
 
     const villageList = ["আটঘর", "আন্দাকুল"];
     const bariList = ["মন্ডলবাড়ি", "মিস্ত্রি বাড়ি"];
-
-    const defaultAccounts = [
-      { userId: "admin", password: "123", role: "Admin" },
-      { userId: "user", password: "123", role: "User" },
-      { userId: "guest", password: "123", role: "Guest" }
-    ];
 
     let appData = {
       CommitteeCollection: [],
@@ -386,8 +380,34 @@
 
     window.onload = function() {
       populateDropdowns();
-      checkAuthSession();
+      fetchDataFromSheetFirst();
     };
+
+    function fetchDataFromSheetFirst() {
+      if (!WEB_APP_URL || WEB_APP_URL === "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
+        checkAuthSession();
+        return;
+      }
+      
+      fetch(WEB_APP_URL)
+        .then(response => response.json())
+        .then(data => {
+          if (data) {
+            appData = {
+              CommitteeCollection: data.CommitteeCollection || [],
+              CommitteeDeposit: data.CommitteeDeposit || [],
+              Expense: data.Expense || [],
+              VillageCollection: data.VillageCollection || [],
+              Users: data.Users || []
+            };
+          }
+          checkAuthSession();
+        })
+        .catch(err => {
+          console.error("Error fetching sheet data:", err);
+          checkAuthSession();
+        });
+    }
 
     function fetchDataFromSheet() {
       if (!WEB_APP_URL || WEB_APP_URL === "YOUR_DEPLOYED_WEB_APP_URL_HERE") return;
@@ -419,7 +439,8 @@
         document.getElementById("userBadgeText").innerText = `আইডি: ${currentUser.userId} (${currentUser.role})`;
         
         applyRolePermissions(currentUser.role);
-        fetchDataFromSheet();
+        calculateTotals();
+        renderAllTables();
         
         const activeMod = localStorage.getItem("poojaActiveModule");
         if (activeMod && activeMod !== "dashboardView") {
@@ -439,14 +460,11 @@
       const errEl = document.getElementById("loginError");
 
       let foundUser = appData.Users.find(u => u.userId === uid && u.password === pass);
-      if (!foundUser) {
-        foundUser = defaultAccounts.find(u => u.userId === uid && u.password === pass);
-      }
 
       if (foundUser) {
         errEl.style.display = "none";
         currentUser = foundUser;
-        localStorage.setItem("poojaAppUser", JSON.stringify(currentUser));
+        localStorage.setItem("poojaAppUser", JSON.stringify(foundUser));
         document.getElementById("loginUserId").value = "";
         document.getElementById("loginPassword").value = "";
         checkAuthSession();
@@ -466,18 +484,24 @@
       const vSelects = ["ccVillage", "cjVillage", "vcVillage", "usrVillage"];
       vSelects.forEach(id => {
         const el = document.getElementById(id);
-        el.innerHTML = "";
-        villageList.forEach(v => el.add(new Option(v, v)));
+        if (el) {
+          el.innerHTML = "";
+          villageList.forEach(v => el.add(new Option(v, v)));
+        }
       });
 
       const bSelect = document.getElementById("ccBari");
-      bSelect.innerHTML = "";
-      bariList.forEach(b => bSelect.add(new Option(b, b)));
+      if (bSelect) {
+        bSelect.innerHTML = "";
+        bariList.forEach(b => bSelect.add(new Option(b, b)));
+      }
     }
 
     function applyRolePermissions(role) {
       const cardUser = document.getElementById("cardUserModule");
-      cardUser.style.display = (role === "User") ? "none" : "block";
+      if (cardUser) {
+        cardUser.style.display = (role === "User") ? "none" : "block";
+      }
 
       const actionCols = document.querySelectorAll(".col-action");
       actionCols.forEach(col => {
@@ -549,9 +573,19 @@
 
       const btnSave = document.getElementById(`btnSave_${moduleName}`);
       btnSave.disabled = true;
-      btnSave.innerText = "ডাটা সেভ হচ্ছে...";
+      
+      let isEdit = (editState.module === moduleName && editState.index !== null);
+      btnSave.innerText = isEdit ? "ডাটা আপডেট হচ্ছে..." : "ডাটা সেভ হচ্ছে...";
 
-      let payload = { action: "save", module: moduleName, timestamp: new Date().toLocaleString() };
+      let payload = { 
+        action: isEdit ? "update" : "save", 
+        module: moduleName, 
+        timestamp: new Date().toLocaleString() 
+      };
+
+      if (isEdit) {
+        payload.index = editState.index;
+      }
 
       if (moduleName === 'CommitteeCollection') {
         payload.name = document.getElementById("ccName").value;
@@ -596,7 +630,7 @@
           btnSave.disabled = false;
           btnSave.innerText = "Save";
           clearForm(moduleName);
-          setTimeout(fetchDataFromSheet, 1000); // শিট থেকে ডাটা সিঙ্ক করার জন্য ১ সেকেন্ড পর ফেচ করবে
+          setTimeout(fetchDataFromSheet, 1000);
         }).catch(err => {
           console.error("Error saving data:", err);
           btnSave.disabled = false;
@@ -638,7 +672,7 @@
         document.getElementById("usrMobile").value = item.mobile || '';
         document.getElementById("usrId").value = item.userId || '';
         document.getElementById("usrPass").value = item.password || '';
-        document.getElementById("usrRole").value = item.userRole || 'User';
+        document.getElementById("usrRole").value = item.userRole || item.role || 'User';
       }
 
       document.getElementById(`btnSave_${moduleName}`).innerText = "Update Data";
@@ -690,7 +724,7 @@
             method: "POST",
             mode: "no-cors",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: "delete", module: moduleName, item: deletedItem })
+            body: JSON.stringify({ action: "delete", module: moduleName, index: index, item: deletedItem })
           }).then(() => setTimeout(fetchDataFromSheet, 1000));
         }
       }
@@ -698,6 +732,7 @@
 
     function renderTable(moduleName) {
       const tbody = document.querySelector(`#tbl${moduleName} tbody`);
+      if (!tbody) return;
       tbody.innerHTML = "";
 
       appData[moduleName].forEach((item, index) => {
