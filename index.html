@@ -385,7 +385,6 @@
 
     function fetchDataFromSheetFirst() {
       if (!WEB_APP_URL || WEB_APP_URL.includes("AKfycbxjYSNj7308hDtiacwFgyz5gpv3YTErl4vOYV8M3TsmjWxylbMij7voHPkN9kv8_mSM")) {
-        // যদি শিট থেকে ডাটা না আসে বা ফেইল করে, ডিফল্ট অ্যাডমিন নিশ্চিত রাখা হলো
         ensureDefaultAdmin();
         checkAuthSession();
       }
@@ -434,9 +433,8 @@
         .catch(err => console.error("Error fetching sheet data:", err));
     }
 
-    // ব্যাকআপ ডিফল্ট অ্যাডমিন যেন সবসময় লগইন নিশ্চিত করে
     function ensureDefaultAdmin() {
-      let hasAdmin = appData.Users.some(u => u.userId === "admin");
+      let hasAdmin = appData.Users.some(u => String(u.userId).toLowerCase() === "admin");
       if (!hasAdmin) {
         appData.Users.unshift({
           timestamp: new Date().toLocaleDateString(),
@@ -481,7 +479,7 @@
       const pass = document.getElementById("loginPassword").value.trim();
       const errEl = document.getElementById("loginError");
 
-      let foundUser = appData.Users.find(u => u.userId === uid && u.password === pass);
+      let foundUser = appData.Users.find(u => String(u.userId).trim() === uid && String(u.password).trim() === pass);
 
       if (foundUser) {
         errEl.style.display = "none";
@@ -591,10 +589,51 @@
       document.getElementById("surplusNet").innerText = netSurplus;
     }
 
+    // ফর্ম ভ্যালিডেশন সহ ডেটা সেভ ও অটো রিলোড লজিক
     function saveData(moduleName) {
       if (!currentUser) return;
       let userRoleVal = currentUser.userRole || currentUser.role || 'Admin';
       if (userRoleVal === "Guest") return;
+
+      // ফর্ম ফাঁকা আছে কি না চেক করার জন্য ভ্যালিডেশন
+      if (moduleName === 'CommitteeCollection') {
+        let name = document.getElementById("ccName").value.trim();
+        let amt = document.getElementById("ccAmount").value.trim();
+        if (!name || !amt) {
+          alert("দشয়া করে নাম এবং পরিমাণ ফিলদুটি পূরণ করুন!");
+          return;
+        }
+      } else if (moduleName === 'CommitteeDeposit') {
+        let name = document.getElementById("cjName").value.trim();
+        let amt = document.getElementById("cjAmount").value.trim();
+        if (!name || !amt) {
+          alert("দয়া করে নাম এবং পরিমাণ ফিল্ড দুটি পূরণ করুন!");
+          return;
+        }
+      } else if (moduleName === 'Expense') {
+        let cat = document.getElementById("exCategory").value.trim();
+        let amt = document.getElementById("exAmount").value.trim();
+        if (!cat || !amt) {
+          alert("দয়া করে খরচের খাত এবং পরিমাণ ফিল্ড দুটি পূরণ করুন!");
+          return;
+        }
+      } else if (moduleName === 'VillageCollection') {
+        let name = document.getElementById("vcName").value.trim();
+        let amt = document.getElementById("vcAmount").value.trim();
+        if (!name || !amt) {
+          alert("দয়া করে নাম এবং পরিমাণ ফিল্ড দুটি পূরণ করুন!");
+          return;
+        }
+      } else if (moduleName === 'Users') {
+        let name = document.getElementById("usrName").value.trim();
+        let uid = document.getElementById("usrId").value.trim();
+        let pass = document.getElementById("usrPass").value.trim();
+        let mobile = document.getElementById("usrMobile").value.trim();
+        if (!name || !uid || !pass || !mobile) {
+          alert("দয়া করে ইউজারের সকল তথ্য সঠিকভাবে পূরণ করুন!");
+          return;
+        }
+      }
 
       const btnSave = document.getElementById(`btnSave_${moduleName}`);
       btnSave.disabled = true;
@@ -613,35 +652,35 @@
       }
 
       if (moduleName === 'CommitteeCollection') {
-        payload.name = document.getElementById("ccName").value;
+        payload.name = document.getElementById("ccName").value.trim();
         payload.village = document.getElementById("ccVillage").value;
         payload.bari = document.getElementById("ccBari").value;
         payload.amount = document.getElementById("ccAmount").value;
         payload.userId = currentUser.userId;
       } else if (moduleName === 'CommitteeDeposit') {
-        payload.name = document.getElementById("cjName").value;
+        payload.name = document.getElementById("cjName").value.trim();
         payload.village = document.getElementById("cjVillage").value;
         payload.type = document.getElementById("cjType").value;
         payload.amount = document.getElementById("cjAmount").value;
         payload.userId = currentUser.userId;
       } else if (moduleName === 'Expense') {
-        payload.category = document.getElementById("exCategory").value;
+        payload.category = document.getElementById("exCategory").value.trim();
         payload.amount = document.getElementById("exAmount").value;
-        payload.receiver = document.getElementById("exReceiver").value;
-        payload.note = document.getElementById("exNote").value;
+        payload.receiver = document.getElementById("exReceiver").value.trim();
+        payload.note = document.getElementById("exNote").value.trim();
         payload.userId = currentUser.userId;
       } else if (moduleName === 'VillageCollection') {
-        payload.name = document.getElementById("vcName").value;
+        payload.name = document.getElementById("vcName").value.trim();
         payload.village = document.getElementById("vcVillage").value;
         payload.amount = document.getElementById("vcAmount").value;
-        payload.note = document.getElementById("vcNote").value;
+        payload.note = document.getElementById("vcNote").value.trim();
         payload.userId = currentUser.userId;
       } else if (moduleName === 'Users') {
-        payload.name = document.getElementById("usrName").value;
+        payload.name = document.getElementById("usrName").value.trim();
         payload.village = document.getElementById("usrVillage").value;
-        payload.mobile = document.getElementById("usrMobile").value;
-        payload.userId = document.getElementById("usrId").value;
-        payload.password = document.getElementById("usrPass").value;
+        payload.mobile = document.getElementById("usrMobile").value.trim();
+        payload.userId = document.getElementById("usrId").value.trim();
+        payload.password = document.getElementById("usrPass").value.trim();
         payload.userRole = document.getElementById("usrRole").value;
       }
 
@@ -655,7 +694,10 @@
           btnSave.disabled = false;
           btnSave.innerText = "Save";
           clearForm(moduleName);
-          setTimeout(fetchDataFromSheet, 1000);
+          // সেভ হওয়ার সাথে সাথে ডাটা রিফ্রেশ ও ফর্ম আপডেট করার জন্য
+          setTimeout(() => {
+            fetchDataFromSheet();
+          }, 1200);
         }).catch(err => {
           console.error("Error saving data:", err);
           btnSave.disabled = false;
@@ -750,7 +792,7 @@
             mode: "no-cors",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ action: "delete", module: moduleName, index: index, item: deletedItem })
-          }).then(() => setTimeout(fetchDataFromSheet, 1000));
+          }).then(() => setTimeout(fetchDataFromSheet, 1200));
         }
       }
     }
