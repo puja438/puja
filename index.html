@@ -364,8 +364,8 @@
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxjYSNj7308hDtiacwFgyz5gpv3YTErl4vOYV8M3TsmjWxylbMij7voHPkN9kv8_mSM/exec";
 
-    const villageList = ["আটঘর", "আন্দাকুল"];
-    const bariList = ["মন্ডলবাড়ি", "মিস্ত্রি বাড়ি"];
+    const villageList = ["আটঘর", "আন্দাকুল", "কুড়িয়ানা", "আদাবাড়ি"];
+    const bariList = ["মন্ডল বাড়ি", "মিস্ত্রি বাড়ি", "দেউড়ি বাড়ি", "সিকদার বাড়ি", "বেপারী বাড়ি", "হালদার বাড়ি", "মজুমদার বাড়ি", "সরকার বাড়ি", "কীর্তুনীয়া বাড়ি"];
 
     let appData = {
       CommitteeCollection: [],
@@ -438,12 +438,12 @@
       if (!hasAdmin) {
         appData.Users.unshift({
           timestamp: new Date().toLocaleDateString(),
-          name: "Admin",
+          name: "Bibek",
           village: "আটঘর",
-          mobile: "01700000000",
-          userId: "admin",
-          password: "12345",
-          userRole: "Admin"
+          mobile: "01753190789",
+          userId: "11",
+          password: "1122",
+          userRole: "bibek"
         });
       }
     }
