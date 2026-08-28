@@ -384,9 +384,10 @@
     };
 
     function fetchDataFromSheetFirst() {
-      if (!WEB_APP_URL || WEB_APP_URL === "https://script.google.com/macros/s/AKfycbxjYSNj7308hDtiacwFgyz5gpv3YTErl4vOYV8M3TsmjWxylbMij7voHPkN9kv8_mSM/exec") {
+      if (!WEB_APP_URL || WEB_APP_URL.includes("AKfycbxjYSNj7308hDtiacwFgyz5gpv3YTErl4vOYV8M3TsmjWxylbMij7voHPkN9kv8_mSM")) {
+        // যদি শিট থেকে ডাটা না আসে বা ফেইল করে, ডিফল্ট অ্যাডমিন নিশ্চিত রাখা হলো
+        ensureDefaultAdmin();
         checkAuthSession();
-        return;
       }
       
       fetch(WEB_APP_URL)
@@ -401,16 +402,18 @@
               Users: data.Users || []
             };
           }
+          ensureDefaultAdmin();
           checkAuthSession();
         })
         .catch(err => {
           console.error("Error fetching sheet data:", err);
+          ensureDefaultAdmin();
           checkAuthSession();
         });
     }
 
     function fetchDataFromSheet() {
-      if (!WEB_APP_URL || WEB_APP_URL === "https://script.google.com/macros/s/AKfycbxjYSNj7308hDtiacwFgyz5gpv3YTErl4vOYV8M3TsmjWxylbMij7voHPkN9kv8_mSM/exec") return;
+      if (!WEB_APP_URL) return;
       
       fetch(WEB_APP_URL)
         .then(response => response.json())
@@ -423,11 +426,28 @@
               VillageCollection: data.VillageCollection || [],
               Users: data.Users || []
             };
+            ensureDefaultAdmin();
             calculateTotals();
             renderAllTables();
           }
         })
         .catch(err => console.error("Error fetching sheet data:", err));
+    }
+
+    // ব্যাকআপ ডিফল্ট অ্যাডমিন যেন সবসময় লগইন নিশ্চিত করে
+    function ensureDefaultAdmin() {
+      let hasAdmin = appData.Users.some(u => u.userId === "admin");
+      if (!hasAdmin) {
+        appData.Users.unshift({
+          timestamp: new Date().toLocaleDateString(),
+          name: "Admin",
+          village: "আটঘর",
+          mobile: "01700000000",
+          userId: "admin",
+          password: "12345",
+          userRole: "Admin"
+        });
+      }
     }
 
     function checkAuthSession() {
@@ -436,9 +456,11 @@
         currentUser = JSON.parse(savedUser);
         document.getElementById("loginScreen").style.display = "none";
         document.getElementById("userProfileArea").style.display = "flex";
-        document.getElementById("userBadgeText").innerText = `আইডি: ${currentUser.userId} (${currentUser.role})`;
         
-        applyRolePermissions(currentUser.role);
+        let userRoleVal = currentUser.userRole || currentUser.role || 'Admin';
+        document.getElementById("userBadgeText").innerText = `আইডি: ${currentUser.userId} (${userRoleVal})`;
+        
+        applyRolePermissions(userRoleVal);
         calculateTotals();
         renderAllTables();
         
@@ -511,13 +533,14 @@
 
     function openModule(moduleId) {
       if (!currentUser) return;
+      let userRoleVal = currentUser.userRole || currentUser.role || 'Admin';
 
-      if (currentUser.role === "Guest") {
+      if (userRoleVal === "Guest") {
         alert("গেস্ট ব্যবহারকারী কেবল উদ্বৃত্ত তালিকা ও মোট হিসাব দেখতে পারবেন।");
         if (moduleId !== "modSurplus") return;
       }
 
-      if (currentUser.role === "User" && moduleId === "modUsers") {
+      if (userRoleVal === "User" && moduleId === "modUsers") {
         alert("ইউজার মডিউল কেবল এডমিনের জন্য সংরক্ষিত।");
         return;
       }
@@ -569,7 +592,9 @@
     }
 
     function saveData(moduleName) {
-      if (!currentUser || currentUser.role === "Guest") return;
+      if (!currentUser) return;
+      let userRoleVal = currentUser.userRole || currentUser.role || 'Admin';
+      if (userRoleVal === "Guest") return;
 
       const btnSave = document.getElementById(`btnSave_${moduleName}`);
       btnSave.disabled = true;
@@ -620,7 +645,7 @@
         payload.userRole = document.getElementById("usrRole").value;
       }
 
-      if (WEB_APP_URL && WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
+      if (WEB_APP_URL) {
         fetch(WEB_APP_URL, {
           method: "POST",
           mode: "no-cors",
@@ -719,7 +744,7 @@
         renderTable(moduleName);
         calculateTotals();
 
-        if (WEB_APP_URL && WEB_APP_URL !== "YOUR_DEPLOYED_WEB_APP_URL_HERE") {
+        if (WEB_APP_URL) {
           fetch(WEB_APP_URL, {
             method: "POST",
             mode: "no-cors",
@@ -735,10 +760,12 @@
       if (!tbody) return;
       tbody.innerHTML = "";
 
+      let userRoleVal = currentUser ? (currentUser.userRole || currentUser.role || 'Admin') : '';
+
       appData[moduleName].forEach((item, index) => {
         let tr = document.createElement("tr");
         let serialNo = index + 1;
-        let actionTd = (currentUser && currentUser.role === "Admin") 
+        let actionTd = (userRoleVal === "Admin") 
           ? `<td>
               <button class="action-btn btn-edit" onclick="editRow('${moduleName}', ${index})">Edit</button>
               <button class="action-btn btn-delete" onclick="deleteRow('${moduleName}', ${index})">Delete</button>
@@ -754,7 +781,8 @@
         } else if (moduleName === 'VillageCollection') {
           tr.innerHTML = `<td>${serialNo}</td><td>${item.timestamp || ''}</td><td>${item.name || ''}</td><td>${item.village || ''}</td><td>${item.amount || 0}</td><td>${item.note || ''}</td><td>${item.userId || ''}</td>${actionTd}`;
         } else if (moduleName === 'Users') {
-          tr.innerHTML = `<td>${serialNo}</td><td>${item.timestamp || ''}</td><td>${item.name || ''}</td><td>${item.village || ''}</td><td>${item.mobile || ''}</td><td>${item.userId || ''}</td><td>***</td><td>${item.userRole || item.role || ''}</td>${actionTd}`;
+          let rName = item.userRole || item.role || '';
+          tr.innerHTML = `<td>${serialNo}</td><td>${item.timestamp || ''}</td><td>${item.name || ''}</td><td>${item.village || ''}</td><td>${item.mobile || ''}</td><td>${item.userId || ''}</td><td>***</td><td>${rName}</td>${actionTd}`;
         }
 
         tbody.appendChild(tr);
