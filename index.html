@@ -437,7 +437,8 @@
       let hasAdmin = appData.Users.some(u => String(u.userId).toLowerCase() === "admin");
       if (!hasAdmin) {
         appData.Users.unshift({
-          timestamp: new Date().toLocaleDateString(),
+          timestamp: new Date().toLocaleString('en-US', { timeZone: 'Asia/Dhaka', hour12: true })
+
           name: "Bibek",
           village: "আটঘর",
           mobile: "01753190789",
@@ -644,7 +645,8 @@
       let payload = { 
         action: isEdit ? "update" : "save", 
         module: moduleName, 
-        timestamp: new Date().toLocaleString() 
+        timestamp: timestamp: new Date().toLocaleString('en-US', { timeZone: 'Asia/Dhaka', hour12: true })
+ 
       };
 
       if (isEdit) {
