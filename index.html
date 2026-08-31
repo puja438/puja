@@ -365,7 +365,7 @@
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxjYSNj7308hDtiacwFgyz5gpv3YTErl4vOYV8M3TsmjWxylbMij7voHPkN9kv8_mSM/exec";
 
     const villageList = ["আটঘর", "আন্দাকুল", "কুড়িয়ানা", "আদাবাড়ি", "অন্যান্য"];
-    const bariList = ["মন্ডল বাড়ি", "মিস্ত্রি বাড়ি", "দেউড়ি বাড়ি", "সিকদার বাড়ি", "বেপারী বাড়ি", "হালদার বাড়ি", "মজুমদার বাড়ি", "সরকার বাড়ি", "কীর্তুনীয়া বাড়ি", "অন্যান্য"];
+    const bariList = ["মন্ডল বাড়ি", "মিস্ত্রি বাড়ি", "দেউড়ি বাড়ি", "সিকদার বাড়ি", "বেপারী বাড়ি", "হালদার বাড়ি", "মজুমদার বাড়ি", "সরকার বাড়ি", "কীর্তুনীয়া বাড়ি", "গাইন বাড়ি", "অন্যান্য"];
 
     let appData = {
       CommitteeCollection: [],
@@ -780,7 +780,7 @@
     }
 
     function deleteRow(moduleName, index) {
-      if (confirm("আপনি কি নিশ্চিত যে এই রেকর্ডটি মুছে ফেলতে চান?")) {
+      if (confirm("আপনি কি নিশ্চিত যে এই রেকর্ডটি মুছে ফেলতে চান? আপডেট করুন")) {
         const deletedItem = appData[moduleName][index];
         appData[moduleName].splice(index, 1);
         renderTable(moduleName);
