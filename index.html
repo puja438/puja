@@ -782,7 +782,7 @@
     }
 
     function deleteRow(moduleName, index) {
-      if (confirm("আপনি কি নিশ্চিত যে এই রেকর্ডটি মুছে ফেলতে চান? আপডেট করুন")) {
+      if (confirm("আপনি কি নিশ্চিত যে এই রেকর্ডটি মুছে ফেলতে চান?")) {
         const deletedItem = appData[moduleName][index];
         appData[moduleName].splice(index, 1);
         renderTable(moduleName);
@@ -794,7 +794,7 @@
             mode: "no-cors",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ action: "delete", module: moduleName, index: index, item: deletedItem })
-          }).then(() => setTimeout(fetchDataFromSheet, 1200));
+          }).then(() => setTimeout(fetchDataFromSheet, 500));
         }
       }
     }
